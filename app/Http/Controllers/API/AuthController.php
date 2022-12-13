@@ -7,7 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Str;
 use App\Models\Employee;
 use App\Models\Password;
    
@@ -32,10 +32,14 @@ class AuthController extends BaseController
                 Auth::loginUsingId($request->employee_id);
 
                 $authUser = Employee::find(Auth::user()->employee_id);
-                $authPass = Password::find(Auth::user()->employee_id);
+                // $authPass = Password::where('employee_id', '=' , $request->employee_id)->orderBy('created_at','desc')->get();
 
-                $success['user_data'] = $authUser;
-                $success['password_data'] = $authPass;
+                // $success['user_data'] = $authUser;
+                // $success['password_data'] = $authPass;
+
+                $success['employee_id'] =  $authUser->employee_id;
+                $success['employee_name'] =  $authUser->employee_name;
+                $success['employee_email'] =  $authUser->employee_email;
                 $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
                 
                 $authUser->remember_token = $success['token'];
@@ -44,29 +48,6 @@ class AuthController extends BaseController
             }
         }
         return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
-
-
-        // if (Auth::attempt(
-        //         ['employee_id' => $request->employee_id,
-        //         'password_id' => $request->password_id]
-        //         )
-        //     ) {
-
-        //     $authUser = Employee::find(Auth::user()->employee_id);
-        //     $authPass = Password::find(Auth::user()->employee_id);
-
-        //     $success['user_data'] = $authUser;
-        //     $success['password_data'] = $authPass;
-        //     $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
-            
-        //     $authUser->remember_token = $success['token'];
-        //     $authUser->save();
-
-
-        //     return $this->sendResponse($success, 'User signed in');
-        // } else {
-        //     return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
-        // }
     }
 
     public function register(Request $request)
@@ -78,7 +59,7 @@ class AuthController extends BaseController
             'supervisor_id' => 'required',
             'regional_id' => 'required',
             'role_id' => 'required',
-            'device_id' => 'required',
+            // 'device_id' => 'required',
             'employee_name' => 'required',
             'employee_email' => 'required|email',
             'password' => 'required',
@@ -97,11 +78,16 @@ class AuthController extends BaseController
         );
 
         $input['password_id'] = $password->password_id;
-
+        $input['device_id'] = Str::random(16); //device_id generator
         $user = Employee::create($input);
 
-        $success['user_data'] =  $user;
-        $success['password_data'] =  $password;
+        // $success['user_data'] =  $user;
+        // $success['password_data'] =  $password;
+
+        $success['employee_id'] =  $user->employee_id;
+        $success['employee_name'] =  $user->employee_name;
+        $success['employee_email'] =  $user->employee_email;
+        $success['token'] =  $user->createToken('MyAuthApp')->plainTextToken;
         
         return $this->sendResponse($success, 'User created successfully.');
     } 
