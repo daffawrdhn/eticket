@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Regional extends Model
 {
     use HasFactory;
 
-    protected $table = 'role_tbl';
-    protected $primaryKey = 'role_id';
+    protected $table = 'regional_tbl';
+    protected $primaryKey = 'regional_id';
 
     protected $fillable = [
-        'role_id',
-        'role_name', 
+        'regional_id',
+        'regional_name', 
     ];
 
 

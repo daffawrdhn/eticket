@@ -14,6 +14,7 @@ class Employee extends Authenticatable
 
     protected $table = 'employee_tbl';
     protected $primaryKey = 'employee_id';
+    protected $with = ['role', 'organization', 'regional'];
     public $incrementing = false;
 
 protected $fillable = [
@@ -44,16 +45,34 @@ protected $fillable = [
 
 protected $hidden = [
     // 'password',
+    'password_id',
+    'organization_id',
+    'regional_id',
+    'role_id',
+    'join_date',
+    'quit_date',
+    'created_at',
+    'updated_at',
     'remember_token',
 ];
 
 
 //relation
 
-    protected $with = ['role_tbl'];
+    
 
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function regional()
+    {
+        return $this->belongsTo(Regional::class, 'role_id');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'role_id');
     }
 }

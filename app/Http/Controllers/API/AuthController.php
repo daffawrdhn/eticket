@@ -48,15 +48,13 @@ class AuthController extends BaseController
 
                         $authUser = Employee::find(Auth::user()->employee_id);
 
-                        // $dataEmployee = Employee::find(Auth::user()->employee_id)->with('role_tbl')->get();
-        
+                        $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
                         $success['employee_id'] =  Auth::user()->employee_id;
-                        $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
-                        $success['data'] =  Employee::with('role_tbl')->get();
+                        $success = $authUser;
                         
-                        $authUser->remember_token = $success['token'];
+                        $authUser->remember_token = $tokens;
                         $authUser->save();
-                        return $this->sendResponse($success, 'User signed in');
+                        return $this->sendResponse($success, 'User signed in', $tokens);
                     }else{
                         return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
                     }
@@ -90,19 +88,24 @@ class AuthController extends BaseController
 
         $input = $request->all();
 
+        $input['password_id'] = 0;
+        $input['device_id'] = Str::random(16); //device_id generator
+        $user = Employee::create($input);
+
+        
         $input['employee_id'] = $input['employee_id'];
         $input['password'] = bcrypt($input['password']);
         $input['non_active_date'] = Carbon::now()->addDays(90);
 
-        $password = Password::create($input
-        );
 
-        $input['password_id'] = $password->password_id;
-        $input['device_id'] = Str::random(16); //device_id generator
-        $user = Employee::create($input);
+        if ($user) {
+            $password = Password::create($input);
 
-        // $success['user_data'] =  $user;
-        // $success['password_data'] =  $password;
+            if ($password) {
+                Employee::where('employee_id', $user->employee_id)
+                    ->update(['password_id' => $password->password_id]);
+            }
+        }
 
         $success['employee_id'] =  $user->employee_id;
         $success['employee_name'] =  $user->employee_name;
