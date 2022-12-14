@@ -22,6 +22,7 @@ class Password extends Model
     protected $fillable = [
         'employee_id',
         'password',
+        'non_active_date'
     ];
 
     protected $hidden = [

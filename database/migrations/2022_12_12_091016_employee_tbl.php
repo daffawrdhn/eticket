@@ -36,10 +36,13 @@ return new class extends Migration
             $table->string('employee_id')->unique()->index();
             // $table->string('password');
             $table->integer('password_id');
-            $table->integer('organization_id');
-            $table->integer('supervisor_id');
-            $table->integer('regional_id');
-            $table->integer('role_id');
+            $table->integer('organization_id')->unsigned();
+            $table->foreign('organization_id')->references('organization_id')->on('organization_tbl');
+            $table->string('supervisor_id');
+            $table->integer('regional_id')->unsigned();
+            $table->foreign('regional_id')->references('regional_id')->on('regional_tbl');
+            $table->integer('role_id')->unsigned();
+            $table->foreign('role_id')->references('role_id')->on('role_tbl');
             $table->string('device_id')->unique();
             $table->string('employee_name');
             $table->string('employee_email')->unique();

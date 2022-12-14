@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Employee;
 use App\Models\Password;
-   
+use Carbon\Carbon;
+
 class AuthController extends BaseController
 {
     public function login(Request $request)
@@ -24,30 +25,48 @@ class AuthController extends BaseController
             return $this->sendError('Error validation', $validator->errors());
         }
 
-        foreach(Password::where('employee_id', '=' , $request->employee_id)->get() as $pass)
-        {
-            // dd($pass);
-            if (Hash::check($request->password, $pass->password))
-            {
-                Auth::loginUsingId($request->employee_id);
+        $idPassword = Employee::where('employee_id', '=', $request->employee_id)->get('password_id')->first();
 
-                $authUser = Employee::find(Auth::user()->employee_id);
-                // $authPass = Password::where('employee_id', '=' , $request->employee_id)->orderBy('created_at','desc')->get();
+        if ($idPassword == null) {
+            return $this->sendError('Unauthorised.', ['error' => 'your password or nik is false']);
+        }else{
 
-                // $success['user_data'] = $authUser;
-                // $success['password_data'] = $authPass;
+            $getPassword = Password::where(
+                [
+                    'employee_id' => $request->employee_id,
+                    'password_id' => $idPassword->password_id
+                ])->get()->first();
+    
+            if ($getPassword != null) {
+                $dateNow = Carbon::now();
+                $nonActiveDate = $getPassword->non_active_date;
 
-                $success['employee_id'] =  $authUser->employee_id;
-                $success['employee_name'] =  $authUser->employee_name;
-                $success['employee_email'] =  $authUser->employee_email;
-                $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
-                
-                $authUser->remember_token = $success['token'];
-                $authUser->save();
-                return $this->sendResponse($success, 'User signed in');
+                if ($nonActiveDate > $dateNow) {
+                    if (Hash::check($request->password, $getPassword->password))
+                    {
+                        Auth::loginUsingId($request->employee_id);
+
+                        $authUser = Employee::find(Auth::user()->employee_id);
+
+                        // $dataEmployee = Employee::find(Auth::user()->employee_id)->with('role_tbl')->get();
+        
+                        $success['employee_id'] =  Auth::user()->employee_id;
+                        $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
+                        $success['data'] =  Employee::with('role_tbl')->get();
+                        
+                        $authUser->remember_token = $success['token'];
+                        $authUser->save();
+                        return $this->sendResponse($success, 'User signed in');
+                    }else{
+                        return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
+                    }
+                }else{
+                    return $this->sendError('Unauthorised.', ['error' => 'your password is not Active, please Update your password']);
+                }
+            }else{
+                return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
             }
         }
-        return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
     }
 
     public function register(Request $request)
@@ -73,6 +92,7 @@ class AuthController extends BaseController
 
         $input['employee_id'] = $input['employee_id'];
         $input['password'] = bcrypt($input['password']);
+        $input['non_active_date'] = Carbon::now()->addDays(90);
 
         $password = Password::create($input
         );
