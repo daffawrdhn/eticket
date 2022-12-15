@@ -14,7 +14,7 @@ use Carbon\Carbon;
 
 class AuthController extends BaseController
 {
-    public function login(Request $request)
+    public function signin(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required',
