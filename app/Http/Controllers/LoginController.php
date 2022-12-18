@@ -15,17 +15,7 @@ class LoginController extends Controller
     public function index()
     {
         if (Auth::user()) {
-           
-            if(Auth::user()->role_id == 0){
-
             return view('containers.dashboard.dashboard');
-           
-            } else {
-        
-                return redirect()->route('logout');
-           
-            }
-
         }else{
             return view('login');
         }
