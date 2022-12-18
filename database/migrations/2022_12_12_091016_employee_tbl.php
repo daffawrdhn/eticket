@@ -43,7 +43,7 @@ return new class extends Migration
             $table->foreign('regional_id')->references('regional_id')->on('regional_tbl')->onDelete('set null');;
             $table->integer('role_id')->unsigned();
             $table->foreign('role_id')->references('role_id')->on('role_tbl')->onDelete('set null');
-            $table->string('device_id')->unique();
+            $table->string('device_id')->nullable()->unique();
             $table->string('employee_name');
             $table->string('employee_email')->unique();
             $table->date('join_date')->nullable();

@@ -12,6 +12,8 @@ use App\Models\Employee;
 use App\Models\Password;
 use Carbon\Carbon;
 
+use function PHPUnit\Framework\isEmpty;
+
 class AuthController extends BaseController
 {
     public function signin(Request $request)
@@ -49,20 +51,48 @@ class AuthController extends BaseController
                         $authUser = Employee::with('role', 'organization', 'regional')->find(Auth::user()->employee_id);
 
                         $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
-                        $success['employee_id'] =  Auth::user()->employee_id;
                         $success = $authUser;
-                        
                         $authUser->remember_token = $tokens;
-                        $authUser->save();
-                        return $this->sendResponse($success, 'User signed in', $tokens);
-                    }else{
-                        return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
+                        // $authUser->save();
+                        // return $this->sendResponse($success, 'User signed in', $tokens);
+
+                        // dd($authUser->device_id);
+
+                        if ($authUser->role_id == 0){
+
+                            $authUser->save();
+                            return $this->sendResponse($success, 'User signed in', $tokens);
+
+                        } else {
+
+                            if($authUser->device_id == null){
+
+                                $authUser->device_id = $request->device_id;
+                                $authUser->save();
+
+                                return $this->sendResponse($success, 'User signed in', $tokens);
+    
+                            } else {
+
+                                if($authUser->device_id == $request->device_id){
+    
+                                    $authUser->save();
+                                    return $this->sendResponse($success, 'User signed in', $tokens);
+    
+                                } else {
+                                    return $this->sendError('Unauthorised.', ['error' => 'Device not recognized !']);
+                                }
+                            }
+                        }
+
+                    } else {
+                        return $this->sendError('Unauthorised.', ['error' => 'Wrong Password']);
                     }
                 }else{
-                    return $this->sendError('Unauthorised.', ['error' => 'your password has expired']);
+                    return $this->sendError('Unauthorised.', ['error' => 'Password Expired']);
                 }
             }else{
-                return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
+                return $this->sendError('Unauthorised.', ['error' => 'Wrong Password']);
             }
         }
     }
@@ -89,7 +119,7 @@ class AuthController extends BaseController
         $input = $request->all();
 
         $input['password_id'] = 0;
-        $input['device_id'] = Str::random(16); //device_id generator
+        $input['device_id'] = null; //device_id generator
         $user = Employee::create($input);
 
         
