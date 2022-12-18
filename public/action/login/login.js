@@ -18,9 +18,9 @@ $(document).ready(function () {
             dataType : "json",
             success : function(response){
 
-                role = response.data.role['role_name']
+                role = response.data.role['role_id']
 
-                if (role === 'user') {
+                if (role === 1) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -43,8 +43,25 @@ $(document).ready(function () {
             },
             error:function(response){
                 if (!response.success) {
-                    $('#alert').show();
-                    $('#alert').html(response.responseJSON.data.error);
+
+                    if (response.status === 403) {
+                        Swal.fire({
+                            icon : 'error',
+                            title: 'You are not Administrator!!',
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                          }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                window.location.href = APP_URL + "logout";
+                            } 
+                          })
+
+                    }else{
+                        $('#alert').show();
+                        $('#alert').html(response.responseJSON.data.error);
+                    }
                 }
             }
         })

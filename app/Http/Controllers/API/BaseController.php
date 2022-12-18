@@ -38,4 +38,16 @@ class BaseController extends Controller
         }
         return response()->json($response, $code);
     }
+
+    public function deviceError($error, $errorMessages = [], $code = 403)
+    {
+    	$response = [
+            'success' => false,
+            'message' => $error,
+        ];
+        if(!empty($errorMessages)){
+            $response['data'] = $errorMessages;
+        }
+        return response()->json($response, $code);
+    }
 }

@@ -30,16 +30,14 @@ class AuthController extends BaseController
         $idPassword = Employee::where('employee_id', '=', $request->employee_id)->get('password_id')->first();
 
         if ($idPassword == null) {
-            return $this->sendError('Unauthorised.', ['error' => 'your password or nik is false']);
+            return $this->sendError('Unauthorised.', ['error' => 'User Credential not Found!']);
         }else{
-
-            $getPassword = Password::where(
-                [
-                    'employee_id' => $request->employee_id,
-                    'password_id' => $idPassword->password_id
-                ])->get()->first();
+                $getPassword = Password::where(
+                    [
+                        'employee_id' => $request->employee_id,
+                        'password_id' => $idPassword->password_id
+                    ])->get()->first();
     
-            if ($getPassword != null) {
                 $dateNow = Carbon::now();
                 $nonActiveDate = $getPassword->non_active_date;
 
@@ -80,20 +78,17 @@ class AuthController extends BaseController
                                     return $this->sendResponse($success, 'User signed in', $tokens);
     
                                 } else { // jika tidak error
-                                    return $this->sendError('Unauthorised.', ['error' => 'Device not recognized !']);
+                                    return $this->deviceError('Unauthorised.', ['error' => 'Device not recognized !']);
                                 }
                             }
                         }
 
                     } else {
-                        return $this->sendError('Unauthorised.', ['error' => 'Wrong Password']);
+                        return $this->sendError('Unauthorised.', ['error' => 'Password incorrect!']);
                     }
                 }else{
                     return $this->sendError('Unauthorised.', ['error' => 'Password Expired']);
                 }
-            }else{
-                return $this->sendError('Unauthorised.', ['error' => 'Wrong Password']);
-            }
         }
     }
 
