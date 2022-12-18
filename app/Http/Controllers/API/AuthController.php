@@ -58,28 +58,28 @@ class AuthController extends BaseController
 
                         // dd($authUser->device_id);
 
-                        if ($authUser->role_id == 0){
+                        if ($authUser->role_id == 0){ //check by role
 
                             $authUser->save();
                             return $this->sendResponse($success, 'User signed in', $tokens);
 
-                        } else {
+                        } else { // jika role selain 0 maka->
 
-                            if($authUser->device_id == null){
+                            if($authUser->device_id == null){ //check auth apakah device id 0
 
                                 $authUser->device_id = $request->device_id;
                                 $authUser->save();
 
                                 return $this->sendResponse($success, 'User signed in', $tokens);
     
-                            } else {
+                            } else { // jika tidak null/device id sudah ada
 
-                                if($authUser->device_id == $request->device_id){
+                                if($authUser->device_id == $request->device_id){ // cek devide id apakah sudah sama
     
                                     $authUser->save();
                                     return $this->sendResponse($success, 'User signed in', $tokens);
     
-                                } else {
+                                } else { // jika tidak error
                                     return $this->sendError('Unauthorised.', ['error' => 'Device not recognized !']);
                                 }
                             }
