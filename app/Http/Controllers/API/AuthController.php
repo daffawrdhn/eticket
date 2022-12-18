@@ -46,7 +46,7 @@ class AuthController extends BaseController
                     {
                         Auth::loginUsingId($request->employee_id);
 
-                        $authUser = Employee::find(Auth::user()->employee_id);
+                        $authUser = Employee::with('role', 'organization', 'regional')->find(Auth::user()->employee_id);
 
                         $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
                         $success['employee_id'] =  Auth::user()->employee_id;
@@ -59,7 +59,7 @@ class AuthController extends BaseController
                         return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
                     }
                 }else{
-                    return $this->sendError('Unauthorised.', ['error' => 'your password is not Active, please Update your password']);
+                    return $this->sendError('Unauthorised.', ['error' => 'your password has expired']);
                 }
             }else{
                 return $this->sendError('Unauthorised.', ['error' => 'your password is fails']);
@@ -96,7 +96,6 @@ class AuthController extends BaseController
         $input['employee_id'] = $input['employee_id'];
         $input['password'] = bcrypt($input['password']);
         $input['non_active_date'] = Carbon::now()->addDays(90);
-
 
         if ($user) {
             $password = Password::create($input);

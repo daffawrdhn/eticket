@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="{{ asset('style/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/bootstrap.min.css') }}">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 
     <script>
         const APP_URL = "{{ asset('/') }}";
@@ -19,8 +20,8 @@
     <script src="{{ asset('style/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script src="{{ asset('style/js/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('style/js/script.js') }}"></script>
     <script src="{{ asset('action/login/login.js') }}"></script>
-    <script src="{{ asset('action/login/password_validate.js') }}"></script>
     
     <title>Document</title>
 </head>

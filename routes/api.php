@@ -9,6 +9,7 @@ use App\Http\Controllers\API\AuthController;
 
 
 Route::post('/login', [AuthController::class, 'signin'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('signup');
 
 
      

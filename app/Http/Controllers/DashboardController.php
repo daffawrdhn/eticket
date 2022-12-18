@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,21 +14,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        if (Auth::user()) {
-            return view('containers.dashboard.dashboard');
-        }else{
-            return view('login');
-        }
-    }
-
-    public function logout(Request $request){
-
-        // $this->guard->logout();
-
-        request()->session()->invalidate();
-
-        request()->session()->regenerateToken();
-        return redirect('/');
+        return view('containers.dashboard.dashboard');
     }
 
     /**

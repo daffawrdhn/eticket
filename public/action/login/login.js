@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    $('#alert').hide();
     //login
     $('#form-login').submit(function (e) { 
         e.preventDefault();
@@ -17,16 +18,40 @@ $(document).ready(function () {
             dataType : "json",
             success : function(response){
 
-                console.log(response);
-                
-                if (response.success === true) {
-                    console.log('ok');
-                    // location.href = APP_URL + "myList"
+                role = response.data.role['role_name']
+
+                if (role === 'user') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'You are not Administrator !',
+                    })
+
+                    window.location.href = APP_URL + "logout";
                 }else{
-                    alert("login gagal")
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Login is Successfully',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+
+                    location.href = APP_URL + "dashboard";
                 }
                 
+            },
+            error:function(response){
+                if (!response.success) {
+                    $('#alert').show();
+                    $('#alert').html(response.responseJSON.data.error);
+                }
             }
         })
     });
+
+
+    $("#logout").click(function () {
+        window.location.href = APP_URL + "logout";
+    })
 });
