@@ -18,10 +18,10 @@
                             </div>
                                 <div class="w-100"></div>
                         </div>
-                        <div class="mb-3"><div class="alert alert-danger" id="alert" role="alert"></div></div>
+                        <div class="alert alert-danger" id="alert" role="alert"></div>
                         <form action="#" class="signin-form" id="form-login" method="POST">
                             @csrf
-                            <div class="form-group mt-3 pb-2">
+                            <div class="form-group mt-4 pb-2">
                                 <input type="number" 
                                 class="form-control" 
                                 id="employee_id" 
@@ -45,7 +45,7 @@
                                 <div id="validation-password" class="invalid-feedback"></div>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+                                <button type="submit" class="form-control btn btn-primary rounded submit px-3">L O G I N</button>
                             </div>
                             <div class="form-group d-md-flex">
                                 <div class="w-50 text-left"></div>
