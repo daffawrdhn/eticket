@@ -40,9 +40,10 @@ class AuthController extends BaseController
     
                 $dateNow = Carbon::now();
                 $nonActiveDate = $getPassword->non_active_date;
+               
+                if (Hash::check($request->password, $getPassword->password)) {
 
-                if ($nonActiveDate > $dateNow) {
-                    if (Hash::check($request->password, $getPassword->password))
+                    if ($nonActiveDate > $dateNow)
                     {
                         Auth::loginUsingId($request->employee_id);
 
@@ -84,10 +85,10 @@ class AuthController extends BaseController
                         }
 
                     } else {
-                        return $this->sendError('Unauthorised.', ['error' => 'Password incorrect!']);
+                        return $this->sendError('Unauthorised.', ['error' => 'Password Expired!']);
                     }
                 }else{
-                    return $this->sendError('Unauthorised.', ['error' => 'Password Expired']);
+                    return $this->sendError('Unauthorised.', ['error' => 'Password incorrect!']);
                 }
         }
     }
