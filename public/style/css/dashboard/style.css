@@ -1,15 +1,19 @@
 @charset "UTF-8";
 
 #bg-blue{
-    background-color: #4484CE;
+    background-color: #03989e;
 }
 
 #bg-yellow{
     background-color: #f9cf00;
 }
 
-#bg-alumunium{
+#bg-grey{
     background-color: #d9d9d9;
+}
+
+#img-logo{
+  margin-top: -100px;
 }
 
 

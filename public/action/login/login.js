@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    passwordValidation();
 
     $('#alert').hide();
     //login
@@ -6,11 +7,11 @@ $(document).ready(function () {
         e.preventDefault();
         var data = {
             'employee_id' : $('#employee_id').val(),
-            'password' : $('#password').val()
+            'password' : $('#password-field').val()
         }
 
        console.log(data);
-        
+
         $.ajax({
             type : "POST",
             url : APP_URL + "api/login",
