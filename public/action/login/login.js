@@ -36,9 +36,13 @@ $(document).ready(function () {
                         title: 'Login is Successfully',
                         showConfirmButton: false,
                         timer: 2000
-                    })
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.href = APP_URL + "dashboard";
+                        }
+                      })
 
-                    location.href = APP_URL + "dashboard";
+                    
                 }
                 
             },

@@ -24,7 +24,7 @@ class AuthController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Error validation', $validator->errors());
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
 
         $idPassword = Employee::where('employee_id', '=', $request->employee_id)->get('password_id')->first();
