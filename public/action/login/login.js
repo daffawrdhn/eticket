@@ -10,7 +10,7 @@ $(document).ready(function () {
             'password' : $('#password-field').val()
         }
 
-       console.log(data);
+    //    console.log(data);
 
         $.ajax({
             type : "POST",
