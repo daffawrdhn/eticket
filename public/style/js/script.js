@@ -17,21 +17,40 @@ window.addEventListener('DOMContentLoaded', event => {
 });
 
 
-$(document).ready(function () {
-
-    $(".toggle-password").click(function() {
-
-        // $(this).toggleClass("fa-eye");
-
-        var input = $($(this).attr("toggle"));
-
-        console.log($(this).attr("toggle"));
-
-        if (input.attr("type") == "password") {
-          input.attr("type", "text");
-        } else {
-          input.attr("type", "password");
+$(document).ready(function() {
+    $("#show_hide_password a").on('click', function(event) {
+        event.preventDefault();
+        if($('#show_hide_password input').attr("type") == "text"){
+            $('#show_hide_password input').attr('type', 'password');
+            $('#show_hide_password i').addClass( "bi bi-eye-slash" );
+            $('#show_hide_password i').removeClass( "bi bi-eye" );
+        }else if($('#show_hide_password input').attr("type") == "password"){
+            $('#show_hide_password input').attr('type', 'text');
+            $('#show_hide_password i').removeClass( "bi bi-eye-slash" );
+            $('#show_hide_password i').addClass( "bi bi-eye" );
         }
     });
 
+    $( "div.input-group" ).hover(
+        function() {
+            var className = $('#hover').attr('class');
+
+            console.log(className);
+
+            if (className == "is-invalid") {
+                $('#pswd_info').show();
+            }
+        }, function() {
+            $('#pswd_info').hide();
+        }
+      );
+       
+      $( "li.fade" ).hover(function() {
+        $( this ).fadeOut( 100 );
+        $( this ).fadeIn( 500 );
+      });
+
 });
+
+
+
