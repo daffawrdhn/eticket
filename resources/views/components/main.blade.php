@@ -25,7 +25,7 @@
     <script src="{{ asset('action/login/login.js') }}"></script>
     <script src="{{ asset('action/login/password_validate.js') }}"></script>
     
-    <title>Document</title>
+    <title>E-ticket</title>
 </head>
 
 <body id="bg-alumunium">

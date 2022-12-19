@@ -9,16 +9,16 @@
             <div class="col-md-7 col-lg-5">
                 <div class="wrap">
                     <div class="d-flex justify-content-center pt-2">
-                        <img src="asset/Eticket.png" style="height: 200px" alt="">
+                        <img src="asset/Eticket.png" style="height: 180px" alt="">
                     </div>
-                    <div class="login-wrap p-4 p-md-5">
+                    <div class="login-wrap p-2 p-md-3">
                         <div class="d-flex">
                             <div class="w-100">
-                                <h3 class="mb-4">Sign In</h3>
+                                <h3 class="mb-4">Login</h3>
                             </div>
                                 <div class="w-100"></div>
                         </div>
-                        <div class="mb-5"><div class="alert alert-danger" id="alert" role="alert"></div></div>
+                        <div class="mb-3"><div class="alert alert-danger" id="alert" role="alert"></div></div>
                         <form action="#" class="signin-form" id="form-login" method="POST">
                             @csrf
                             <div class="form-group mt-3 pb-2">

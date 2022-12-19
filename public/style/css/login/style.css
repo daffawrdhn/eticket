@@ -223,6 +223,12 @@ button,
 [type="submit"] {
   -webkit-appearance: button; }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 button:not(:disabled),
 [type="button"]:not(:disabled),
 [type="reset"]:not(:disabled),
@@ -8166,7 +8172,7 @@ h1, h2, h3, h4, h5,
   background: #03989e !important; }
 
 .ftco-section {
-  padding: 7em 0; }
+  padding: 1em 0; }
 
 .ftco-no-pt {
   padding-top: 0; }
