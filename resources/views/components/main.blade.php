@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('style/css/dashboard/style.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/login/style.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 
     <script>
@@ -18,6 +19,9 @@
     </script>
 
     <script src="{{ asset('style/js/popper.js') }}"></script>
+    <script src="{{ asset('style/js/popper.min.js') }}"></script>
+    <script src="{{ asset('style/js/popper.min.js.map') }}"></script>
+    <script src="{{ asset('style/js/popper.min.js') }}"></script>
     <script src="{{ asset('style/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script src="{{ asset('style/js/sweetalert2.all.min.js') }}"></script>
