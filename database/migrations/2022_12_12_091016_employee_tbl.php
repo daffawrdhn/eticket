@@ -46,10 +46,15 @@ return new class extends Migration
             $table->string('device_id')->nullable()->unique();
             $table->string('employee_name');
             $table->string('employee_email')->unique();
+            $table->string('employee_ktp')->unique(); //baru
+            $table->string('employee_birth'); //baru
             $table->date('join_date')->nullable();
             $table->date('quit_date')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
+            $table->string('api_token', 80)->unique()
+                  ->nullable()
+                  ->default(null);
             $table->rememberToken();
 
         });
