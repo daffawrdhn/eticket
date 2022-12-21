@@ -27,10 +27,13 @@ protected $fillable = [
     'device_id',
     'employee_name',
     'employee_email',
+    'employee_ktp',
+    'employee_birth',
     'join_date',
     'quit_date',
     'created_at',
     'updated_at',
+    'api_token',
     'remember_token',
 ];
 

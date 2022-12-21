@@ -50,9 +50,11 @@ class AuthController extends BaseController
 
                         $authUser = Employee::with('role', 'organization', 'regional')->find(Auth::user()->employee_id);
 
-                        $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
+                        $tokens = $authUser->createToken('sanctum')->plainTextToken;
                         $success = $authUser;
+                        $authUser->api_token = $tokens;
                         $authUser->remember_token = $tokens;
+
                         // $authUser->save();
                         // return $this->sendResponse($success, 'User signed in', $tokens);
 
@@ -92,6 +94,69 @@ class AuthController extends BaseController
                     return $this->sendError('Unauthorised.', ['error' => 'Password incorrect!']);
                 }
         }
+    }
+
+    public function checkData(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'required',
+            'employee_ktp' => 'required',
+            'employee_birth' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
+        }
+        
+
+        $forgot = Employee::where('employee_id', '=', $request->employee_id)
+        ->where('employee_ktp', '=', $request->employee_ktp)
+        ->where('employee_birth', '=', $request->employee_birth)
+        ->get()->first();
+
+        if($forgot != null){
+            $success['token'] = $forgot->remember_token;
+            return $this->sendResponse($success, 'Data Correct!');
+        } else {
+            return $this->sendError('Unauthorised.', ['error' => 'Data incorrect!']);
+        }
+    }
+
+    public function forgotPassword(Request $request){
+        $user = Auth::user();
+
+        if($user != null){
+
+        $validator = Validator::make($request->all(), [
+            'new_password' => 'required',
+            'new_password_confirm' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
+        }
+
+        $input['employee_id'] = Auth::user()->employee_id;
+        $input['password'] = bcrypt($request->new_password);
+        $input['non_active_date'] = Carbon::now()->addDays(90);
+        $password = Password::create($input);
+
+            if ($password) {
+                $success = Employee::where('employee_id', Auth::user()->employee_id)
+                    ->update(['password_id' => $password->password_id]);
+            }
+        return $this->sendResponse($success, 'Password Changed!');
+
+       } else {
+        return $this->sendError('Unauthorised.', ['error' => 'Request Error!']);
+
+       }
+        
+    }
+
+    public function data(Request $request){
+        $success = Auth::user();
+       return $this->sendResponse($success, 'Data Found!');
     }
 
     public function register(Request $request)
