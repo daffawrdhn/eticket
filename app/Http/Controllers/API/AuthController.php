@@ -50,7 +50,7 @@ class AuthController extends BaseController
 
                         $authUser = Employee::with('role', 'organization', 'regional')->find(Auth::user()->employee_id);
 
-                        $tokens = $authUser->createToken('sanctum')->plainTextToken;
+                        $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
                         $success = $authUser;
                         $authUser->api_token = $tokens;
                         $authUser->remember_token = $tokens;
@@ -115,7 +115,7 @@ class AuthController extends BaseController
         ->get()->first();
 
         if($forgot != null){
-            $success['token'] = $forgot->remember_token;
+            $success['token'] = $forgot->api_token;
             return $this->sendResponse($success, 'Data Correct!');
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Data incorrect!']);
@@ -136,21 +136,33 @@ class AuthController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
 
-        $input['employee_id'] = Auth::user()->employee_id;
-        $input['password'] = bcrypt($request->new_password);
-        $input['non_active_date'] = Carbon::now()->addDays(90);
-        $password = Password::create($input);
+            if ($request->new_password == $request->new_password_confirm){
+                
+                $input['employee_id'] = Auth::user()->employee_id;
+                $input['password'] = bcrypt($request->new_password);
+                $input['non_active_date'] = Carbon::now()->addDays(90);
+                $password = Password::create($input);
+        
+                    if ($password) {
 
-            if ($password) {
-                $success = Employee::where('employee_id', Auth::user()->employee_id)
-                    ->update(['password_id' => $password->password_id]);
+                        $success = Employee::where('employee_id', Auth::user()->employee_id)
+                            ->update(['password_id' => $password->password_id]);
+
+                    }
+        
+                return $this->sendResponse($success, 'Password Changed!');
+            
+            } else {
+
+                return $this->sendError('Unauthorised.', ['error' => 'Please input password confirmation correctly!']);
+            
             }
-        return $this->sendResponse($success, 'Password Changed!');
 
        } else {
-        return $this->sendError('Unauthorised.', ['error' => 'Request Error!']);
-
-       }
+            
+        return $this->sendError('Unauthorised.', ['error' => 'No Valid Token!']);
+       
+    }
         
     }
 
@@ -182,9 +194,10 @@ class AuthController extends BaseController
 
         $input['password_id'] = 0;
         $input['device_id'] = null; //device_id generator
+        $input['api_token'] = 
         $user = Employee::create($input);
 
-        
+        $token = $user->createToken('MyAuthApp')->plainTextToken;
         $input['employee_id'] = $input['employee_id'];
         $input['password'] = bcrypt($input['password']);
         $input['non_active_date'] = Carbon::now()->addDays(90);
@@ -194,14 +207,20 @@ class AuthController extends BaseController
 
             if ($password) {
                 Employee::where('employee_id', $user->employee_id)
-                    ->update(['password_id' => $password->password_id]);
+                ->update(
+                    [
+                        'password_id' => $password->password_id,
+                        'api_token' => $token, 
+                        'remember_token' => $token
+                    ]
+                );
             }
         }
 
         $success['employee_id'] =  $user->employee_id;
         $success['employee_name'] =  $user->employee_name;
         $success['employee_email'] =  $user->employee_email;
-        $success['token'] =  $user->createToken('MyAuthApp')->plainTextToken;
+        $success['token'] =  $token;
         
         return $this->sendResponse($success, 'User created successfully.');
     } 
