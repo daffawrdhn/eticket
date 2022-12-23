@@ -31,24 +31,41 @@ $(document).ready(function() {
         }
     });
 
-    $( "div.input-group" ).hover(
+    $("#show-hide-confirm a").on('click', function(event) {
+        event.preventDefault();
+        if($('#show-hide-confirm input').attr("type") == "text"){
+            $('#show-hide-confirm input').attr('type', 'password');
+            $('#show-hide-confirm i').addClass( "bi bi-eye-slash" );
+            $('#show-hide-confirm i').removeClass( "bi bi-eye" );
+        }else if($('#show-hide-confirm input').attr("type") == "password"){
+            $('#show-hide-confirm input').attr('type', 'text');
+            $('#show-hide-confirm i').removeClass( "bi bi-eye-slash" );
+            $('#show-hide-confirm i').addClass( "bi bi-eye" );
+        }
+    });
+
+    $( "div.description" ).hover(
         function() {
             var className = $('#hover').attr('class');
 
-            console.log(className);
-
             if (className == "is-invalid") {
                 $('#pswd_info').show();
+                $('#pswd_desc').show();
             }
         }, function() {
             $('#pswd_info').hide();
+            $('#pswd_desc').hide();
         }
       );
        
-      $( "li.fade" ).hover(function() {
-        $( this ).fadeOut( 100 );
-        $( this ).fadeIn( 500 );
-      });
+        $( "#employee_birth" ).focus(function() {
+            $('#employee_birth').attr('type', 'date');
+            
+        })
+
+        $( "#employee_birth" ).focusout(function() {
+            $('#employee_birth').attr('type', 'text');
+        })
 
 });
 

@@ -125,7 +125,7 @@ class AuthController extends BaseController
     public function forgotPassword(Request $request){
         $user = Auth::user();
 
-        if($user != null) {
+        if($user != null){
 
         $validator = Validator::make($request->all(), [
             'new_password' => 'required',
@@ -136,32 +136,21 @@ class AuthController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
 
-            if ($request->new_password == $request->new_password_confirm) {
+            if ($request->new_password == $request->new_password_confirm){
                 
-                $lastThreePasswords = Password::where('employee_id', Auth::user()->employee_id)->orderBy('updated_at', 'desc')->take(3)->get();
-                
-                foreach ($lastThreePasswords as $password) {
-
-                    if (Hash::check($request->new_password, $password->password)) {
-                        
-                        return $this->sendError('Unauthorised.', ['error' => 'Password has already been used recently!']);
-                  
-                    }
-                }
-
                 $input['employee_id'] = Auth::user()->employee_id;
-                        $input['password'] = bcrypt($request->new_password);
-                        $input['non_active_date'] = Carbon::now()->addDays(90);
-                        $password = Password::create($input);
-                
-                            if ($password) {
+                $input['password'] = bcrypt($request->new_password);
+                $input['non_active_date'] = Carbon::now()->addDays(90);
+                $password = Password::create($input);
+        
+                    if ($password) {
 
-                                $success = Employee::where('employee_id', Auth::user()->employee_id)
-                                    ->update(['password_id' => $password->password_id]);
+                        $success = Employee::where('employee_id', Auth::user()->employee_id)
+                            ->update(['password_id' => $password->password_id]);
 
-                            }
-                
-                        return $this->sendResponse($success, 'Password Changed!');
+                    }
+        
+                return $this->sendResponse($success, 'Password Changed!');
             
             } else {
 
@@ -173,7 +162,7 @@ class AuthController extends BaseController
             
         return $this->sendError('Unauthorised.', ['error' => 'No Valid Token!']);
        
-        }
+    }
         
     }
 

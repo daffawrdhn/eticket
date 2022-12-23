@@ -8410,3 +8410,41 @@ h1, h2, h3, h4, h5,
 #pswd_info {
   display:none;
 }
+
+
+
+#pswd_desc {
+  position:absolute;
+  bottom:-10px;
+  bottom: -115px\9; /* IE Specific */
+  right:10px;
+  width:250px;
+  padding:15px;
+  background:#fefefe;
+  font-size:.875em;
+  border-radius:5px;
+  box-shadow:0 1px 3px #ccc;
+  border:1px solid #ddd;
+}
+
+#pswd_desc h4 {
+  margin:0 0 10px 0;
+  padding:0;
+  font-weight:normal;
+}
+
+#pswd_desc::before {
+  content: "\25B2";
+  position:absolute;
+  top:-12px;
+  left:45%;
+  font-size:14px;
+  line-height:14px;
+  color:#ddd;
+  text-shadow:none;
+  display:block;
+}
+
+#pswd_desc {
+  display:none;
+}

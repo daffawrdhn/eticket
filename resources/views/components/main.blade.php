@@ -28,6 +28,8 @@
     <script src="{{ asset('style/js/script.js') }}"></script>
     <script src="{{ asset('action/login/login.js') }}"></script>
     <script src="{{ asset('action/login/password_validate.js') }}"></script>
+    <script src="{{ asset('action/login/check_employee.js') }}"></script>
+    <script src="{{ asset('action/login/forgot_password.js') }}"></script>
     
     <title>E-ticket</title>
 </head>
