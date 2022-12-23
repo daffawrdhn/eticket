@@ -33,7 +33,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="" id="hover">
-                                    <div class="input-group" id="show_hide_password">
+                                    <div class="input-group description" id="show_hide_password">
                                         <input type="password" 
                                         id="password-field" 
                                         name='password' 
@@ -47,7 +47,7 @@
                                         <div id="password-fieldFeedback" class="invalid-feedback"></div>   
                                     </div>
                                 </div>
-                              </div>
+                            </div>
                               
                             <div class="form-group">
                                 <button type="submit" class="form-control btn btn-primary rounded submit px-3">L O G I N</button>
@@ -55,7 +55,7 @@
                             <div class="form-group d-md-flex">
                                 <div class="w-50 text-left"></div>
                                 <div class="w-50 text-md-right">
-                                    <a href="#">Forgot Password ?</a>
+                                    <a href="/check-employee">Forgot Password ?</a>
                                 </div>
                             </div>
                         </form>

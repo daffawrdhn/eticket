@@ -17,7 +17,7 @@ class LoginController extends Controller
         if (Auth::user()) {
             return view('containers.dashboard.dashboard');
         }else{
-            return view('login');
+            return view('containers.login.login');
         }
     }
 

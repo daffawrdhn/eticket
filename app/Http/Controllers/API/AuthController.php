@@ -96,75 +96,7 @@ class AuthController extends BaseController
         }
     }
 
-    public function checkData(Request $request){
-
-        $validator = Validator::make($request->all(), [
-            'employee_id' => 'required',
-            'employee_ktp' => 'required',
-            'employee_birth' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Error validation', ['error' => $validator->errors()]);
-        }
-        
-
-        $forgot = Employee::where('employee_id', '=', $request->employee_id)
-        ->where('employee_ktp', '=', $request->employee_ktp)
-        ->where('employee_birth', '=', $request->employee_birth)
-        ->get()->first();
-
-        if($forgot != null){
-            $success['token'] = $forgot->api_token;
-            return $this->sendResponse($success, 'Data Correct!');
-        } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Data incorrect!']);
-        }
-    }
-
-    public function forgotPassword(Request $request){
-        $user = Auth::user();
-
-        if($user != null){
-
-        $validator = Validator::make($request->all(), [
-            'new_password' => 'required',
-            'new_password_confirm' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Error validation', ['error' => $validator->errors()]);
-        }
-
-            if ($request->new_password == $request->new_password_confirm){
-                
-                $input['employee_id'] = Auth::user()->employee_id;
-                $input['password'] = bcrypt($request->new_password);
-                $input['non_active_date'] = Carbon::now()->addDays(90);
-                $password = Password::create($input);
-        
-                    if ($password) {
-
-                        $success = Employee::where('employee_id', Auth::user()->employee_id)
-                            ->update(['password_id' => $password->password_id]);
-
-                    }
-        
-                return $this->sendResponse($success, 'Password Changed!');
-            
-            } else {
-
-                return $this->sendError('Unauthorised.', ['error' => 'Please input password confirmation correctly!']);
-            
-            }
-
-       } else {
-            
-        return $this->sendError('Unauthorised.', ['error' => 'No Valid Token!']);
-       
-    }
-        
-    }
+    
 
     public function data(Request $request){
         $success = Auth::user();
