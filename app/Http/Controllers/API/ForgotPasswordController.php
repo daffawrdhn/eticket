@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\forgotpassword;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
 use App\Models\Employee;

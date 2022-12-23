@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\forgotpassword\CheckDataEmployeeController;
-use App\Http\Controllers\forgotpassword\ForgotPasswordController;
+use App\Http\Controllers\API\CheckDataEmployeeController;
+use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
