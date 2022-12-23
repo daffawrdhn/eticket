@@ -1,20 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\forgotpassword;
+namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Employee;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class CheckEmployeeController extends BaseController
+class CheckDataEmployeeController extends BaseController
 {
     public function index(){
+
         return view('containers.login.check_employee');
     }
 
-    public function checkData(Request $request){
 
+
+    public function checkEmployee(Request $request){
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required',
             'employee_ktp' => 'required',
@@ -33,9 +36,16 @@ class CheckEmployeeController extends BaseController
 
         if($getEmployee != null){
             $success['token'] = $getEmployee->api_token;
+            $success['role'] = $getEmployee->role_id;
             return $this->sendResponse($success, 'Data Correct!');
         } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Data incorrect!']);
+            return $this->sendError('Unauthorised.', ['error' => 'Data Not Found!']);
         }
     }
+
+    public function data(Request $request){
+        $success = Auth::user();
+       return $this->sendResponse($success, 'Data Found!');
+    }
 }
+
