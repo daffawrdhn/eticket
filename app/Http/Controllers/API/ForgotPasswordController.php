@@ -56,6 +56,22 @@ class ForgotPasswordController extends BaseController
                                     ->update(['password_id' => $password->password_id]);
 
                             }
+
+                            // Delete all passwords except for the last three passwords
+                            $lastThreePasswordIds = Password::where('employee_id', Auth::user()->employee_id)
+                                ->orderBy('updated_at', 'desc')
+                                ->take(3)
+                                ->pluck('password_id');
+
+                            // dd($lastThreePasswordIds);
+
+                            if($lastThreePasswordIds){
+                                Password::where('employee_id', Auth::user()->employee_id)
+                                ->whereNotIn('password_id', $lastThreePasswordIds)
+                                ->delete();
+                            }
+                            // Delete all passwords except for the last three passwords
+                            
                 
                         return $this->sendResponse($success, 'Password Changed!');
             
