@@ -26,6 +26,7 @@
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                 required>
                                 <label class="form-control-placeholder" for="employee_id">NIK</label>
+                                <div id="employee_idFeedback" class="invalid-feedback"></div>
                             </div>
                             <div class="form-group mt-4 pb-2">
                                 <input type="text" 
@@ -36,6 +37,7 @@
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                 required>
                                 <label class="form-control-placeholder" for="employee_ktp">No. KTP</label>
+                                <div id="employee_ktpFeedback" class="invalid-feedback"></div>
                             </div>
 
                             <div class="form-group mt-4 pb-2 date">
@@ -46,6 +48,7 @@
                                 autocomplete="off"
                                 required>
                                 <label class="form-control-placeholder" for="employee_birth">date of birth</label>
+                                
                             </div>
                               
                             <div class="form-group">

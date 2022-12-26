@@ -3,7 +3,7 @@
         <div class="sb-sidenav-menu">
             <div class="nav">
                 <div class="sb-sidenav-menu-heading">Core</div>
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="/dashboard">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
@@ -68,8 +68,16 @@
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            Start Bootstrap
+            <div class="dropup-center dropup">
+                <button class="btn text-light text-start" type="button" style="width: 100%" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-gear"></i>
+                     Setting
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/change-password">Change Password</a></li>
+                </ul>
+            </div>
+            
         </div>
     </nav>
 </div>
