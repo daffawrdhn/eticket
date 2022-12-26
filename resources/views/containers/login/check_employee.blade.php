@@ -23,6 +23,7 @@
                                 id="employee_id" 
                                 name="employee_id" 
                                 autocomplete="off"
+                                maxlength="12"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                 required>
                                 <label class="form-control-placeholder" for="employee_id">NIK</label>
@@ -34,6 +35,7 @@
                                 id="employee_ktp" 
                                 name="employee_ktp" 
                                 autocomplete="off"
+                                maxlength="18"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                 required>
                                 <label class="form-control-placeholder" for="employee_ktp">No. KTP</label>
