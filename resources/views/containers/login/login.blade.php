@@ -27,6 +27,7 @@
                                 id="employee_id" 
                                 name="employee_id" 
                                 autocomplete="off"
+                                maxlength="12"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                 required>
                                 <label class="form-control-placeholder" for="username">NIK</label>
