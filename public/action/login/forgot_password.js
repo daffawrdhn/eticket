@@ -18,6 +18,8 @@ $(document).ready(function () {
         if (newPassword.match(pwdValidation)) {
 
             if (newPassword === confirmPassword) {
+                $('#confirm-password').removeClass('is-invalid');
+                $('#password-field').removeClass('is-invalid');
 
                 $.ajax({
                 type : "POST",
