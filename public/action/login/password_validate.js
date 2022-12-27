@@ -114,3 +114,40 @@ function hoverPassword(password) {
         $('#specialChar').addClass('text-danger');
     }
 }
+
+
+function checkNik() {
+    
+    $('#employee_id').keyup(function () {
+        
+         var employeeId = $('#employee_id').val()
+
+         console.log('ok');
+
+        if (employeeId.length >= 8) {
+            $('#employee_id').removeClass('is-invalid');
+
+        } else {
+            $('#employee_id').addClass('is-invalid');
+            $('#employee_idFeedback').html('NIk min 8 - 12 char')
+        }
+
+    })
+
+    $('#employee_ktp').keyup(function () {
+        
+        var employeeKtp = $('#employee_ktp').val()
+
+        console.log('ok');
+
+       if (employeeKtp.length >= 16) {
+           $('#employee_ktp').removeClass('is-invalid');
+
+       } else {
+           $('#employee_ktp').addClass('is-invalid');
+           $('#employee_ktpFeedback').html('No.Ktp min 16 char')
+       }
+
+   })
+
+}
