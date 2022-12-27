@@ -14,71 +14,80 @@ $(document).ready(function () {
 
         if (data.employee_id.length >= 8) {
             if (data.password.match(pwdValidation)) {
-                $.ajax({
-                    type : "POST",
-                    url : APP_URL + "api/login",
-                    data : data,
-                    dataType : "json",
-                    success : function(response){
-        
-                        role = response.data.role['role_id']
-        
-                        if (role === 1) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'You are not Administrator !',
-                            })
-        
-                            window.location.href = APP_URL + "logout";
-                        }else{
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Login is Successfully',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    location.href = APP_URL + "dashboard";
+                let timerInterval
+                Swal.fire({
+                title: 'Loading!',
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        $.ajax({
+                            type : "POST",
+                            url : APP_URL + "api/login",
+                            data : data,
+                            dataType : "json",
+                            success : function(response){
+                
+                                role = response.data.role['role_id']
+                
+                                if (role === 1) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'You are not Administrator !',
+                                    })
+                
+                                    window.location.href = APP_URL + "logout";
+                                }else{
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'success',
+                                        title: 'Login is Successfully',
+                                        showConfirmButton: false,
+                                        timer: 1000
+                                    }).then((result) => {
+                                        if (result.dismiss === Swal.DismissReason.timer) {
+                                            location.href = APP_URL + "dashboard";
+                                        }
+                                      })
+                
+                                    
                                 }
-                              })
-        
-                            
-                        }
-                        
-                    },
-                    error:function(response){
-                        if (!response.success) {
-        
-                            if (response.status === 403) {
-                                Swal.fire({
-                                    icon : 'error',
-                                    title: 'You are not Administrator!!',
-                                    showDenyButton: false,
-                                    showCancelButton: false,
-                                    confirmButtonText: 'Ok',
-                                  }).then((result) => {
-                                    /* Read more about isConfirmed, isDenied below */
-                                    if (result.isConfirmed) {
-                                        window.location.href = APP_URL + "logout";
-                                    } 
-                                  })
-        
-                            }else{
-                                $('#alert').show();
-                                $('#alert').html(response.responseJSON.data.error);
+                                
+                            },
+                            error:function(response){
+                                if (!response.success) {
+                
+                                    if (response.status === 403) {
+                                        Swal.fire({
+                                            icon : 'error',
+                                            title: 'You are not Administrator!!',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            confirmButtonText: 'Ok',
+                                          }).then((result) => {
+                                            /* Read more about isConfirmed, isDenied below */
+                                            if (result.isConfirmed) {
+                                                window.location.href = APP_URL + "logout";
+                                            } 
+                                          })
+                
+                                    }else{
+                                        $('#alert').show();
+                                        $('#alert').html(response.responseJSON.data.error);
+                                    }
+                                }
                             }
-                        }
+                        })
                     }
                 })
-            }else{
-                $('#password-field').addClass('is-invalid');
-                $('#password-fieldFeedback').html('please match the request format')
             }
-        }else{
-            $('#employee_id').addClass('is-invalid');
-            $('#employee_idFeedback').html('please input min 8 char')
         }
 
         

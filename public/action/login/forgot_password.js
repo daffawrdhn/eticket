@@ -21,45 +21,55 @@ $(document).ready(function () {
                 $('#confirm-password').removeClass('is-invalid');
                 $('#password-field').removeClass('is-invalid');
 
-                $.ajax({
-                type : "POST",
-                url : APP_URL + "api/forgot-password",
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                let timerInterval
+                Swal.fire({
+                title: 'Loading!',
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
                 },
-                success : function(response){
-    
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            location.href = APP_URL;
-                        }
-                      })
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                            $('#alert').show();
-                            $('#alert').html(response.responseJSON.data.error);
-                        
-                    }
+                willClose: () => {
+                    clearInterval(timerInterval)
                 }
-            })
-            }else{
-                $('#confirm-password').addClass('is-invalid');
-                $('#hover').addClass('is-invalid');
-                $('#confirm-passwordFeedback').html('confirm password not match')
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        $.ajax({
+                            type : "POST",
+                            url : APP_URL + "api/forgot-password",
+                            data : data,
+                            dataType : "json",
+                            beforeSend: function(xhr, settings) { 
+                                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                            },
+                            success : function(response){
+                
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        location.href = APP_URL;
+                                    }
+                                  })
+                                
+                            },
+                            error:function(response){
+                                if (!response.success) {
+                                        $('#alert').show();
+                                        $('#alert').html(response.responseJSON.data.error);
+                                    
+                                }
+                            }
+                        })
+                    }
+                })
+
+                
             }
-        }else{
-            $('#password-field').addClass('is-invalid');
-            $('#password-fieldFeedback').html('please match the request format')
         }
 
 
