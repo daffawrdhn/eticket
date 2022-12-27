@@ -16,7 +16,7 @@
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="#">Setting User</a>
-                        <a class="nav-link" href="#">Setting User Role</a>
+                        <a class="nav-link" href="/setting-role">Setting User Role</a>
                         <a class="nav-link" href="#">Setting Regional</a>
                         <a class="nav-link" href="#">Setting Role</a>
                     </nav>
