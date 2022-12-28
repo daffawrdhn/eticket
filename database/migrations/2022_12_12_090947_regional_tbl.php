@@ -18,7 +18,8 @@ return new class extends Migration
             Blueprint $table
         ){
             $table->bigIncrements('regional_id');
-            $table->string('regional_name');            
+            $table->string('regional_name');
+            $table->timestamps();            
         });
     }
 
