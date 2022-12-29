@@ -20,6 +20,7 @@ class Ticket extends Model
         'ticket_title',
         'photo',
         'ticket_description',
+        'ticket_status_id',
         'ticket_status'
     ];
 
@@ -31,6 +32,11 @@ class Ticket extends Model
     public function subFeature()
     {
         return $this->belongsTo(SubFeature::class, 'sub_feature_id');
+    }
+
+    public function ticketStatus()
+    {
+        return $this->hasMany(TicketStatus::class, 'ticket_status_id');
     }
 
     public function employee()

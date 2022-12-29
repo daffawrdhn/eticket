@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Employee;
 use App\Models\Password;
+use App\Models\TicketStatus;
 use Carbon\Carbon;
 
 use function PHPUnit\Framework\isEmpty;
@@ -168,6 +169,7 @@ class AuthController extends BaseController
 
     public function data(Request $request){
         $success = Auth::user();
+        // $success = TicketStatus::all();
        return $this->sendResponse($success, 'Data Found!');
     }
 
