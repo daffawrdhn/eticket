@@ -16,9 +16,10 @@
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="#">Setting User</a>
-                        <a class="nav-link" href="#">Setting User Role</a>
+                        <a class="nav-link" href="/setting-role">Setting User Role</a>
                         <a class="nav-link" href="#">Setting Regional</a>
-                        <a class="nav-link" href="#">Setting Role</a>
+                        <a class="nav-link" href="/setting-feature">Setting Feature</a>
+                        <a class="nav-link" href="#">Setting Sub Feature</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -66,18 +67,6 @@
                     Tables
                 </a>
             </div>
-        </div>
-        <div class="sb-sidenav-footer">
-            <div class="dropup-center dropup">
-                <button class="btn text-light text-start" type="button" style="width: 100%" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-gear"></i>
-                     Setting
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/change-password">Change Password</a></li>
-                </ul>
-            </div>
-            
         </div>
     </nav>
 </div>

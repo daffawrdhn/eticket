@@ -150,4 +150,19 @@ function checkNik() {
 
    })
 
+   $('#confirm-password').keyup(function () {
+        
+    var confirmPassword = $('#confirm-password').val()
+    var password = $('#password-field').val()
+
+   if (confirmPassword === password) {
+       $('#confirm-password').removeClass('is-invalid');
+
+   } else {
+       $('#confirm-password').addClass('is-invalid');
+       $('#confirm-passwordFeedback').html('Password Not match')
+   }
+
+})
+
 }

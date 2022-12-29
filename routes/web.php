@@ -3,8 +3,10 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +29,8 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/change-password', [PasswordController::class, 'index']);
+    Route::get('/setting-role', [RoleController::class, 'index']);
+    Route::get('/setting-feature', [FeatureController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
 
 });

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
+    <link rel="stylesheet" href="{{ asset('style/css/dashboard/style2.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/dashboard/style.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/login/style.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/bootstrap.min.css') }}">
@@ -21,7 +21,6 @@
     <script src="{{ asset('style/js/popper.js') }}"></script>
     <script src="{{ asset('style/js/popper.min.js') }}"></script>
     <script src="{{ asset('style/js/popper.min.js.map') }}"></script>
-    <script src="{{ asset('style/js/popper.min.js') }}"></script>
     <script src="{{ asset('style/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script src="{{ asset('style/js/sweetalert2.all.min.js') }}"></script>
@@ -30,6 +29,7 @@
     <script src="{{ asset('action/login/password_validate.js') }}"></script>
     <script src="{{ asset('action/login/check_employee.js') }}"></script>
     <script src="{{ asset('action/login/forgot_password.js') }}"></script>
+    <script src="{{ asset('action/feature/feature.js') }}"></script>
     
     <title>E-ticket</title>
 </head>
