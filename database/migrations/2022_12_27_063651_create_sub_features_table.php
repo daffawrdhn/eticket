@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('sub_feature_tbl', function (Blueprint $table) {
             $table->bigIncrements('sub_feature_id');
-            $table->string('sub_feature_name');
             $table->unsignedBigInteger('feature_id');
-            $table->foreign('feature_id')->references('feature_id')->on('feature_tbl')->onDelete('cascade');
+            $table->string('sub_feature_name');
             $table->timestamps();
+
+            $table->foreign('feature_id')->references('feature_id')->on('feature_tbl')->onDelete('cascade');
+            
         });
     }
 

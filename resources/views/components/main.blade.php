@@ -21,7 +21,6 @@
     <script src="{{ asset('style/js/popper.js') }}"></script>
     <script src="{{ asset('style/js/popper.min.js') }}"></script>
     <script src="{{ asset('style/js/popper.min.js.map') }}"></script>
-    <script src="{{ asset('style/js/popper.min.js') }}"></script>
     <script src="{{ asset('style/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script src="{{ asset('style/js/sweetalert2.all.min.js') }}"></script>
