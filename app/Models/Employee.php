@@ -80,6 +80,6 @@ protected $hidden = [
 
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class, 'ticket_id');
+        return $this->hasMany(Ticket::class, 'employee_id', 'employee_id');
     }
 }
