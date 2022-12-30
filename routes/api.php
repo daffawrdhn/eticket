@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-ticket/{id}', [TicketController::class, 'destroy'])->name('auth.deleteTicket');
     Route::get('get-ticket', [TicketController::class, 'getTicket'])->name('auth.getTicket');
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
+    route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
     
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Feature;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,6 +32,29 @@ class TicketController extends BaseController
     public function create()
     {
         
+    }
+
+    public function features()
+    {
+        $features = Feature::with('subfeatures')->get();
+        
+        $response = [
+            'feature' => $features->map(function ($feature) {
+                return [
+                    'feature_id' => $feature->feature_id,
+                    'feature_name' => $feature->feature_name,
+                    'sub_feature' => $feature->subfeatures->map(function ($subfeature) {
+                        return [
+                            'sub_feature_id' => $subfeature->sub_feature_id,
+                            'sub_feature_name' => $subfeature->sub_feature_name
+                        ];
+                    })
+                ];
+            })
+            ];
+            
+            return $this->sendResponse($response, 'Features responses get.');
+                        
     }
 
     /**
