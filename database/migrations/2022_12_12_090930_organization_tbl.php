@@ -18,7 +18,7 @@ return new class extends Migration
             Blueprint $table
         ){
             $table->bigIncrements('organization_id');
-            $table->string('orgainzation_name');
+            $table->string('organization_name');
             $table->timestamps();            
         });
     }

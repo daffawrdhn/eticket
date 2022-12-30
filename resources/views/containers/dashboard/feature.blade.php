@@ -16,7 +16,7 @@
 
                     <div class="container-fluid p-4 rounded shadow position-relative">
                         <button class="btn btn-danger btn-sm mb-5" id="delete-all">Delete All</button>
-                        <table class="table">
+                        <table class="table" id="featureTable">
                             <thead>
                               <tr>
                                 <th scope="col p-2">
@@ -72,4 +72,7 @@
             </div>
         </div>
     </div>
+
+
+    <script src="{{ asset('action/feature/feature.js') }}"></script>
 @endsection

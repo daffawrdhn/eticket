@@ -1,6 +1,9 @@
 $(document).ready(function () {
 
-    getDataFeature();
+    
+        getDataFeature();
+
+    
 
     //getdata
     function getDataFeature()
@@ -98,7 +101,6 @@ $(document).ready(function () {
         $("#input-feature").removeClass('update-feature');
         $("#input-feature").addClass('input-feature');
         $('#feature_name').val('');
-
         
     });
 
@@ -114,15 +116,8 @@ $(document).ready(function () {
         }
 
         
-        
-        if (data.feature_name == '') {
-            $('#feature_name').addClass('is-invalid');
-            $('#feature_nameFeedback').html('please fill out this field')
-        }else{
-            $('#feature_name').removeClass('is-invalid');
-            
 
-            $.ajax({
+        $.ajax({
                 type : "POST",
                 url : APP_URL + "api/add-feature",
                 data : data,
@@ -151,11 +146,19 @@ $(document).ready(function () {
                 },
                 error:function(response){
                     if (!response.success) {
-                            console.log(response.responseJSON.data.error);
+
+                            Swal.fire({
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                text : "please fill out this field",
+                                
+                                
+                            })
                     }
                 }
-            })
-        }
+        })
+        
     });
 
     //update feature
@@ -168,18 +171,9 @@ $(document).ready(function () {
 
         data = {
             'feature_name' : $('#feature_name').val()
-        }
+        }  
 
-        
-        
-        if (data.feature_name == '') {
-            $('#feature_name').addClass('is-invalid');
-            $('#feature_nameFeedback').html('please fill out this field')
-        }else{
-            $('#feature_name').removeClass('is-invalid');
-            
-
-            $.ajax({
+        $.ajax({
                 type : "POST",
                 url : APP_URL + "api/update-feature/"+ id,
                 data : data,
@@ -208,12 +202,20 @@ $(document).ready(function () {
                 },
                 error:function(response){
                     if (!response.success) {
-                            console.log(response.responseJSON.data.error);
+
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : "please fill out this field",
+                            
+                            
+                        })
                         
                     }
                 }
-            })
-        }
+        })
+
     });
 
 
@@ -337,6 +339,7 @@ $(document).ready(function () {
                                         
                                     }).then((result) => {
                                         if (result.isConfirmed) {
+                                            $("#master-check").prop('checked', false); 
                                             getDataFeature();
                                         } 
                                     })

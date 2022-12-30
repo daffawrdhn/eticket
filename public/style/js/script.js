@@ -67,6 +67,13 @@ $(document).ready(function() {
             $('#employee_birth').attr('type', 'text');
         })
 
+
+
+        // test data table
+
+
+        $('#subFeatureTable').DataTable()
+
 });
 
 

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Role;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class RoleController extends Controller
+class RoleController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +38,45 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $validator = Validator::make($request->all(),[
+                'role_name' => 'required'
+            ]);
+    
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $role['role_name'] = $request->role_name;
+                $storeRole = Role::create($role);
+
+                if ($storeRole) {
+                    return $this->sendResponse($role, 'success input new role');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $storeRole]);
+                }
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+    public function getRole(){
+        try {
+            
+            $getRole = Role::all();
+
+            if ($getRole) {
+                return $this->sendResponse($getRole, 'success get data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $getRole]);
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 
     /**
@@ -45,7 +87,19 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $data = Role::where('role_id',$id)->first();
+
+
+            if ($data) {
+                return $this->sendResponse($data, 'success get data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $data]);
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 
     /**
@@ -68,7 +122,32 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(),[
+                'role_name' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $updateFeature = Role::where('role_id', $id)
+                    ->update([
+                        'role_name' => $request->role_name
+                    ]);
+
+                $data = Role::find($id);
+
+                if ($updateFeature) {
+                    return $this->sendResponse($data, 'success update data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $updateFeature]);
+                }
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 
     /**
@@ -79,6 +158,42 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $delete = Role::where('role_id', $id)->delete();
+
+            if ($delete) {
+                return $this->sendResponse($delete, 'success delete data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $delete]);
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+    public function destroyAll(Request $request){
+
+        try {   
+            $validator = Validator::make($request->all(),[
+                'ids' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $ids = $request->ids;
+
+                $deleteAll = Role::whereIn('role_id',explode(",",$ids))->delete();
+
+                if ($deleteAll) {
+                    return $this->sendResponse($deleteAll, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $deleteAll]);
+                }
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
+        }
     }
 }

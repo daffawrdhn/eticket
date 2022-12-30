@@ -17,9 +17,10 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="#">Setting User</a>
                         <a class="nav-link" href="/setting-role">Setting User Role</a>
-                        <a class="nav-link" href="#">Setting Regional</a>
+                        <a class="nav-link" href="/setting-organization">Setting Organization</a>
+                        <a class="nav-link" href="/setting-regional">Setting Regional</a>
                         <a class="nav-link" href="/setting-feature">Setting Feature</a>
-                        <a class="nav-link" href="#">Setting Sub Feature</a>
+                        <a class="nav-link" href="/setting-sub-feature">Setting Sub Feature</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">

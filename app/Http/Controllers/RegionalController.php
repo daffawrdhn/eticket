@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Regional;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class RegionalController extends BaseController
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('containers.dashboard.regional');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+    
+            try {
+
+                $validator = Validator::make($request->all(),[
+                    'regional_name' => 'required'
+                ]);
+        
+                if ($validator->fails()) {
+                    return $this->sendError('Error validation', ['error' => $validator->errors()]);
+                }else{
+
+                    $regional['regional_name'] = $request->regional_name;
+                    $storeRegional = Regional::create($regional);
+
+                    if ($storeRegional) {
+                        return $this->sendResponse($regional, 'success input new regional');
+                    }else{
+                        return $this->sendError('Error validation', ['error' => $storeRegional]);
+                    }
+                }
+
+            } catch (Exception $error) {
+                return $this->sendError('Error validation', ['error' => $error]);
+            }
+        
+
+    }
+
+
+    public function getRegional(){
+        try {
+            
+            $getRegional = Regional::all();
+
+            if ($getRegional) {
+                return $this->sendResponse($getRegional, 'success get data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $getRegional]);
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        try {
+            $data = Regional::where('regional_id',$id)->first();
+
+
+            if ($data) {
+                return $this->sendResponse($data, 'success get data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $data]);
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+    public function edit(Regional $regional)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $validator = Validator::make($request->all(),[
+                'regional_name' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $update = Regional::where('regional_id', $id)
+                    ->update([
+                        'regional_name' => $request->regional_name
+                    ]);
+
+                $data = Regional::find($id);
+
+                if ($update) {
+                    return $this->sendResponse($data, 'success update data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $update]);
+                }
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $delete = Regional::where('regional_id', $id)->delete();
+
+            if ($delete) {
+                return $this->sendResponse($delete, 'success delete data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $delete]);
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+
+    public function destroyAll(Request $request){
+
+        try {   
+            $validator = Validator::make($request->all(),[
+                'ids' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $ids = $request->ids;
+
+                $deleteAll = Regional::whereIn('regional_id',explode(",",$ids))->delete();
+
+                if ($deleteAll) {
+                    return $this->sendResponse($deleteAll, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $deleteAll]);
+                }
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
+        }
+    }
+}

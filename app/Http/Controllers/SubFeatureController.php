@@ -175,4 +175,31 @@ class SubFeatureController extends BaseController
             return $this->sendError('Error validation', ['error' => $error]);
         }
     }
+
+
+    public function destroyAll(Request $request){
+
+        try {   
+            $validator = Validator::make($request->all(),[
+                'ids' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $ids = $request->ids;
+
+                $deleteAll = SubFeature::whereIn('sub_feature_id',explode(",",$ids))->delete();
+
+                if ($deleteAll) {
+                    return $this->sendResponse($deleteAll, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $deleteAll]);
+                }
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
+        }
+    }
 }

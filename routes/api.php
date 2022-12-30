@@ -6,6 +6,9 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\RegionalController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Http\Controllers\TicketController;
 
@@ -19,6 +22,29 @@ Route::middleware('auth:api')->group( function () {
 
     Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('auth.forgotpassword');
     
+    //organization
+    Route::post('add-organization', [OrganizationController::class, 'store'])->name('auth.addOrganization');
+    Route::post('update-organization/{id}', [OrganizationController::class, 'update'])->name('auth.updateOrganization');
+    Route::delete('delete-organization/{id}', [OrganizationController::class, 'destroy'])->name('auth.deleteOrganization');
+    Route::delete('delete-all-organization', [OrganizationController::class, 'destroyAll'])->name('auth.deleteAllOrganization');
+    Route::get('get-organization', [OrganizationController::class, 'getOrganization'])->name('auth.getOrganization');
+    Route::get('get-organization/{id}', [OrganizationController::class, 'show'])->name('auth.getOrganizationById');
+
+    //regional
+    Route::post('add-regional', [RegionalController::class, 'store'])->name('auth.addRegional');
+    Route::post('update-regional/{id}', [RegionalController::class, 'update'])->name('auth.updateRegional');
+    Route::delete('delete-regional/{id}', [RegionalController::class, 'destroy'])->name('auth.deleteRegional');
+    Route::delete('delete-all-regional', [RegionalController::class, 'destroyAll'])->name('auth.deleteAllRegional');
+    Route::get('get-regional', [RegionalController::class, 'getRegional'])->name('auth.getRegional');
+    Route::get('get-regional/{id}', [RegionalController::class, 'show'])->name('auth.getRegionalById');
+
+    //role
+    Route::post('add-role', [RoleController::class, 'store'])->name('auth.addRole');
+    Route::post('update-role/{id}', [RoleController::class, 'update'])->name('auth.updateRole');
+    Route::delete('delete-role/{id}', [RoleController::class, 'destroy'])->name('auth.deleteRole');
+    Route::delete('delete-all-role', [RoleController::class, 'destroyAll'])->name('auth.deleteAllRole');
+    Route::get('get-role', [RoleController::class, 'getRole'])->name('auth.getRole');
+    Route::get('get-role/{id}', [RoleController::class, 'show'])->name('auth.getRoleById');
     
     //feature
     Route::post('add-feature', [FeatureController::class, 'store'])->name('auth.addFeature');
@@ -43,7 +69,7 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-ticket/{id}', [TicketController::class, 'destroy'])->name('auth.deleteTicket');
     Route::get('get-ticket', [TicketController::class, 'getTicket'])->name('auth.getTicket');
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
-
+    
     
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 

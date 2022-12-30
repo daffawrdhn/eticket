@@ -34,9 +34,9 @@ $(document).ready(function () {
                             dataType : "json",
                             success : function(response){
                 
-                                role = response.data.role['role_id']
+                                role = response.data.role['role_name']
                 
-                                if (role === 1) {
+                                if (role != 'administrator') {
                                     Swal.fire({
                                         icon : 'error',
                                         title: 'You are not Administrator!!',
