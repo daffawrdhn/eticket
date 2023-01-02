@@ -36,7 +36,9 @@ class TicketController extends BaseController
 
     public function features()
     {
-        $features = Feature::with('subfeatures')->get();
+        try
+        {
+            $features = Feature::with('subfeatures')->get();
         
         $response = [
             'feature' => $features->map(function ($feature) {
@@ -54,6 +56,10 @@ class TicketController extends BaseController
             ];
             
             return $this->sendResponse($response, 'Features responses get.');
+        
+        } catch (Exception $error) {
+            return $this->sendError('Error creating ticket', ['error' => $error->getMessage()]);
+        }
                         
     }
 
@@ -72,8 +78,8 @@ class TicketController extends BaseController
             'sub_feature_id' => 'required',
             'ticket_title' => 'required',
             'ticket_description' => 'required',
-            'ticket_status_id' => 'required',
-            'photo' => 'required|mimes:jpg,png',
+            // 'ticket_status_id' => 'required',
+            // 'photo' => 'required|mimes:jpg,png',
         ]);
 
         if ($validator->fails()) {
@@ -91,16 +97,18 @@ class TicketController extends BaseController
                 $thumbnail = Image::make(public_path('asset/images/' . $filename))->resize(100, 100);
             
                 $thumbnail->save(public_path('asset/images/' . $filename));
+            } else {
+                $filename = 'nopic.jpg';
             }
 
-            
             $ticket = [
                 'employee_id' => $employeeId->employee_id,
+                'supervisor_id' => $employeeId->supervisor_id,
                 'feature_id' => $request->feature_id,
                 'sub_feature_id' => $request->sub_feature_id, // Add this line
                 'ticket_title' => $request->ticket_title,
                 'ticket_description' => $request->ticket_description,
-                'ticket_status_id' => $request->ticket_status_id,
+                'ticket_status_id' => 1,
                 'photo' => $filename
             ];
             // dd($ticket);

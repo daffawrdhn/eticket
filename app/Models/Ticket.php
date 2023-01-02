@@ -15,6 +15,7 @@ class Ticket extends Model
     protected $fillable = [
         'ticket_id',
         'employee_id',
+        'supervisor_id',
         'feature_id',
         'sub_feature_id',  // add this line
         'ticket_title',
