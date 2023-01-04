@@ -50,7 +50,6 @@
                                 autocomplete="off"
                                 required>
                                 <label class="form-control-placeholder" for="employee_birth">date of birth</label>
-                                
                             </div>
                               
                             <div class="form-group">

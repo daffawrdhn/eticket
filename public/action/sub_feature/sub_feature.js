@@ -2,60 +2,63 @@ $(document).ready(function () {
 
     
     getDataSubFeature();
-    getDataFeature()
 
 
     //getdata
     function getDataSubFeature()
     {
         var token = $('#token').val()
-        $.ajax({
-            url : APP_URL + "api/get-sub-feature",
-            type : 'GET',
-            dataType : 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
 
-                    $('#table-sub_feature').html('');
-                    no = 1;
-                    $(response.data).each(function(key, values){
-
-                        $('#table-sub_feature').append(`<tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.sub_feature_id +`">
-                                </div>
-                            </td>
-                            <td>`+ no++ +`</td>
-                            <td id="sub_feature-list">`+values.feature.feature_name+`</td>
-                            <td id="sub_feature-list">`+values.sub_feature_name+`</td>
-                            <td>
-                            <button type="button" id="edit-sub_feature" class="btn btn-sm btn-success" value="`+ values.sub_feature_id +`" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                                <button type="button" id="delete-sub_feature" class="btn btn-danger btn-sm" value="`+ values.sub_feature_id +`">
-                                    <i class="bi bi-trash-fill"></i>
+            $.ajax({
+                url : APP_URL + "api/get-sub-feature",
+                type : 'GET',
+                dataType : 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+    
+                        $('#table-sub_feature').html('');
+    
+                        no = 1;
+                        $(response.data).each(function(key, values){
+    
+                            $('#table-sub_feature').append(`<tr>
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.sub_feature_id +`">
+                                    </div>
+                                </td>
+                                <td>`+ no++ +`</td>
+                                <td id="sub_feature-list">`+values.feature.feature_name+`</td>
+                                <td id="sub_feature-list">`+values.sub_feature_name+`</td>
+                                <td>
+                                <button type="button" id="edit-sub_feature" class="btn btn-sm btn-success" value="`+ values.sub_feature_id +`" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <i class="bi bi-pencil-fill"></i>
                                 </button>
-                            </td>
-                        </tr>`);
-                    })
-                
-
-            },
-            error:function(response){
-                if (!response.success) {
-                        // $('#alert').show();
-                        // $('#alert').html(response.responseJSON.data.error);
-
-
-                        console.log(response.responseJSON.data.error);
+                                    <button type="button" id="delete-sub_feature" class="btn btn-danger btn-sm" value="`+ values.sub_feature_id +`">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </td>
+                            </tr>`);
+                        })
                     
+    
+                },
+                error:function(response){
+                    if (!response.success) {
+                            // $('#alert').show();
+                            // $('#alert').html(response.responseJSON.data.error);
+    
+    
+                            console.log(response.responseJSON.data.error);
+                        
+                    }
                 }
-            }
+    
+            })
 
-        });
+        
     }
 
     // get sub_feature by id
@@ -79,7 +82,9 @@ $(document).ready(function () {
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
             },
             success : function(response){
-                $('#sub_feature_name').val(response.data.sub_feature_name);
+                $('#feature_id').append(`
+                    <option selected value="${response.data.feature.feature_id}">${response.data.feature['feature_name']}</option>
+                `)
                 $('#input-sub_feature').val(response.data.sub_feature_id);
             },
             error:function(response){
@@ -96,43 +101,7 @@ $(document).ready(function () {
     });
 
 
-    //get Feature
-    function getDataFeature()
-    {
-        var token = $('#token').val()
-        $.ajax({
-            url : APP_URL + "api/get-feature",
-            type : 'GET',
-            dataType : 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-
-                    $('.select-feature').html('');
-                    no = 1;
-                    $(response.data).each(function(key, values){
-
-                        $('.select-feature').append(`
-                            <option value="`+ values.feature_id +`">`+ values.feature_name +`</option>
-                        `);
-                    })
-                
-
-            },
-            error:function(response){
-                if (!response.success) {
-                        // $('#alert').show();
-                        // $('#alert').html(response.responseJSON.data.error);
-
-
-                        console.log(response.responseJSON.data.error);
-                    
-                }
-            }
-
-        });
-    }
+    
 
 
     //post
@@ -142,6 +111,7 @@ $(".sub_featureAdd").click(function (e) {
     $(".modal-title").html('Add New sub_feature')
     $("#input-sub_feature").removeClass('update-sub-feature');
     $("#input-sub_feature").addClass('input-sub-feature');
+    $('#feature_id option:selected').remove();
     $('#sub_feature_name').val('');
     
 });
@@ -167,7 +137,7 @@ $(".sub_featureAdd").click(function (e) {
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
             },
             success : function(response){
-
+                $("#staticBackdrop").modal('hide');
 
                 Swal.fire({
                     position: 'center',
@@ -214,6 +184,43 @@ $(".sub_featureAdd").click(function (e) {
     
     });
 
+    $(document).on('click', '#edit-sub_feature', function(e){
+        e.preventDefault();
+        
+        $(".modal-title").html('Update Sub Feature')
+        $("#input-sub_feature").removeClass('input-sub_feature');
+        $("#input-sub_feature").addClass('update-sub_feature');
+
+        
+        var id = $(this).val();
+        
+
+        var token = $('#token').val()
+        $.ajax({
+            url : APP_URL + "api/get-sub-feature/"+ id,
+            type : 'GET',
+            dataType : 'json',
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+            success : function(response){
+                console.log(response);
+                $('#sub_feature_name').val(response.data.sub_feature_name);
+                $('#input-sub_feature').val(response.data.sub_feature_id);
+            },
+            error:function(response){
+                if (!response.success) {
+
+                        console.log(response.responseJSON.data.error);
+                    
+                }
+            }
+
+        });
+        
+
+    });
+
 // //update sub_feature
 $(document).on('click', '.update-sub-feature', function(e){
     e.preventDefault();
@@ -238,7 +245,7 @@ $(document).on('click', '.update-sub-feature', function(e){
         },
         success : function(response){
 
-
+            $("#staticBackdrop").modal('hide');
             Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -405,8 +412,44 @@ $('#delete-all').on('click', function(e) {
                 }
               })
         
-    }  
-});
+        }  
+    });
 
+    // Select Sub Feature
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var token = $('#token').val()
+    var selectFeature =   $('#feature_id').select2({
+                            placeholder : "Select Feature",
+                            dropdownParent: $("#staticBackdrop"),
+                            ajax: { 
+                                url: APP_URL + "api/select-feature",
+                                type: "post",
+                                dataType: 'json',
+                                delay: 250,
+                                beforeSend: function(xhr, settings) { 
+                                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                                },
+                                data: function (params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term // search term
+                                };
+                                },
+                                processResults: function (response) {
+                                return {
+                                    results: $.map(response.data, function (item) {
+                                        
+                                        return{
+                                            text : item.feature_name,
+                                            id: item.feature_id
+                                        }
+                                    })
+                                };
+                                },
+                                cache: true
+                            }
+                        })
 
+                    selectFeature.data('select2').$selection.css('height', '45px')
+                    selectFeature.data('select2').$selection.css('padding-top', '5px')
 });

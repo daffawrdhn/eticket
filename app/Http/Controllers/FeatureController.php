@@ -202,4 +202,27 @@ class FeatureController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
     }
+
+
+    public function selectFeature(Request $request){
+        $search = $request->search;
+
+        if($search == ''){
+            $features = Feature::orderby('feature_name','asc')->select('feature_id','feature_name')->limit(5)->get();
+        }else{
+            $features = Feature::orderby('feature_name','asc')->where('feature_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+        }
+
+        if ($features) {
+            $response = array();
+            foreach($features as $feature){
+                $response[] = array(
+                    "feature_id"=>$feature->feature_id,
+                    "feature_name"=>$feature->feature_name
+                );
+            }
+            return $this->sendResponse($response, 'success'); 
+        }
+
+    }
 }

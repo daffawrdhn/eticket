@@ -16,26 +16,29 @@
 
                     <div class="container-fluid p-4 rounded shadow position-relative">
                         <button class="btn btn-danger btn-sm mb-5" id="delete-all">Delete All</button>
-                        <table class="table" id="subFeatureTable">
-                            <thead>
-                              <tr>
-                                <th scope="col p-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="master-check">
-                                    </div>
-                                </th>
-                                <th scope="col">No</th>
-                                <th scope="col">Feature Name</th>
-                                <th scope="col">Sub Feature Name</th>
-                                <th scope="col">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody class="table-group-divider" id="table-sub_feature">
-                              
-                            </tbody>
-                          </table>
+                        <div class="container-fluid" id="overflow">    
+                            <table class="table" id="subFeatureTable">
+                                <thead>
+                                    <tr>
+                                    <th scope="col p-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="master-check">
+                                        </div>
+                                    </th>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Feature Name</th>
+                                    <th scope="col">Sub Feature Name</th>
+                                    <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider" id="table-sub_feature">
+                                    
+                                </tbody>
+                                </table>
 
-                        <button class="btn btn-dark rounded-circle shadow fs-4 sub_featureAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                            <button class="btn btn-dark rounded-circle shadow fs-4 sub_featureAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                    
+                        </div>    
                     </div>
                 </div>
             </main>
@@ -53,7 +56,7 @@
                 <form action="#" class="signin-form" id="" method="POST">
                     @csrf
                     <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
-                    <select class="form-select form-control select-feature" id="feature_id" name="feature_id" aria-label="Default select example"></select>
+                    <select class="form-select form-control select-feature" style="width: 100%" id="feature_id" name="feature_id" aria-label="Default select example"></select>
                     <div class="form-group mt-4 pb-2">
                         <input type="text" 
                         class="form-control" 
@@ -67,7 +70,7 @@
             </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="input-sub_feature" data-bs-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-primary" id="input-sub_feature">Save</button>
                     </div>
                 </form>
             </div>

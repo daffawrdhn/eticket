@@ -18,7 +18,6 @@ class Employee extends Authenticatable
 
 protected $fillable = [
     'employee_id',
-    // 'password',
     'password_id',
     'organization_id',
     'supervisor_id',
@@ -51,8 +50,6 @@ protected $hidden = [
     'organization_id',
     'regional_id',
     'role_id',
-    'join_date',
-    'quit_date',
     'created_at',
     'updated_at',
     'remember_token',

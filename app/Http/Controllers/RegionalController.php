@@ -195,4 +195,28 @@ class RegionalController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
     }
+
+
+    public function selectRegional(Request $request){
+        $search = $request->search;
+
+        if($search == ''){
+            $regionals = Regional::orderby('regional_name','asc')->select('regional_id','regional_name')->limit(5)->get();
+        }else{
+            $regionals = Regional::orderby('regional_name','asc')->where('regional_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+        }
+
+        if ($regionals) {
+            $response = array();
+            foreach($regionals as $regional){
+                $response[] = array(
+                    "regional_id"=>$regional->regional_id,
+                    "regional_name"=>$regional->regional_name
+                );
+            }
+            return $this->sendResponse($response, 'success'); 
+        }
+
+        
+    }
 }

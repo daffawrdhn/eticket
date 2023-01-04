@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\Facades;
 
 class TicketController extends BaseController
 {
@@ -40,64 +42,56 @@ class TicketController extends BaseController
     public function store(Request $request)
     {
         try {
-
-            $validator = Validator::make($request->all(),[
+            // dd($request->all());
+            $validator = Validator::make($request->all(), [
                 'feature_id' => 'required',
                 'sub_feature_id' => 'required',
                 'ticket_title' => 'required',
                 'ticket_description' => 'required',
-                'ticket_status' => 'required',
-                'photo' => 'required',
+                'ticket_status_id' => 'required',
+                'photo' => 'required|mimes:jpg,png',
             ]);
-
     
             if ($validator->fails()) {
                 return $this->sendError('Error validation', ['error' => $validator->errors()]);
-            }else{
-                
-                $employeeId = Auth::user()->employee_id;
-
+            } else {
+                $employeeId = Auth::user();
+    
                 $image = $request->file('photo');
-
-                // Jika ada file yang diupload
+    
                 if ($image) {
-                    // Buat nama file unik
                     $filename =  time().'.'.$request->photo->extension();
-        
-                    // Pindahkan file ke folder public/images
+                
                     $image->move(public_path('asset/images'), $filename);
-        
-                    // Ubah ukuran file
-                    $thumbnail = $request->photo->make(public_path('images/' . $filename))->resize(100, 100);
-        
-                    // Simpan file thumbnail
+                
+                    $thumbnail = Image::make(public_path('asset/images/' . $filename))->resize(100, 100);
+                
                     $thumbnail->save(public_path('asset/images/' . $filename));
-        
-                    // Update field photo pada tabel tickets
                 }
-
+    
+    
                 $ticket = [
-                    'employee_id' => $employeeId,
+                    'employee_id' => $employeeId->employee_id,
                     'feature_id' => $request->feature_id,
-                    'sub_feature_id' => $request->sub_feature_id,
+                    'sub_feature_id' => $request->sub_feature_id, // Add this line
                     'ticket_title' => $request->ticket_title,
                     'ticket_description' => $request->ticket_description,
-                    'ticket_status' => $request->ticket_status,
+                    'ticket_status_id' => $request->ticket_status_id,
                     'photo' => $filename
-
                 ];
-
+                // dd($ticket);
+    
                 $storeTicket = Ticket::create($ticket);
-
-                if ($storeTicket) {
-                    return $this->sendResponse($thumbnail, 'success input new ticket');
-                }else{
-                    return $this->sendError('Error validation', ['error' => $storeTicket]);
+                $storeTicket['supervisor_id'] = $employeeId->supervisor_id;
+    
+                if ($storeTicket instanceof Ticket) {
+                    return $this->sendResponse($storeTicket, 'success input new ticket');
+                } else {
+                    return $this->sendError('Error creating ticket', ['error' => $storeTicket]);
                 }
             }
-
         } catch (Exception $error) {
-            return $this->sendError('Error validation', ['error' => $error]);
+            return $this->sendError('Error creating ticket', ['error' => $error->getMessage()]);
         }
     }
 

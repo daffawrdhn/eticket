@@ -6,8 +6,12 @@
     bottom: 50;
     right: 50;
   }
-  
+
 
 #dialog-modal{
     top: 20%;
+}
+
+#overflow{
+  overflow: auto;
 }

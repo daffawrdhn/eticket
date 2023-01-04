@@ -197,4 +197,27 @@ class OrganizationController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
     }
+
+    public function selectOrganization(Request $request){
+        $search = $request->search;
+
+        if($search == ''){
+            $organizations = Organization::orderby('organization_name','asc')->select('organization_id','organization_name')->limit(5)->get();
+        }else{
+            $organizations = Organization::orderby('organization_name','asc')->where('organization_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+        }
+
+        if ($organizations) {
+            $response = array();
+            foreach($organizations as $organization){
+                $response[] = array(
+                    "organization_id"=>$organization->organization_id,
+                    "organization_name"=>$organization->organization_name
+                );
+            }
+            return $this->sendResponse($response, 'success'); 
+        }
+
+        
+    }
 }

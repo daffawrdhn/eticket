@@ -127,7 +127,7 @@ $(document).ready(function () {
             },
             success : function(response){
 
-
+                $("#staticBackdrop").modal('hide');
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -182,7 +182,7 @@ $(document).ready(function () {
             },
             success : function(response){
 
-
+                $("#staticBackdrop").modal('hide');
                 Swal.fire({
                     position: 'center',
                     icon: 'success',

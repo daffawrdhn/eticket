@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\RegionalController;
@@ -53,6 +54,7 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-all-feature', [FeatureController::class, 'destroyAll'])->name('auth.deleteAllFeature');
     Route::get('get-feature', [FeatureController::class, 'getFeature'])->name('auth.getFeature');
     Route::get('get-feature/{id}', [FeatureController::class, 'show'])->name('auth.getFeatureById');
+    Route::post('select-feature', [FeatureController::class, 'selectFeature'])->name('auth.selectFeature');
 
 
     //sub feature
@@ -69,8 +71,25 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-ticket/{id}', [TicketController::class, 'destroy'])->name('auth.deleteTicket');
     Route::get('get-ticket', [TicketController::class, 'getTicket'])->name('auth.getTicket');
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
+
+
+    // User
+    Route::post('add-user', [EmployeeController::class, 'store'])->name('auth.addUser');
+    Route::get('get-user', [EmployeeController::class, 'getEmployee'])->name('auth.getUser');
+    Route::get('get-user/{id}', [EmployeeController::class, 'show'])->name('auth.getUserById');
+    Route::post('update-user/{id}', [EmployeeController::class, 'update'])->name('auth.updateUser');
+    Route::post('reset-user-password/{id}', [EmployeeController::class, 'resetPassword'])->name('auth.resetPassword');
+    Route::delete('delete-user/{id}', [EmployeeController::class, 'destroy'])->name('auth.deleteUser');
+    Route::delete('delete-all-user', [EmployeeController::class, 'destroyAll'])->name('auth.deleteAllUser');
     
     
+
+    // select data
+    Route::post('select-user', [EmployeeController::class, 'selectEmployee'])->name('auth.selectUser');
+    Route::post('select-organization', [OrganizationController::class, 'selectOrganization'])->name('auth.selectOrganization');
+    Route::post('select-role', [RoleController::class, 'selectRole'])->name('auth.selectRolel');
+    Route::post('select-regional', [RegionalController::class, 'selectRegional'])->name('auth.selectRegional');
+
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 
 });

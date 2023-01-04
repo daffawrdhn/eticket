@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrganizationController;
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/setting-user', [EmployeeController::class, 'index']);
     Route::get('/change-password', [PasswordController::class, 'index']);
     Route::get('/setting-role', [RoleController::class, 'index']);
     Route::get('/setting-organization', [OrganizationController::class, 'index']);

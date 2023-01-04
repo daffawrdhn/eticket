@@ -67,14 +67,22 @@ $(document).ready(function() {
             $('#employee_birth').attr('type', 'text');
         })
 
+        $( "#join_date" ).focus(function() {
+            $('#join_date').attr('type', 'date');
+            
+        })
 
+        $( "#join_date" ).focusout(function() {
+            $('#join_date').attr('type', 'text');
+        })
 
-        // test data table
+        $( "#quit_date" ).focus(function() {
+            $('#quit_date').attr('type', 'date');
+            
+        })
 
-
-        $('#subFeatureTable').DataTable()
-
+        $( "#quit_date" ).focusout(function() {
+            $('#quit_date').attr('type', 'text');
+        })
 });
-
-
 

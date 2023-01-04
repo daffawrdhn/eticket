@@ -196,4 +196,27 @@ class RoleController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
     }
+
+    public function selectRole(Request $request){
+        $search = $request->search;
+
+        if($search == ''){
+            $roles = Role::orderby('role_name','asc')->select('role_id','role_name')->limit(5)->get();
+        }else{
+            $roles = Role::orderby('role_name','asc')->where('role_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+        }
+
+        if ($roles) {
+            $response = array();
+            foreach($roles as $role){
+                $response[] = array(
+                    "role_id"=>$role->role_id,
+                    "role_name"=>$role->role_name
+                );
+            }
+            return $this->sendResponse($response, 'success'); 
+        }
+
+        
+    }
 }

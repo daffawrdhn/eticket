@@ -126,8 +126,11 @@ $(document).ready(function () {
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
                 },
                 success : function(response){
+                    
 
-    
+                    $("#staticBackdrop").modal('hide');
+
+
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
