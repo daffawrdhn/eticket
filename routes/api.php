@@ -41,9 +41,13 @@ Route::middleware('auth:api')->group( function () {
     Route::post('add-ticket', [TicketController::class, 'store'])->name('auth.addTicket');
     Route::post('update-ticket/{id}', [TicketController::class, 'update'])->name('auth.updateTicket');
     Route::delete('delete-ticket/{id}', [TicketController::class, 'destroy'])->name('auth.deleteTicket');
+
     Route::get('get-ticket', [TicketController::class, 'getTicket'])->name('auth.getTicket');
+    Route::get('get-approval', [TicketController::class, 'getApproval'])->name('auth.getApproval');
+
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
     route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
+    Route::patch('ticket/{ticketId}/status', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
 
     
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');

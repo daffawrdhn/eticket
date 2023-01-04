@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Employee;
 use App\Models\Feature;
 use App\Models\Ticket;
+use App\Models\TicketStatusHistory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,11 +36,85 @@ class TicketController extends BaseController
         
     }
 
+    public function getTicket()
+    {
+        try
+        {
+            $auth = Auth::user();
+            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                 ->where('employee_id', $auth->employee_id)
+                 ->orderBy('created_at', 'desc')
+                 ->get();
+
+                //  dd($tickets->ticket_id);
+
+            foreach ($tickets as $ticket) {
+                $ticketId = $ticket->ticket_id;
+                $supervisorId = $ticket->supervisor_id;
+                $employeeId = $ticket->employee_id;
+                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
+                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+                $ticket->history = $ticketHistory;
+                
+                foreach ($ticketHistory as $spv) {
+                    $spvId = $spv->supervisor_id;
+                    $spvHistory = Employee::where('employee_id',$spvId)->first();
+                    $spv->supervisor = $spvHistory;
+                }      
+            }            
+
+
+            return $this->sendResponse($tickets, 'Tickets collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
+        }
+    }
+
+    public function getApproval()
+    {
+        try
+        {
+            $auth = Auth::user();
+            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                 ->where('supervisor_id', $auth->employee_id)
+                 ->whereBetween('ticket_status_id', [1, 3])
+                 ->orderBy('created_at', 'desc')
+                 ->get();
+
+
+                //  dd($tickets->ticket_id);
+
+            foreach ($tickets as $ticket) {
+                $ticketId = $ticket->ticket_id;
+                $supervisorId = $ticket->supervisor_id;
+                $employeeId = $ticket->employee_id;
+                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
+                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+                $ticket->history = $ticketHistory;
+                
+                foreach ($ticketHistory as $spv) {
+                    $spvId = $spv->supervisor_id;
+                    $spvHistory = Employee::where('employee_id',$spvId)->first();
+                    $spv->supervisor = $spvHistory;
+                }      
+            }            
+
+
+            return $this->sendResponse($tickets, 'Tickets collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
+        }
+    }
+
     public function features()
     {
         try
         {
-            $features = Feature::with('subfeatures')->get();
+        $features = Feature::with('subfeatures')->get();
         
         $response = [
             'feature' => $features->map(function ($feature) {
@@ -92,11 +168,11 @@ class TicketController extends BaseController
             if ($image) {
                 $filename =  time().'.'.$request->photo->extension();
             
-                $image->move(public_path('asset/images'), $filename);
+                $image->move(public_path('storage/'), $filename);
             
-                $thumbnail = Image::make(public_path('asset/images/' . $filename))->resize(100, 100);
+                $thumbnail = Image::make(public_path('storage/' . $filename));
             
-                $thumbnail->save(public_path('asset/images/' . $filename));
+                $thumbnail->save(public_path('storage/' . $filename));
             } else {
                 $filename = 'nopic.jpg';
             }
@@ -116,8 +192,15 @@ class TicketController extends BaseController
             $storeTicket = Ticket::create($ticket);
             $storeTicket['supervisor_id'] = $employeeId->supervisor_id;
 
+            $input = new Request([
+                'ticket_status_id' => 1,
+            ]);
+            
+            $this->updateStatus($input, $storeTicket->ticket_id);
+            
+
             if ($storeTicket instanceof Ticket) {
-                return $this->sendResponse($storeTicket, 'success input new ticket');
+                return $this->sendResponse($storeTicket, 'Ticket Created!');
             } else {
                 return $this->sendError('Error creating ticket', ['error' => $storeTicket]);
             }
@@ -126,6 +209,67 @@ class TicketController extends BaseController
         return $this->sendError('Error creating ticket', ['error' => $error->getMessage()]);
     }
 }
+
+public function updateStatus(Request $request, $ticketId)
+{
+    try {
+        $validator = Validator::make($request->all(), [
+            'ticket_status_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Error validation', ['error' => $validator->errors()]);
+        } else {
+
+            $auth = Auth::user();
+            $ticket = Ticket::with('ticketStatus')->find($ticketId);
+
+            if (!$ticket) {
+                return $this->sendError('Ticket not found');
+            }
+
+                // Add this code
+                $statusHistory = new TicketStatusHistory();
+                $statusHistory->ticket_id = $ticket->ticket_id;
+                $statusHistory->status_before = $ticket->ticket_status_id;
+                $statusHistory->status_after = $request->ticket_status_id;
+
+                $ticket->ticket_status_id = $request->ticket_status_id;
+                $ticket->save();
+                $ticket = Ticket::with('ticketStatus')->find($ticketId);
+
+                if($request->ticket_status_id == $ticket->ticketStatus->ticket_status_id){
+                    $statusHistory->description = $ticket->ticketStatus->ticket_status_name;
+                } 
+
+                $statusHistory->supervisor_id = $auth->supervisor_id;
+
+                if ($statusHistory->status_before == $statusHistory->status_after || $statusHistory->status_after < $statusHistory->status_before) {
+                // Check if status_before and status_after are both 1
+                    if ($statusHistory->status_before == 1 && $statusHistory->status_after == 1) {
+                    // Allow the code to pass
+                        $statusHistory->save();
+
+                    } else {
+                        // Return the error message
+                        return $this->sendError('Error updating ticket history', ['error' => 'status_before and status_after are the same or smaller']);
+                    }
+                } else {
+
+                    $statusHistory->save();
+
+                }
+                // End of added code
+
+                $statusHistory['supervisor'] = Employee::where('employee_id',$auth->supervisor_id)->first();
+
+                return $this->sendResponse($statusHistory, 'Ticket Status History Created!');
+
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error updating ticket history', ['error' => $error->getMessage()]);
+        }
+    }
 
 
     /**

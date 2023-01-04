@@ -19,7 +19,7 @@ class TicketStatus extends Model
 
     public function tickets()
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->hasMany(Ticket::class);
     }
     
 }
