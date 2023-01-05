@@ -47,7 +47,8 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
     route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
-    Route::patch('ticket/{ticketId}/status', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
+
+    Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
 
     
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');

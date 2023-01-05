@@ -14,6 +14,7 @@ class TicketStatus extends Model
     protected $fillable = [
         'ticket_status_id',
         'ticket_status_name',
+        'ticket_status_next',
     ];
 
 

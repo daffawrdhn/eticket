@@ -77,12 +77,23 @@ class TicketController extends BaseController
         try
         {
             $auth = Auth::user();
-            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+
+            if( $auth->role_id == 0){
+
+                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
                  ->where('supervisor_id', $auth->employee_id)
-                 ->whereBetween('ticket_status_id', [1, 3])
+                 ->whereBetween('ticket_status_id', [1, 4])
                  ->orderBy('created_at', 'desc')
                  ->get();
+                 
+            } else {
 
+                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                    ->where('supervisor_id', $auth->employee_id)
+                    ->whereBetween('ticket_status_id', [1, 3])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            }
 
                 //  dd($tickets->ticket_id);
 
@@ -235,6 +246,11 @@ public function updateStatus(Request $request, $ticketId)
                 $statusHistory->status_after = $request->ticket_status_id;
 
                 $ticket->ticket_status_id = $request->ticket_status_id;
+
+                if($request->ticket_status_id == 4){
+                    $ticket->supervisor_id = '000000000';
+                }
+
                 $ticket->save();
                 $ticket = Ticket::with('ticketStatus')->find($ticketId);
 
@@ -263,13 +279,13 @@ public function updateStatus(Request $request, $ticketId)
 
                 $statusHistory['supervisor'] = Employee::where('employee_id',$auth->supervisor_id)->first();
 
-                return $this->sendResponse($statusHistory, 'Ticket Status History Created!');
+                return $this->sendResponse($statusHistory, 'Ticket Status Updated!');
 
             }
         } catch (Exception $error) {
             return $this->sendError('Error updating ticket history', ['error' => $error->getMessage()]);
-        }
     }
+}
 
 
     /**

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('ticket_status_tbl', function (Blueprint $table) {
             $table->bigIncrements('ticket_status_id');
             $table->string('ticket_status_name');
+            $table->string('ticket_status_next');
             $table->timestamps();
             
         });
