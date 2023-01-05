@@ -77,4 +77,9 @@ protected $hidden = [
     {
         return $this->belongsTo(Organization::class, 'organization_id');
     }
+
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class, 'employee_id', 'employee_id');
+    }
 }

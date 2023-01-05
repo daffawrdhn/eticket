@@ -38,12 +38,17 @@ $(document).ready(function () {
                 
                                 if (role === 1) {
                                     Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: 'You are not Administrator !',
-                                    })
-                
-                                    window.location.href = APP_URL + "logout";
+                                        icon : 'error',
+                                        title: 'You are not Administrator!!',
+                                        showDenyButton: false,
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Ok',
+                                      }).then((result) => {
+                                        /* Read more about isConfirmed, isDenied below */
+                                        if (result.isConfirmed) {
+                                            window.location.href = APP_URL + "logout";
+                                        } 
+                                      })
                                 }else{
                                     Swal.fire({
                                         position: 'center',

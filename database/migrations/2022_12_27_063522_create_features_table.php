@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('organization_tbl', function(
-            Blueprint $table
-        ){
-            $table->bigIncrements('organization_id');
-            $table->string('orgainzation_name');
-            $table->timestamps();            
+        Schema::create('feature_tbl', function (Blueprint $table) {
+            $table->bigIncrements('feature_id');
+            $table->string('feature_name');
+            $table->timestamps();
         });
+
     }
 
     /**
@@ -30,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('organization_tbl');
-
+        Schema::dropIfExists('feature_tbl');
     }
 };

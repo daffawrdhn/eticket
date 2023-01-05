@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('organization_tbl', function(
-            Blueprint $table
-        ){
-            $table->bigIncrements('organization_id');
-            $table->string('orgainzation_name');
-            $table->timestamps();            
+        Schema::create('ticket_status_tbl', function (Blueprint $table) {
+            $table->bigIncrements('ticket_status_id');
+            $table->string('ticket_status_name');
+            $table->string('ticket_status_next');
+            $table->timestamps();
+            
         });
     }
 
@@ -30,8 +29,11 @@ return new class extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('organization_tbl');
-
+        //public function down()
+    {
+        Schema::dropIfExists('ticket_status_tbl');
+    }
+        
     }
 };
+

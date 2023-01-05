@@ -1,0 +1,49 @@
+INSERT INTO public.organization_tbl(
+organization_id, orgainzation_name)
+VALUES (0, 'Human Capital');
+
+INSERT INTO public.organization_tbl(
+organization_id, orgainzation_name)
+VALUES (1, 'Marketing');
+
+INSERT INTO public.organization_tbl(
+organization_id, orgainzation_name)
+VALUES (2, 'Operation');
+
+INSERT INTO public.regional_tbl(
+regional_id, regional_name)
+VALUES (0, 'Jawa Bali');
+
+INSERT INTO public.regional_tbl(
+regional_id, regional_name)
+VALUES (1, 'Kalimantan Sulawesi');
+
+INSERT INTO public.regional_tbl(
+regional_id, regional_name)
+VALUES (2, 'Sumatra');
+
+INSERT INTO public.role_tbl(
+role_id, role_name)
+VALUES (0, 'Admin');
+
+INSERT INTO public.role_tbl(
+role_id, role_name)
+VALUES (1, 'User');
+
+INSERT INTO feature_tbl (feature_name, created_at, updated_at) VALUES
+('Feature 1', NOW(), NOW()),
+('Feature 2', NOW(), NOW());
+
+INSERT INTO sub_feature_tbl (feature_id, sub_feature_name, created_at, updated_at) VALUES
+(1, 'Sub Feature 1-1', NOW(), NOW()),
+(1, 'Sub Feature 1-2', NOW(), NOW()),
+(2, 'Sub Feature 2-1', NOW(), NOW()),
+(2, 'Sub Feature 2-2', NOW(), NOW());
+
+INSERT INTO ticket_status_tbl (ticket_status_name, ticket_status_next, created_at, updated_at) VALUES
+('Open', 'Waiting Approval 1', NOW(), NOW()),
+('Approve 1', 'Waiting Approval 2', NOW(), NOW()),
+('Approve 2', 'Waiting for Completing / AP3', NOW(), NOW()),
+('Approve 3', 'Waiting for Completing', NOW(), NOW()),
+('Completed', 'Completed', NOW(), NOW()),
+('Closed', 'Ticket Closed', NOW(), NOW());
