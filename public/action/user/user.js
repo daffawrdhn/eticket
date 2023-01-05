@@ -68,10 +68,15 @@ $(document).ready(function () {
             data : data,
             dataType : "json",
             beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                xhr.setRequestHeader('Authorization','Bearer ' + token );
+                
+                
+                $("#modalAddUser").modal('hide');
+                $("#loading").modal('show');
             },
             success : function(response){
-                $("#modalAddUser").modal('hide');
+                
+                $("#loading").modal('hide');
 
                 Swal.fire({
                     position: 'center',
@@ -461,8 +466,10 @@ $(document).ready(function () {
             dataType : "json",
             beforeSend: function(xhr, settings) { 
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                
             },
             success : function(response){
+                
                 $("#staticBackdrop").modal('hide');
 
                 Swal.fire({
