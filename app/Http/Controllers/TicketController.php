@@ -97,21 +97,28 @@ class TicketController extends BaseController
 
                 //  dd($tickets->ticket_id);
 
-            foreach ($tickets as $ticket) {
-                $ticketId = $ticket->ticket_id;
-                $supervisorId = $ticket->supervisor_id;
-                $employeeId = $ticket->employee_id;
-                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
-                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
-                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
-                $ticket->history = $ticketHistory;
+                foreach ($tickets as $ticket) {
                 
-                foreach ($ticketHistory as $spv) {
-                    $spvId = $spv->supervisor_id;
-                    $spvHistory = Employee::where('employee_id',$spvId)->first();
-                    $spv->supervisor = $spvHistory;
-                }      
-            }            
+                    $ticketId = $ticket->ticket_id;
+                    $getSupervisor = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+    
+                    if ($getSupervisor->supervisor_id != Auth::user()->employee_id) {
+                        
+                        $ticketId = $ticket->ticket_id;
+                        $supervisorId = $ticket->supervisor_id;
+                        $employeeId = $ticket->employee_id;
+                        $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                        $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
+                        $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+                        $ticket->history = $ticketHistory;
+                        
+                        foreach ($ticketHistory as $spv) {
+                            $spvId = $spv->supervisor_id;
+                            $spvHistory = Employee::where('employee_id',$spvId)->first();
+                            $spv->supervisor = $spvHistory;
+                        } 
+                    }  
+                }
 
 
             return $this->sendResponse($tickets, 'Tickets collected.'); 
