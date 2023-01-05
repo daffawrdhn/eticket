@@ -1,7 +1,20 @@
 $(document).ready(function () {
     getDataEmployee()
+    search()
 
 });
+
+// status
+
+function search() {
+    $("#search").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#table-employee tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+}
+
 
 // get data employee
 function getDataEmployee()
@@ -18,39 +31,44 @@ function getDataEmployee()
             success : function(response){
 
                     $('#table-employee').html('');
-
-                    no = 1;
+                    
+                    no = 1
                     $(response.data).each(function(key, values){
-
-                        $('#table-employee').append(`<tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.employee_id +`">
-                                </div>
-                            </td>
-                            <td id="employee-list">`+values.employee_id+`</td>
-                            <td id="employee-list">`+values.employee_ktp+`</td>
-                            <td id="employee-list" class="employee_name">`+values.employee_name+`</td>
-                            <td id="employee-list">`+values.employee_email+`</td>
-                            <td id="employee-list">`+values.role.role_name+`</td>
-                            <td id="employee-list">`+values.organization.organization_name+`</td>
-                            <td id="employee-list">`+values.regional.regional_name+`</td>
-                            <td id="employee-list">stts</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-gear-fill"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" id="reset-pass" href="#" data-id="`+ values.employee_id +`">Re-Set Pass</a></li>
-                                    <li><a class="dropdown-item" id="edit-user" href="#" data-id="`+ values.employee_id +`" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
-                                    <li><a class="dropdown-item" id="delete-user" data-id="`+ values.employee_id +`" href="#">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>`);
+                        
+                        $('#table-employee').append(
+                                `<tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.employee_id +`">
+                                        </div>
+                                    </td>
+                                    <td id="employee-list">`+values.employee_id+`</td>
+                                    <td id="employee-list">`+values.employee_ktp+`</td>
+                                    <td id="employee-list" class="employee_name">`+values.employee_name+`</td>
+                                    <td id="employee-list">`+values.employee_email+`</td>
+                                    <td id="employee-list">`+values.role.role_name+`</td>
+                                    <td id="employee-list">`+values.organization.organization_name+`</td>
+                                    <td id="employee-list">`+values.regional.regional_name+`</td>
+                                    <td id="employee-list">`+
+                                        (values.status == 'Active' ? '<button class="btn btn-sm btn-success" id="status" value="'+ values.status +'" data-id="'+ values.employee_id +'">'+ values.status +'</button>': 
+                                        '<button class="btn btn-sm btn-danger" id="status" value="'+ values.status +'" data-id="'+ values.employee_id +'">'+ values.status +'</button>')
+                                    +`</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-gear-fill"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" id="reset-pass" href="#" data-id="`+ values.employee_id +`">Re-Set Pass</a></li>
+                                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="`+ values.employee_id +`" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
+                                            <li><a class="dropdown-item" id="delete-user" data-id="`+ values.employee_id +`" href="#">Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>`)
                     })
-                
+                     
+                    $("#employeeTable").DataTable();
 
             },
             error:function(response){

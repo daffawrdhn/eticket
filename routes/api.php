@@ -81,6 +81,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('reset-user-password/{id}', [EmployeeController::class, 'resetPassword'])->name('auth.resetPassword');
     Route::delete('delete-user/{id}', [EmployeeController::class, 'destroy'])->name('auth.deleteUser');
     Route::delete('delete-all-user', [EmployeeController::class, 'destroyAll'])->name('auth.deleteAllUser');
+    Route::post('set-status-employee/{id}', [EmployeeController::class, 'setStatusEmployee'])->name('auth.setStatusEmployee');
     
     
 

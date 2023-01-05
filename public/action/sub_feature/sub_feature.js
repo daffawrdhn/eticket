@@ -350,22 +350,22 @@ $(document).on('click', '#master-check', function(e){
 
 
 // // delete-all
-$('#delete-all').on('click', function(e) {
+    $('#delete-all').on('click', function(e) {
 
-    var allVals = [];  
-    $(".sub-check:checked").each(function() {  
-        allVals.push($(this).attr('data-id'));
-    });  
-    if(allVals.length <=0)  
-    {  
-        Swal.fire({
-            icon : 'warning',
-            confirmButtonText: 'Ok',
-            title : 'Warning!',
-            text : 'Please select row!!',
-        })
+        var allVals = [];  
+        $(".sub-check:checked").each(function() {  
+            allVals.push($(this).attr('data-id'));
+        });  
+        if(allVals.length <=0)  
+        {  
+            Swal.fire({
+                icon : 'warning',
+                confirmButtonText: 'Ok',
+                title : 'Warning!',
+                text : 'Please select row!!',
+            })
 
-    }  else {  
+        }  else {  
         
             var join_selected_values = allVals.join(","); 
             var token = $('#token').val()

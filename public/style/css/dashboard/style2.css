@@ -13,5 +13,6 @@
 }
 
 #overflow{
-  overflow: auto;
+  overflow-x: auto;
+  min-height: 50vh;
 }

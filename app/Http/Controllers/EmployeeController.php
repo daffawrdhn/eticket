@@ -63,8 +63,8 @@ class EmployeeController extends BaseController
     
             //generate employee ID 
     
-            $employeeData = Employee::all();
-            $employeeCount = $employeeData->count();
+            $employeeData = Employee::select('employee_id')->latest('created_at')->first();
+            $employeeCount = (int)$employeeData->employee_id;
             $employeeCount++;
     
             $employeeId = sprintf("%09s", $employeeCount);
@@ -158,12 +158,28 @@ class EmployeeController extends BaseController
     public function getEmployee(){
         try {
             
-            $data = Employee::with('Role', 'Organization', 'Regional')->get();
+            $datas = Employee::orderBy('created_at', 'desc')->with('Role', 'Organization', 'Regional')->get();
+            $isNow = Carbon::now();
 
-            if ($data) {
-                return $this->sendResponse($data, 'success get data');
+            $dataEmployee = [];
+            foreach($datas as $d){
+                
+                $data = $d;
+                if ($d->quit_date > $isNow) {
+                    $data['status'] = 'Active';
+                }else{
+                    $data['status'] = 'Non Active';
+                }
+
+                $dataEmployee[] = $data;
+            }
+            
+            
+
+            if ($datas) {
+                return $this->sendResponse($dataEmployee, "successs");
             }else{
-                return $this->sendError('Error validation', ['error' => $data]);
+                return $this->sendError('Error validation', ['error' => $isNow]);
             }
 
         } catch (Exception $error) {
@@ -367,6 +383,66 @@ class EmployeeController extends BaseController
             }else{
                 return $this->sendError('Error validation', ['error' => $inputPassword]);
             }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+
+    public function destroyAll(Request $request){
+
+        try {   
+            $validator = Validator::make($request->all(),[
+                'ids' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+            }else{
+
+                $ids = $request->ids;
+
+                $deleteAll = Employee::whereIn('employee_id',explode(",",$ids))->delete();
+                $deletePassword = Password::whereIn('employee_id', explode(",",$ids))->delete();
+
+                if ($deleteAll) {
+                    return $this->sendResponse($deleteAll, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $deleteAll]);
+                }
+            }
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+
+    public function setStatusEmployee(Request $request, $id){
+        try {
+            $valditaor = Validator::make($request->all(),[
+                'status' => 'required',
+                'quit_date' => 'required'
+            ]);
+
+            if ($request->status == 'Active') {
+                $quitDate = Carbon::now();
+
+                $updateStatus = Employee::where('employee_id', $id)->update(['quit_date' => $quitDate]);
+                if ($updateStatus) {
+                    return $this->sendResponse($request->all(), 'user deactivation was successful');
+                }
+                
+            }else{
+
+                $updateStatus = Employee::where('employee_id', $id)
+                ->update([
+                    'quit_date' => $request->quit_date
+                ]);
+
+                return $this->sendResponse($updateStatus, 'successfully activated the user');
+            }
+
 
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);

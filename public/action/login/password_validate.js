@@ -122,7 +122,7 @@ function checkNik() {
         
          var employeeId = $('#employee_id').val()
 
-         console.log('ok');
+         
 
         if (employeeId.length >= 8) {
             $('#employee_id').removeClass('is-invalid');
@@ -138,7 +138,7 @@ function checkNik() {
         
         var employeeKtp = $('#employee_ktp').val()
 
-        console.log('ok');
+        
 
        if (employeeKtp.length >= 16) {
            $('#employee_ktp').removeClass('is-invalid');

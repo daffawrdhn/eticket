@@ -14,8 +14,11 @@
                         <li class="breadcrumb-item active">User</li>
                     </ol>
 
-                    <div class="container-fluid p-4 rounded shadow position-relative">
-                        <button class="btn btn-danger btn-sm mb-5" id="delete-all">Delete All</button>
+                    <div class="container-fluid p-4 rounded shadow">
+                        <div class="container d-flex mb-4">
+                                <button class="btn btn-danger btn-sm me-2" id="delete-all">Delete All</button>
+                                <button class="btn btn-ligth btn-sm" id="delete-all">Advance <i class="bi bi-search"></i></button>
+                        </div>
                         <div class="container-fluid" id="overflow">
                             <table class="table table-striped table-hover" id="employeeTable">
                                 <thead>
@@ -135,6 +138,38 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="input-user">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" id="dialog-modal">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Set New Quit Date</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="signin-form" id="" method="POST">
+                    @csrf
+                    <input type="hidden" id="status" name="status" data-id="">
+                    <div class="form-group mt-4 pb-2 date">
+                        <input type="text"
+                        class="form-control date" 
+                        id="new_quit_date" 
+                        name="new_quit_date" 
+                        autocomplete="off"
+                        required>
+                        <label class="form-control-placeholder" for="new_quit_date">Quit Date</label>
+                    </div>
+                
+            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="input-quit-date">Save</button>
                     </div>
                 </form>
             </div>
