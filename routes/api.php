@@ -74,7 +74,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-approval', [TicketController::class, 'getApproval'])->name('auth.getApproval');
 
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
-    route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
+    Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
     Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
 

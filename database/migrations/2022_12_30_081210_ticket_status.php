@@ -6,13 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('ticket_status_tbl', function (Blueprint $table) {
             $table->bigIncrements('ticket_status_id');
             $table->string('ticket_status_name');
+            $table->string('ticket_status_next');
             $table->timestamps();
-
+            
         });
     }
 
@@ -27,6 +33,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('ticket_status_tbl');
     }
-
+        
     }
 };
