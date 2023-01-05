@@ -42,7 +42,7 @@ $(document).ready(function () {
 
     /////////////////////////input User
 
-    $(document).on('click', '.input-user', function(e){
+    $(document).on('click', '.input-user', async function(e){
         e.preventDefault();
         
         
@@ -438,7 +438,6 @@ $(document).ready(function () {
         $( "#new_quit_date" ).focusout(function() {
             $('#new_quit_date').attr('type', 'text');
         })
-s
     }
 
     $(document).on('click', '#input-quit-date', function(e){

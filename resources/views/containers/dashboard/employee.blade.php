@@ -17,7 +17,7 @@
                     <div class="container-fluid p-4 rounded shadow">
                         <div class="container d-flex mb-4">
                                 <button class="btn btn-danger btn-sm me-2" id="delete-all">Delete All</button>
-                                <button class="btn btn-ligth btn-sm" id="delete-all">Advance <i class="bi bi-search"></i></button>
+                                <button class="btn btn-light border-dark btn-sm" id="advance-search">Advance <i class="bi bi-search"></i></button>
                         </div>
                         <div class="container-fluid" id="overflow">
                             <table class="table table-striped table-hover" id="employeeTable">

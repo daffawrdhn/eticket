@@ -59,7 +59,7 @@ function getDataEmployee()
                                                 <i class="bi bi-gear-fill"></i>
                                             </button>
                                             <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" id="reset-pass" href="#" data-id="`+ values.employee_id +`">Re-Set Pass</a></li>
+                                            <li><a class="dropdown-item" id="reset-pass" href="#" data-id="`+ values.employee_id +`">reset Pass</a></li>
                                             <li><a class="dropdown-item" id="edit-user" href="#" data-id="`+ values.employee_id +`" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
                                             <li><a class="dropdown-item" id="delete-user" data-id="`+ values.employee_id +`" href="#">Delete</a></li>
                                             </ul>
