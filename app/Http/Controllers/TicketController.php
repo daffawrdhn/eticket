@@ -249,7 +249,8 @@ public function updateStatus(Request $request, $ticketId)
                 $statusHistory->status_after = $request->ticket_status_id;
 
                 $ticket->ticket_status_id = $request->ticket_status_id;
-                $ticket->supervisor_id = $auth->employee_id;
+                
+                $ticket->supervisor_id = $auth->supervisor_id;
                 if($request->ticket_status_id == 4){
                     $ticket->supervisor_id = '000000000';
                 }
