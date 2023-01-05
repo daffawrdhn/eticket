@@ -12,23 +12,18 @@ class Feature extends Model
     protected $table = 'feature_tbl';
     protected $primaryKey = 'feature_id';
 
-
     protected $fillable = [
         'feature_id',
         'feature_name'
     ];
-
-
 
     public function subFeatures()
     {
         return $this->hasMany(SubFeature::class, 'feature_id', 'feature_id');
     }
 
-    public function subFeature()
+    public function tickets()
     {
-        return $this->belongsTo(Ticket::class, 'ticket_id', 'ticket_tbl');
+        return $this->hasMany(Ticket::class, 'feature_id', 'feature_id');
     }
-
-    
 }

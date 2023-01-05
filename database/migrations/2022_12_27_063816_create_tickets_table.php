@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('ticket_tbl', function (Blueprint $table) {
             $table->bigIncrements('ticket_id');
             $table->string('employee_id')->unsigned();
+            $table->string('supervisor_id');
             $table->integer('feature_id')->unsigned();
             $table->integer('sub_feature_id')->unsigned();
             $table->integer('ticket_status_id')->unsigned();
