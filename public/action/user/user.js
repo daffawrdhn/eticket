@@ -70,14 +70,13 @@ $(document).ready(function () {
             beforeSend: function(xhr, settings) { 
                 xhr.setRequestHeader('Authorization','Bearer ' + token );
                 
-                
-                $("#modalAddUser").modal('hide');
                 $("#loading").modal('show');
+                
+                
             },
             success : function(response){
-                
+                $("#modalAddUser").modal('hide');
                 $("#loading").modal('hide');
-
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -95,6 +94,7 @@ $(document).ready(function () {
             },
             error:function(response){
                 if (!response.success) {
+                    $("#loading").modal('hide');
                     Swal.fire({
                         icon : 'warning',
                         confirmButtonText: 'Ok',
