@@ -175,7 +175,18 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="loading" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loaingLabel" aria-hidden="true">
+        <div class="modal-dialog" id="dialog-modal">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <h5>Loading.....</h5>
+                    <div class="container-fluid spinner-border mt-4" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="{{ asset('action/user/get_data.js') }}"></script>
     <script src="{{ asset('action/user/user.js') }}"></script>

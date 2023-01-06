@@ -96,11 +96,15 @@ class TicketController extends BaseController
                     ->whereBetween('ticket_status_id', [1, 3])
                     ->orderBy('created_at', 'desc')
                     ->get();
+
+
+                    
             }
 
                 //  dd($tickets->ticket_id);
 
             foreach ($tickets as $ticket) {
+
                 $ticketId = $ticket->ticket_id;
                 $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
