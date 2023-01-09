@@ -104,6 +104,12 @@ Route::middleware('auth:api')->group( function () {
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 
     Route::get('/storage/{path}', function ($path) {
+
+        if (!auth()->check()) {
+            // Redirect the user to the login page
+            return redirect()->route('login');
+        }
+        
         $path = storage_path('app/' . $path);
         if (!File::exists($path)) {
             abort(404);
