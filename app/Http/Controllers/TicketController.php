@@ -48,9 +48,9 @@ class TicketController extends BaseController
             // $auth = Auth::user();
             $tickets = Ticket::where('ticket_id', $ticketId)->first();
 
-            $tickets->photo = url('storage/'.$tickets->photo);
+            $response['photo'] = $tickets->photo = url('storage/'.$tickets->photo);
 
-            return $this->sendResponse($tickets, 'Ticket photo collected.'); 
+            return $this->sendResponse($response, 'Ticket photo collected.'); 
 
         } catch (Exception $error) {
             return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
