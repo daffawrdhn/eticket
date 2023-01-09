@@ -49,7 +49,10 @@ class TicketController extends BaseController
         // $auth = Auth::user();
         $tickets = Ticket::where('ticket_id', $ticketId)->first();
 
-        $path = url('storage/'.$tickets->photo);
+        $basePath = public_path();
+        $filePath = '/storage/'.$tickets->photo;
+        $path = $basePath.$filePath;
+
         if (!file_exists($path)) {
             return $this->sendError('Error get ticket photo', ['error' => 'File not found']);
         }
