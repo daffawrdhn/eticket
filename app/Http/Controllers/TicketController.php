@@ -46,9 +46,7 @@ class TicketController extends BaseController
             }
             
             // $auth = Auth::user();
-            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
-                 ->where('ticket_id', $ticketId)
-                 ->first();
+            $tickets = Ticket::where('ticket_id', $ticketId)->first();
 
             $tickets->photo = url('storage/'.$tickets->photo);
 
