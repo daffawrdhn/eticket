@@ -71,7 +71,7 @@ class TicketController extends BaseController
             'photo' => $response
         ];
 
-        return $this->sendResponse($responseData, 'Ticket photo collected.'); 
+        return $response;
 
     } catch (Exception $error) {
         return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
