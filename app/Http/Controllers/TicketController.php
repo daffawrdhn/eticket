@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Storage;
 
 
 class TicketController extends BaseController
@@ -48,7 +49,10 @@ class TicketController extends BaseController
             // $auth = Auth::user();
             $tickets = Ticket::where('ticket_id', $ticketId)->first();
 
-            $response['photo'] = $tickets->photo = url('storage/'.$tickets->photo);
+            $path = url('storage/'.$tickets->photo);
+            $file = file_get_contents($path);
+            $base64 = base64_encode($file);
+            $response['photo'] = $base64;
 
             return $this->sendResponse($response, 'Ticket photo collected.'); 
 
