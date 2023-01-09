@@ -57,6 +57,8 @@ class TicketController extends BaseController
             return $this->sendError('Error get ticket photo', ['error' => 'File not found']);
         }
 
+        ini_set('default_charset', 'UTF-8');
+
         $file = file_get_contents($path);
         if ($file === false) {
             return $this->sendError('Error get ticket photo', ['error' => 'Failed to read file']);
