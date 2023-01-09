@@ -15,29 +15,28 @@
                     </ol>
 
                     <div class="container-fluid p-4 rounded shadow">
-                        <div class="container d-flex mb-4">
-                                <button class="btn btn-danger btn-sm me-2" id="delete-all">Delete All</button>
-                                <button class="btn btn-light border-dark btn-sm" id="advance-search">Advance <i class="bi bi-search"></i></button>
-                        </div>
+                        
                         <div class="container-fluid" id="overflow">
                             <table class="table table-striped table-hover" id="employeeTable">
                                 <thead>
-                                <tr>
-                                    <th scope="col-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="master-check">
-                                        </div>
-                                    </th>
-                                    <th scope="col">Nik</th>
-                                    <th scope="col">No.Ktp</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Organization</th>
-                                    <th scope="col">Regional</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
-                                </tr>
+                                    <tr >
+                                        <th scope="col">Nik</th>
+                                        <th scope="col">No.Ktp</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Organization</th>
+                                        <th scope="col">Regional</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    <tr id="loading-table">
+                                        <td colspan="8" align="center">
+                                            <div class="container-fluid spinner-border mt-4 d-flex justify-content-center" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="table-employee">
                                 
@@ -90,6 +89,8 @@
                         id="employee_ktp" 
                         name="employee_ktp" 
                         autocomplete="off"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                        maxlength="18"
                         required>
                         <label class="form-control-placeholder" for="employe_ktp">No KTP</label>
                         <div id="employee_ktpFeedback" class="invalid-feedback"></div>  
@@ -102,15 +103,18 @@
                         autocomplete="off"
                         required>
                         <label class="form-control-placeholder" for="employee_birth">date of birth</label>
+                        <div id="employee_birthFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="form-group mt-4 pb-2 date">
                         <input type="text"
                         class="form-control date" 
                         id="join_date" 
                         name="join_date" 
+                        min=""
                         autocomplete="off"
                         required>
                         <label class="form-control-placeholder" for="join_date">Join Date</label>
+                        <div id="join_dateFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="form-group mt-4 pb-2 date">
                         <input type="text"
@@ -120,19 +124,22 @@
                         autocomplete="off"
                         required>
                         <label class="form-control-placeholder" for="quit_date">Quit Date</label>
+                        <div id="quit_dateFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="form-group mt-4">
                         <select class="form-select form-control" id="supervisor_id" name="supervisor_id" style="width: 100%" aria-label="Default select example"></select>
+                        
                     </div>
                     <div class="form-group mt-4">
                         <select class="form-select mt-4 overflow-auto" data-live-search="true" id="role_id" name="role_id" style="width: 100%; margin-bottom:20px"  aria-label="Default select example" style="height: 50px"></select>
+                        
                     </div>
                     <div class="form-group mt-4">
                         <select class="form-select  mt-4" id="organization_id" name="organization_id" style="width: 100%" aria-label="Default select example"></select>
-                    </div>
+                        </div>
                     <div class="form-group mt-4">
                         <select class="form-select  mt-4" id="regional_id" name="regional_id" aria-label="Default select example" style="width: 100%"  style="height: 50px"></select>
-                    </div>
+                            </div>
                 
             </div>
                     <div class="modal-footer">

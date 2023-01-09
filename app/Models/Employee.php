@@ -36,6 +36,11 @@ protected $fillable = [
     'remember_token',
 ];
 
+protected $rules = [
+    'employee_email' => 'sometimes|required|email|unique:employee_tbl',
+    'employee_ktp' => 'sometimes|required|min:16|unique:employee_tbl',
+    
+];
     
 
 /**

@@ -34,14 +34,8 @@ function getDataEmployee()
                     
                     no = 1
                     $(response.data).each(function(key, values){
-                        
                         $('#table-employee').append(
                                 `<tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.employee_id +`">
-                                        </div>
-                                    </td>
                                     <td id="employee-list">`+values.employee_id+`</td>
                                     <td id="employee-list">`+values.employee_ktp+`</td>
                                     <td id="employee-list" class="employee_name">`+values.employee_name+`</td>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Controllers\EmployeeController;
+use App\Mail\SendMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +14,8 @@ use App\Models\Employee;
 use App\Models\Password;
 use App\Models\TicketStatus;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -124,46 +128,131 @@ class AuthController extends BaseController
     }
 
     public function forgotPassword(Request $request){
-        $user = Auth::user();
-
-        if($user != null){
-
-        $validator = Validator::make($request->all(), [
-            'new_password' => 'required',
-            'new_password_confirm' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Error validation', ['error' => $validator->errors()]);
-        }
-
-            if ($request->new_password == $request->new_password_confirm){
-                
-                $input['employee_id'] = Auth::user()->employee_id;
-                $input['password'] = bcrypt($request->new_password);
-                $input['non_active_date'] = Carbon::now()->addDays(90);
-                $password = Password::create($input);
-        
-                    if ($password) {
-
-                        $success = Employee::where('employee_id', Auth::user()->employee_id)
-                            ->update(['password_id' => $password->password_id]);
-
-                    }
-        
-                return $this->sendResponse($success, 'Password Changed!');
-            
-            } else {
-
-                return $this->sendError('Unauthorised.', ['error' => 'Please input password confirmation correctly!']);
-            
+        try {
+            $validator = Validator::make($request->all(), [
+                'organization_id' => 'required',
+                'supervisor_id' => 'required',
+                'regional_id' => 'required',
+                'role_id' => 'required',
+                'join_date' => 'required',
+                'quit_date' => 'required',
+                'employee_birth' => 'required',
+                'employee_ktp' => 'required|min:16|unique:employee_tbl',
+                'employee_name' => 'required',
+                'employee_email' => 'required|email|unique:employee_tbl',
+            ]);
+    
+            if ($validator->fails()) {
+                $errors =  $validator->errors()->all();
+                return $this->sendError('Error validation', ['error' => $errors]);
             }
-
-       } else {
+    
+            //generate employee ID 
+    
+            $employeeData = Employee::select('employee_id')->latest('created_at')->first();
+            $employeeCount = (int)$employeeData->employee_id;
+            $employeeCount++;
+    
+            $employeeId = sprintf("%09s", $employeeCount);
+    
+            // generate Password
+    
+            $password = Employee::randomPassword(8);
+    
+            // send mail
+    
+            $testMailData = [
+                'title' => 'Eticket Mobile Password',
+                'body' => 'This is your password for mobile eticket aplication. Please Change Your Password And Dont Show this mail for another people. thanks',
+                'password' => $password,
+                'nik' => $employeeId,
+            ];
+    
+                
             
-        return $this->sendError('Unauthorised.', ['error' => 'No Valid Token!']);
+            
+    
+            $input = $request->all();
+    
+            $input['employee_id'] = $employeeId;
+            $input['password_id'] = 0;
+            $input['device_id'] = null; 
+            $input['api_token'] = null;
+            $user = Employee::create($input);
+    
+            $token = $user->createToken('MyAuthApp')->plainTextToken;
+            $inputPassword['employee_id'] = $input['employee_id'];
+            $inputPassword['password'] = bcrypt($password);
+            $inputPassword['non_active_date'] = Carbon::now()->addDays(90);
+    
+            if ($user) {
+                $password = Password::create($inputPassword);
+    
+                if ($password) {
+                    Mail::to($request->employee_email)->send(new SendMail($testMailData));
+                    
+                    Employee::where('employee_id', $user->employee_id)
+                    ->update(
+                        [
+                            'password_id' => $password->password_id,
+                            'api_token' => $token, 
+                            'remember_token' => $token
+                        ]
+                    );
+                }
+            }
+    
+            $success['employee_id'] =  $user->employee_id;
+            $success['employee_name'] =  $user->employee_name;
+            $success['employee_email'] =  $user->employee_email;
+            $success['token'] =  $token;
+    
+            
+            return $this->sendResponse($success, 'User created successfully.');
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    //     $user = Auth::user();
+
+    //     if($user != null){
+
+    //     $validator = Validator::make($request->all(), [
+    //         'new_password' => 'required',
+    //         'new_password_confirm' => 'required',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return $this->sendError('Error validation', ['error' => $validator->errors()]);
+    //     }
+
+    //         if ($request->new_password == $request->new_password_confirm){
+                
+    //             $input['employee_id'] = Auth::user()->employee_id;
+    //             $input['password'] = bcrypt($request->new_password);
+    //             $input['non_active_date'] = Carbon::now()->addDays(90);
+    //             $password = Password::create($input);
+        
+    //                 if ($password) {
+
+    //                     $success = Employee::where('employee_id', Auth::user()->employee_id)
+    //                         ->update(['password_id' => $password->password_id]);
+
+    //                 }
+        
+    //             return $this->sendResponse($success, 'Password Changed!');
+            
+    //         } else {
+
+    //             return $this->sendError('Unauthorised.', ['error' => 'Please input password confirmation correctly!']);
+            
+    //         }
+
+    //    } else {
+            
+    //     return $this->sendError('Unauthorised.', ['error' => 'No Valid Token!']);
        
-    }
+    // }
         
     }
 
@@ -196,8 +285,7 @@ class AuthController extends BaseController
 
         $input['password_id'] = 0;
         $input['device_id'] = null; //device_id generator
-        $input['api_token'] = 
-        $user = Employee::create($input);
+        $input['api_token'] = $user = Employee::create($input);
 
         $token = $user->createToken('MyAuthApp')->plainTextToken;
         $input['employee_id'] = $input['employee_id'];
