@@ -214,7 +214,7 @@ class TicketController extends BaseController
             
                 $thumbnail = Image::make(public_path('storage/' . $filename));
             
-                $thumbnail->save(public_path('storage/' . $filename));
+                $thumbnail->save(public_path('storage/' . $filename), 35);
             } else {
                 $filename = 'nopic.jpg';
             }
