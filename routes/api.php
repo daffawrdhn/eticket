@@ -12,6 +12,9 @@ use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Http\Controllers\TicketController;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\Response;
+
 
 Route::post('login', [AuthController::class, 'signin'])->name('auth.login');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
@@ -99,5 +102,20 @@ Route::middleware('auth:api')->group( function () {
     Route::post('select-regional', [RegionalController::class, 'selectRegional'])->name('auth.selectRegional');
 
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
+
+    Route::get('/storage/{path}', function ($path) {
+        $path = storage_path('app/' . $path);
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+
+        return $response;
+    })->where('path', '.*');
 
 });

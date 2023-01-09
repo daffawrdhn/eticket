@@ -9,10 +9,10 @@ use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Http\Response;
 
 
 class TicketController extends BaseController
@@ -37,7 +37,6 @@ class TicketController extends BaseController
         
     }
 
-    
     public function getPhoto($ticketId)
 {
     try
@@ -65,11 +64,10 @@ class TicketController extends BaseController
         }
 
         $response = new Response($file, 200);
-        $response->header('Content-Type', 'image/jpeg');
-
-        $responseData = [
-            'photo' => $response
-        ];
+        
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        $contentType = 'image/' . $extension;
+        $response->header('Content-Type', $contentType);
 
         return $response;
 
@@ -77,8 +75,6 @@ class TicketController extends BaseController
         return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
     }
 }
-
-
 
     public function getTicket()
     {
@@ -96,7 +92,7 @@ class TicketController extends BaseController
                 $ticketId = $ticket->ticket_id;
                 $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
-                $ticket->photo = url('storage/'.$ticket->photo);
+
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
 
@@ -145,12 +141,13 @@ class TicketController extends BaseController
                     
             }
 
+                //  dd($tickets->ticket_id);
+
             foreach ($tickets as $ticket) {
 
                 $ticketId = $ticket->ticket_id;
                 $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
-                $ticket->photo = url('storage/'.$ticket->photo);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
@@ -233,7 +230,7 @@ class TicketController extends BaseController
             
                 $thumbnail = Image::make(public_path('storage/' . $filename));
             
-                $thumbnail->save(public_path('storage/' . $filename), 35);
+                $thumbnail->save(public_path('storage/' . $filename));
             } else {
                 $filename = 'nopic.jpg';
             }
