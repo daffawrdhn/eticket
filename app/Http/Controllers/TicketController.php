@@ -50,7 +50,15 @@ class TicketController extends BaseController
         $tickets = Ticket::where('ticket_id', $ticketId)->first();
 
         $path = url('storage/'.$tickets->photo);
+        if (!file_exists($path)) {
+            return $this->sendError('Error get ticket photo', ['error' => 'File not found']);
+        }
+
         $file = file_get_contents($path);
+        if ($file === false) {
+            return $this->sendError('Error get ticket photo', ['error' => 'Failed to read file']);
+        }
+
         $response = new Response($file, 200);
         $response->header('Content-Type', 'image/jpeg');
 
@@ -64,6 +72,7 @@ class TicketController extends BaseController
         return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
     }
 }
+
 
 
     public function getTicket()
