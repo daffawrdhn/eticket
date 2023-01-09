@@ -49,7 +49,7 @@ class TicketController extends BaseController
         // $auth = Auth::user();
         $tickets = Ticket::where('ticket_id', $ticketId)->first();
 
-        $path = storage_path($tickets->photo);
+        $path = url('storage/'.$tickets->photo);
         $file = file_get_contents($path);
         $response = new Response($file, 200);
         $response->header('Content-Type', 'image/jpeg');
