@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
 
 
 class TicketController extends BaseController
@@ -39,27 +39,32 @@ class TicketController extends BaseController
 
     
     public function getPhoto($ticketId)
+{
+    try
     {
-        try
-        {
-            if (!Auth::check()) {
-                return $this->sendError('Error get ticket photo', ['error' => 'Not Logged into system']);
-            }
-            
-            // $auth = Auth::user();
-            $tickets = Ticket::where('ticket_id', $ticketId)->first();
-
-            $path = url('storage/'.$tickets->photo);
-            $file = file_get_contents($path);
-            $base64 = base64_encode($file);
-            $response['photo'] = $base64;
-
-            return $this->sendResponse($response, 'Ticket photo collected.'); 
-
-        } catch (Exception $error) {
-            return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
+        if (!Auth::check()) {
+            return $this->sendError('Error get ticket photo', ['error' => 'Not Logged into system']);
         }
+        
+        // $auth = Auth::user();
+        $tickets = Ticket::where('ticket_id', $ticketId)->first();
+
+        $path = storage_path('app/'.$tickets->photo);
+        $file = file_get_contents($path);
+        $response = new Response($file, 200);
+        $response->header('Content-Type', 'image/jpeg');
+
+        $responseData = [
+            'photo' => $response
+        ];
+
+        return $this->sendResponse($responseData, 'Ticket photo collected.'); 
+
+    } catch (Exception $error) {
+        return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
     }
+}
+
 
     public function getTicket()
     {
