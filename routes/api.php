@@ -103,25 +103,23 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 
-    Route::get('/storage/{path}', function ($path) {
+});
 
-        if (!auth()->check()) {
-            // Redirect the user to the login page
-            return redirect()->route('login');
-        }
-        
-        $path = storage_path('app/' . $path);
+Route::get('/storage/{path}', function ($path) {
+    // Check if the user is authenticated
+    if (!auth()->check()) {
+        // Redirect the user to the login page
+        return redirect()->route('login');
+    } else {
+        $path = storage_path($path);
         if (!File::exists($path)) {
             abort(404);
-        }
-
-        $file = File::get($path);
-        $type = File::mimeType($path);
-
-        $response = Response::make($file, 200);
-        $response->header("Content-Type", $type);
-
-        return $response;
-    })->where('path', '.*');
-
-});
+        } else {
+            $file = File::get($path);
+            $type = File::mimeType($path);
+            $response = Response::make($file, 200);
+            $response->header("Content-Type", $type);
+            return $response;
+        }   
+    }
+})->where('path', '.*');
