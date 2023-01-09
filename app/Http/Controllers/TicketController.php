@@ -36,6 +36,29 @@ class TicketController extends BaseController
         
     }
 
+    
+    public function getPhoto($ticketId)
+    {
+        try
+        {
+            if (!Auth::check()) {
+                return $this->sendError('Error get ticket photo', ['error' => 'Not Logged into system']);
+            }
+            
+            // $auth = Auth::user();
+            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                 ->where('ticket_id', $ticketId)
+                 ->first();
+
+            $tickets->photo = url('storage/'.$tickets->photo);
+
+            return $this->sendResponse($tickets, 'Ticket photo collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get ticket photo', ['error' => $error->getMessage()]);
+        }
+    }
+
     public function getTicket()
     {
         try
@@ -52,7 +75,7 @@ class TicketController extends BaseController
                 $ticketId = $ticket->ticket_id;
                 $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
-
+                $ticket->photo = url('storage/'.$ticket->photo);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
 
@@ -101,13 +124,12 @@ class TicketController extends BaseController
                     
             }
 
-                //  dd($tickets->ticket_id);
-
             foreach ($tickets as $ticket) {
 
                 $ticketId = $ticket->ticket_id;
                 $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
+                $ticket->photo = url('storage/'.$ticket->photo);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();

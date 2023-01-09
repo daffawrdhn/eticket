@@ -82,19 +82,15 @@ class EmployeeController extends BaseController
                 'nik' => $employeeId,
             ];
     
-                
-            
-            
-    
             $input = $request->all();
     
             $input['employee_id'] = $employeeId;
             $input['password_id'] = 0;
             $input['device_id'] = null; 
-            $input['api_token'] = 
+            $input['api_token'] = null;
             $user = Employee::create($input);
     
-            $token = $user->createToken('MyAuthApp')->plainTextToken;
+            // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
             $inputPassword['password'] = bcrypt($password);
             $inputPassword['non_active_date'] = Carbon::now()->addDays(90);
@@ -103,7 +99,11 @@ class EmployeeController extends BaseController
                 $password = Password::create($inputPassword);
     
                 if ($password) {
+
                     Mail::to($request->employee_email)->send(new SendMail($testMailData));
+                    
+            $token = $user->createToken('MyAuthApp')->plainTextToken;
+
                     Employee::where('employee_id', $user->employee_id)
                     ->update(
                         [

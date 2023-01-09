@@ -77,6 +77,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
     Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
+    Route::get('get-photo/{ticketId}', [TicketController::class, 'getPhoto'])->name('auth.getPhoto');
 
 
     // User
