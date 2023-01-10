@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Requests\EmployeeFormRequest;
 use App\Models\Employee;
 use App\Models\Password;
 use Carbon\Carbon;
@@ -44,6 +45,7 @@ class EmployeeController extends BaseController
     {
         try {
             $validator = Validator::make($request->all(), [
+                // 'employee_id' => 'required',
                 'organization_id' => 'required',
                 'supervisor_id' => 'required',
                 'regional_id' => 'required',
@@ -89,7 +91,11 @@ class EmployeeController extends BaseController
             $input['device_id'] = null; 
             $input['api_token'] = null;
             $user = Employee::create($input);
+<<<<<<< HEAD
     
+=======
+            
+>>>>>>> rudi
             // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
             $inputPassword['password'] = bcrypt($password);
@@ -99,11 +105,16 @@ class EmployeeController extends BaseController
                 $password = Password::create($inputPassword);
     
                 if ($password) {
+<<<<<<< HEAD
 
                     Mail::to($request->employee_email)->send(new SendMail($testMailData));
                     
             $token = $user->createToken('MyAuthApp')->plainTextToken;
 
+=======
+                    // Mail::to($request->employee_email)->send(new SendMail($testMailData));
+                    $token = $user->createToken('MyAuthApp')->plainTextToken;
+>>>>>>> rudi
                     Employee::where('employee_id', $user->employee_id)
                     ->update(
                         [
@@ -250,29 +261,59 @@ class EmployeeController extends BaseController
             if ($validator->fails()) {
                 $errors =  $validator->errors()->all();
                 return $this->sendError('Error validation', ['error' => $errors]);
-            }else{
-                $updateEmployee = Employee::where('employee_id', $id)
-                    ->update([
-                        'organization_id' => $request->organization_id,
-                        'supervisor_id' => $request->supervisor_id,
-                        'regional_id' => $request->regional_id,
-                        'role_id' => $request->role_id,
-                        'join_date' => $request->join_date,
-                        'quit_date' => $request->quit_date,
-                        'employee_birth' => $request->employee_birth,
-                        'employee_ktp' => $request->employee_ktp,
-                        'employee_name' => $request->employee_name,
-                        'employee_email' => $request->employee_email,
-                    ]);
-
-                if ($updateEmployee) {
-                    return $this->sendResponse($updateEmployee, 'success update data');
-                }else{
-                    return $this->sendError('Error validation', ['error' => $updateEmployee]);
-                }
-
-                
             }
+
+            $emailValidation = Employee::where(
+                'employee_id', '!=', $id
+                )->where('employee_email', $request->employee_email)
+            ->get();
+
+            foreach($emailValidation as $email){
+                if ($email['employee_email'] != null) {
+                    return $this->sendError('Error validation', ['error' =>  'email already exist']);
+                }
+            }
+
+            $ktpValidation = Employee::where(
+                'employee_id', '!=', $id
+                )->where('employee_ktp', $request->employee_ktp)
+            ->get();
+
+            foreach($ktpValidation as $ktp){
+                if ($ktp['employee_ktp'] != null) {
+                    return $this->sendError('Error validation', ['error' => 'ktp already exist']);
+                }
+            }
+
+
+            $updateEmployee = Employee::where('employee_id', $id)
+                ->update([
+                    'organization_id' => $request->organization_id,
+                    'supervisor_id' => $request->supervisor_id,
+                    'regional_id' => $request->regional_id,
+                    'role_id' => $request->role_id,
+                    'join_date' => $request->join_date,
+                    'quit_date' => $request->quit_date,
+                    'employee_birth' => $request->employee_birth,
+                    'employee_ktp' => $request->employee_ktp,
+                    'employee_name' => $request->employee_name,
+                    'employee_email' => $request->employee_email,
+                ]);
+
+            if ($updateEmployee) {
+                return $this->sendResponse($updateEmployee, 'success update data');
+            }else{
+                return $this->sendError('Error validation', ['error' => $updateEmployee]);
+            }
+
+                    
+                
+            
+
+
+            
+             
+            
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);
         }
@@ -315,7 +356,7 @@ class EmployeeController extends BaseController
         $sets[] = '123456789';
         $sets[]  = '!@#$%&*,.?';
     
-        $password = '';
+        $password = NULL;
         
         //append a character from each set - gets first 4 characters
         foreach ($sets as $set) {
@@ -365,21 +406,26 @@ class EmployeeController extends BaseController
                         ]
                     );
                 
-                Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
+                $sendMail = Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
 
-                $lastThreePasswordIds = Password::where('employee_id', $id)
-                ->orderBy('updated_at', 'desc')
-                ->take(3)
-                ->pluck('password_id');
+                if ($sendMail) {
+                    $lastThreePasswordIds = Password::where('employee_id', $id)
+                    ->orderBy('updated_at', 'desc')
+                    ->take(3)
+                    ->pluck('password_id');
 
 
-                if($lastThreePasswordIds){
-                    Password::where('employee_id',$id)
-                    ->whereNotIn('password_id', $lastThreePasswordIds)
-                    ->delete();
+                    if($lastThreePasswordIds){
+                        Password::where('employee_id',$id)
+                        ->whereNotIn('password_id', $lastThreePasswordIds)
+                        ->delete();
+                    }
+
+                    return $this->sendResponse('success', 'success reset password');
+                }else{
+                    return $this->sendError('Error validation', ['error' => 'gagal kirim email']);
                 }
-
-                return $this->sendResponse($password, $isMail->employee_email);
+                
             }else{
                 return $this->sendError('Error validation', ['error' => $inputPassword]);
             }

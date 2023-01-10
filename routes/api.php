@@ -87,7 +87,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('add-user', [EmployeeController::class, 'store'])->name('auth.addUser');
     Route::get('get-user', [EmployeeController::class, 'getEmployee'])->name('auth.getUser');
     Route::get('get-user/{id}', [EmployeeController::class, 'show'])->name('auth.getUserById');
-    Route::post('update-user/{id}', [EmployeeController::class, 'update'])->name('auth.updateUser');
+    Route::put('update-user/{id}', [EmployeeController::class, 'update'])->name('auth.updateUser');
     Route::post('reset-user-password/{id}', [EmployeeController::class, 'resetPassword'])->name('auth.resetPassword');
     Route::delete('delete-user/{id}', [EmployeeController::class, 'destroy'])->name('auth.deleteUser');
     Route::delete('delete-all-user', [EmployeeController::class, 'destroyAll'])->name('auth.deleteAllUser');

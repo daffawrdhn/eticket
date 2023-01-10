@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+    $("#loading-table").hide();
     getDataEmployee()
 
     // // check-box
@@ -14,6 +14,7 @@ $(document).ready(function () {
             $(".sub-check").prop('checked',false);  
         } 
     });
+
 
     // modal post
     $(".userAdd").click(function (e) { 
@@ -61,49 +62,71 @@ $(document).ready(function () {
             'supervisor_id' : $('#supervisor_id').val(),
         }
 
+            var date = new Date();
+            var year = date.toLocaleString("default", { year: "numeric" });
+            var month = date.toLocaleString("default", { month: "2-digit" });
+            var day = date.toLocaleString("default", { day: "2-digit" });
+
+            // Generate yyyy-mm-dd date string
+            var formattedDate = year + "-" + month + "-" + day;
+
+        if (data.employee_birth < data.join_date && data.quit_date >= formattedDate) {
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/add-user",
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token );
+                    
+                    $("#loading").modal('show')
+                    
+                },
+                success : function(response){
+                    $("#modalAddUser").modal('hide');
+    
+                    setTimeout(()=>{
+                        $("#loading").modal('hide') 
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                $("#loading-table").show();
         
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/add-user",
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token );
-                
-                $("#loading").modal('show');
-                
-                
-            },
-            success : function(response){
-                $("#modalAddUser").modal('hide');
-                $("#loading").modal('hide');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        getDataEmployee();
-
+                                setTimeout(()=>{
+                                    $("#loading-table").hide();
+                                    getDataEmployee();
+                                },1000)
+            
+                            }
+                        })
+                    },1000)
+                    
+                },
+                error:function(response){
+                    if (!response.success) {
+                        
+    
+                        setTimeout(() => {
+                            $("#loading").modal('hide');
+                            Swal.fire({
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                text : response.responseJSON.data.error
+                            })
+                        },500)
+                        
                     }
-                    })
-                
-            },
-            error:function(response){
-                if (!response.success) {
-                    $("#loading").modal('hide');
-                    Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : response.responseJSON.data.error
-                    })
                 }
-            }
-        })
+            })
+        }
+        
+        
         
     });
 
@@ -114,10 +137,16 @@ $(document).ready(function () {
     $(document).on('click', '.update-user', function(e){
         e.preventDefault();
         
-        console.log('ok');
-        
         var token = $('#token').val()
         var id = $(this).val();
+
+        var date = new Date();
+        var year = date.toLocaleString("default", { year: "numeric" });
+        var month = date.toLocaleString("default", { month: "2-digit" });
+        var day = date.toLocaleString("default", { day: "2-digit" });
+
+        // Generate yyyy-mm-dd date string
+        var formattedDate = year + "-" + month + "-" + day;
     
         data = {
             'employee_name' : $('#employee_name').val(),
@@ -132,47 +161,65 @@ $(document).ready(function () {
             'supervisor_id' : $('#supervisor_id').val(),
         }
     
-    
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/update-user/"+ id,
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-    
-                $("#modalAddUser").modal('hide');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        getDataEmployee();
-    
-                    }
-                })
-                
-            },
-            error:function(response){
-                if (!response.success) {
-    
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : response.responseJSON.data.error,
-                            
-                            
-                        })
+        if (data.employee_birth < data.join_date && data.quit_date >= formattedDate) {
+            $.ajax({
+                type : "PUT",
+                url : APP_URL + "api/update-user/"+ id,
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                    $("#loading").modal('show')
+                },
+                success : function(response){
                     
+                    $("#modalAddUser").modal('hide');
+
+                    setTimeout(()=>{
+                        $("#loading").modal('hide') 
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                $("#loading-table").show();
+        
+                                setTimeout(()=>{
+                                    $("#loading-table").hide();
+                                    getDataEmployee();
+                                },1000)
+            
+                            }
+                        })
+                    },1000)
+                    
+                    
+                    
+                },
+                error:function(response){
+                    
+                    if (!response.success) {
+                    
+                        setTimeout(() => { 
+                            $("#loading").modal('hide');
+                            Swal.fire({
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                text : response.responseJSON.data.error,
+                                
+                            })
+                            
+                        },1000)
+
+                        
+                    }
                 }
-            }
-        })
+            })
+        }
     
     });
 
@@ -204,11 +251,13 @@ $(document).ready(function () {
                     url : APP_URL + "api/reset-user-password/"+ id,
                     dataType : "json",
                     beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                        xhr.setRequestHeader('Authorization','Bearer ' + token );
+                        $("#loading").modal('show') 
                     },
                     success : function(response){
             
                         $("#modalAddUser").modal('hide');
+                        $("#loading").modal('hide') 
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
@@ -221,14 +270,17 @@ $(document).ready(function () {
                     error:function(response){
                         if (!response.success) {
             
+                            setTimeout(() => { 
+                                $("#loading").modal('hide');
                                 Swal.fire({
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',
                                     title : 'Warning!',
                                     text : response.responseJSON.data.error,
                                     
-                                    
                                 })
+                                
+                             },1000)
                             
                         }
                     }
