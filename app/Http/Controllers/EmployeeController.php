@@ -91,11 +91,7 @@ class EmployeeController extends BaseController
             $input['device_id'] = null; 
             $input['api_token'] = null;
             $user = Employee::create($input);
-<<<<<<< HEAD
-    
-=======
             
->>>>>>> rudi
             // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
             $inputPassword['password'] = bcrypt($password);
@@ -105,16 +101,8 @@ class EmployeeController extends BaseController
                 $password = Password::create($inputPassword);
     
                 if ($password) {
-<<<<<<< HEAD
-
-                    Mail::to($request->employee_email)->send(new SendMail($testMailData));
-                    
-            $token = $user->createToken('MyAuthApp')->plainTextToken;
-
-=======
                     // Mail::to($request->employee_email)->send(new SendMail($testMailData));
                     $token = $user->createToken('MyAuthApp')->plainTextToken;
->>>>>>> rudi
                     Employee::where('employee_id', $user->employee_id)
                     ->update(
                         [
