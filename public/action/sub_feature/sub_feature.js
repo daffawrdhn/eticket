@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     
     getDataSubFeature();
-
+    $('#feature_idFeedback').show()
 
     //getdata
     function getDataSubFeature()
@@ -68,6 +68,7 @@ $(document).ready(function () {
         $(".modal-title").html('Update Sub Feature')
         $("#input-sub_feature").removeClass('input-sub-feature');
         $("#input-sub_feature").addClass('update-sub-feature');
+        
 
         
         var id = $(this).val();
@@ -105,16 +106,17 @@ $(document).ready(function () {
 
 
     //post
-$(".sub_featureAdd").click(function (e) { 
-    e.preventDefault();
-    
-    $(".modal-title").html('Add New sub_feature')
-    $("#input-sub_feature").removeClass('update-sub-feature');
-    $("#input-sub_feature").addClass('input-sub-feature');
-    $('#feature_id option:selected').remove();
-    $('#sub_feature_name').val('');
-    
-});
+    $(".sub_featureAdd").click(function (e) { 
+        e.preventDefault();
+        
+        $(".modal-title").html('Add New sub_feature')
+        $("#input-sub_feature").removeClass('update-sub-feature');
+        $("#input-sub_feature").addClass('input-sub-feature');
+        $('#feature_id option:selected').remove();
+        $('#sub_feature_name').val('');
+        $('#is-invalid').hide()
+        
+    });
 
 // //post data 
     $(document).on('click', '.input-sub-feature', function(e){
@@ -126,61 +128,77 @@ $(".sub_featureAdd").click(function (e) {
             'sub_feature_name' : $('#sub_feature_name').val(),
             'feature_id' : $('#feature_id').val()
         }
+        if (data.sub_feature_name == '' && data.feature_id == '') {
+            $('#sub_feature_name').addClass('is-invalid');
+            $('#sub_feature_nameFeedback').html('please fill out this field')
+            $('#select-feature').addClass('is-invalid');
+            $('#feature_idFeedback').html('please fill out this field')
+            
 
-
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/add-sub-feature",
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-                $("#staticBackdrop").modal('hide');
-
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        $('#sub_feature_name').val('')
-                        getDataSubFeature();
-
-                    }
-                })
+        }else{
+            if (data.sub_feature_name == '') {
+                $('#sub_feature_name').addClass('is-invalid');
+                $('#sub_feature_nameFeedback').html('please fill out this field')
+    
                 
-            },
-            error:function(response){
-                if (!response.success) {
-
-                    if (response.responseJSON.data.error.sub_feature_name !== null) {
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : response.responseJSON.data.error.sub_feature_name,
-                            
-                            
-                        })
-                    }else{
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : response.responseJSON.data.error,
-                            
-                            
-                        })
-                    }
-                    
-                }
+            }else{
+                $('#sub_feature_name').removeClass('is-invalid');
             }
-        })
+        }
+
+        // $.ajax({
+        //     type : "POST",
+        //     url : APP_URL + "api/add-sub-feature",
+        //     data : data,
+        //     dataType : "json",
+        //     beforeSend: function(xhr, settings) { 
+        //         xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+        //     },
+        //     success : function(response){
+        //         $("#staticBackdrop").modal('hide');
+
+        //         Swal.fire({
+        //             position: 'center',
+        //             icon: 'success',
+        //             title: response.message,
+        //             showConfirmButton: false,
+        //             timer: 2000
+        //         }).then((result) => {
+        //             if (result.dismiss === Swal.DismissReason.timer) {
+
+        //                 $('#sub_feature_name').val('')
+        //                 getDataSubFeature();
+
+        //             }
+        //         })
+                
+        //     },
+        //     error:function(response){
+        //         if (!response.success) {
+
+        //             if (response.responseJSON.data.error.sub_feature_name !== null) {
+        //                 Swal.fire({
+        //                     icon : 'warning',
+        //                     confirmButtonText: 'Ok',
+        //                     title : 'Warning!',
+        //                     text : response.responseJSON.data.error.sub_feature_name,
+                            
+                            
+        //                 })
+        //             }else{
+        //                 Swal.fire({
+        //                     icon : 'warning',
+        //                     confirmButtonText: 'Ok',
+        //                     title : 'Warning!',
+        //                     text : response.responseJSON.data.error,
+                            
+                            
+        //                 })
+        //             }
+                    
+        //         }
+        //     }
+        // })
     
     });
 
@@ -196,6 +214,8 @@ $(".sub_featureAdd").click(function (e) {
         
 
         var token = $('#token').val()
+
+        
         $.ajax({
             url : APP_URL + "api/get-sub-feature/"+ id,
             type : 'GET',

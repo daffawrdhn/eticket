@@ -1,11 +1,71 @@
 $(document).ready(function () {
-    $("#loading-table").hide();
-    getDataEmployee()
+    var token = $('#token').val()
+    var table = $('#employeeTable').DataTable({
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ajax: { 
+                    url: APP_URL + "api/get-user",
+                    type: "GET",
+                    dataType: 'json',
+                    beforeSend: function(xhr, settings) { 
+                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                    },
+                },
+                columns: [
+                    {data: 'employee_id', name: 'employee_id'},
+                    {data: 'employee_ktp', name: 'employee_ktp'},
+                    {data: 'employee_name', name: 'employee_name'},
+                    {data: 'employee_email', name: 'employee_email'}, 
+                    {data: 'role_name', name: 'role_name'}, 
+                    {data: 'organization_name', name: 'organization_name'}, 
+                    {data: 'regional_name', name: 'regional_name'}, 
+                    {
+                        data: 'status', 
+                        name: 'status',
+                        orderable: true, 
+                        searchable: true,
+                    },
+                    {
+                        data: 'action', 
+                        name: 'action', 
+                        orderable: true, 
+                        searchable: true,
+                    },
+                    
+                ]   
+    });
+
+
+    function IsEmail(email) { 
+        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if(!regex.test(email)) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    $('#employee_email').keyup(function () {
+        
+        var employeeEmail = $(this).val()
+
+        
+
+       if (IsEmail(employeeEmail) == true) {
+           $('#employee_email').removeClass('is-invalid');
+
+       } else {
+           $('#employee_email').addClass('is-invalid');
+           $('#employee_emailFeedback').html('Email is Invalid')
+       }
+
+   })
+
 
     // // check-box
 
-    $(document).on('click', '#master-check', function(e){
-        
+    $(document).on('click', '#master-check', function(e){    
 
         if($(this).is(':checked',true))  
         {
@@ -69,61 +129,69 @@ $(document).ready(function () {
 
             // Generate yyyy-mm-dd date string
             var formattedDate = year + "-" + month + "-" + day;
+        if (IsEmail(data.employee_email) == true || data.employee_email == '') {
 
-        if (data.employee_birth < data.join_date && data.quit_date >= formattedDate) {
-            $.ajax({
-                type : "POST",
-                url : APP_URL + "api/add-user",
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token );
-                    
-                    $("#loading").modal('show')
-                    
-                },
-                success : function(response){
-                    $("#modalAddUser").modal('hide');
-    
-                    setTimeout(()=>{
-                        $("#loading").modal('hide') 
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                $("#loading-table").show();
+            if (data.employee_birth < data.join_date && data.quit_date >= formattedDate || data.employee_birth == '') {
+                $.ajax({
+                    type : "POST",
+                    url : APP_URL + "api/add-user",
+                    data : data,
+                    dataType : "json",
+                    beforeSend: function(xhr, settings) { 
+                        xhr.setRequestHeader('Authorization','Bearer ' + token );
+                        
+                        $("#loading").modal('show')
+                        
+                    },
+                    success : function(response){
+                        $("#modalAddUser").modal('hide');
         
-                                setTimeout(()=>{
-                                    $("#loading-table").hide();
-                                    getDataEmployee();
-                                },1000)
-            
-                            }
-                        })
-                    },1000)
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                        
-    
-                        setTimeout(() => {
-                            $("#loading").modal('hide');
+                        setTimeout(()=>{
+                            $("#loading").modal('hide') 
                             Swal.fire({
-                                icon : 'warning',
-                                confirmButtonText: 'Ok',
-                                title : 'Warning!',
-                                text : response.responseJSON.data.error
+                                position: 'center',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                willClose: () => {
+                                    table.draw()
+                                }
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    
+                                    table.draw()
+                                    
+                
+                                }
                             })
-                        },500)
+                        },1000)
                         
+                    },
+                    error:function(response){
+                        if (!response.success) {
+                            setTimeout(() => {
+                                $("#loading").modal('hide');
+                                Swal.fire({
+                                    icon : 'warning',
+                                    confirmButtonText: 'Ok',
+                                    title : 'Warning!',
+                                    html : '<ul></ul>',
+                                    didOpen: () => {
+                                        const ul = Swal.getHtmlContainer().querySelector('ul')
+                                        $.each(response.responseJSON.data.error, function (key, value) { 
+                                             $(ul).append('<li>'+ value +'</li>');
+                                        });
+                                      },
+                                })
+                            },500)
+                            
+                            
+                        }
                     }
-                }
-            })
+                })
+            }
+
         }
         
         
@@ -135,6 +203,7 @@ $(document).ready(function () {
     //////////////update data////////////////
 
     $(document).on('click', '.update-user', function(e){
+
         e.preventDefault();
         
         var token = $('#token').val()
@@ -161,7 +230,7 @@ $(document).ready(function () {
             'supervisor_id' : $('#supervisor_id').val(),
         }
     
-        if (data.employee_birth < data.join_date && data.quit_date >= formattedDate) {
+        
             $.ajax({
                 type : "PUT",
                 url : APP_URL + "api/update-user/"+ id,
@@ -182,16 +251,14 @@ $(document).ready(function () {
                             icon: 'success',
                             title: response.message,
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 2000,
+                            willClose: () => {
+                                table.draw()
+                            }
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
-                                $("#loading-table").show();
-        
-                                setTimeout(()=>{
-                                    $("#loading-table").hide();
-                                    getDataEmployee();
-                                },1000)
-            
+                                
+                                table.draw()
                             }
                         })
                     },1000)
@@ -203,23 +270,27 @@ $(document).ready(function () {
                     
                     if (!response.success) {
                     
-                        setTimeout(() => { 
+                        setTimeout(() => {
                             $("#loading").modal('hide');
                             Swal.fire({
                                 icon : 'warning',
                                 confirmButtonText: 'Ok',
                                 title : 'Warning!',
-                                text : response.responseJSON.data.error,
-                                
+                                html : '<ul></ul>',
+                                didOpen: () => {
+                                    const ul = Swal.getHtmlContainer().querySelector('ul')
+                                    $.each(response.responseJSON.data.error, function (key, value) { 
+                                         $(ul).append('<li>'+ value +'</li>');
+                                    });
+                                  },
                             })
-                            
-                        },1000)
+                        },500)
 
                         
                     }
                 }
             })
-        }
+        
     
     });
 
@@ -255,17 +326,17 @@ $(document).ready(function () {
                         $("#loading").modal('show') 
                     },
                     success : function(response){
-            
                         $("#modalAddUser").modal('hide');
-                        $("#loading").modal('hide') 
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 2000
-                        })
-                        
+                        setTimeout(() => { 
+                            $("#loading").modal('hide') 
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                         },1000)
                     },
                     error:function(response){
                         if (!response.success) {
@@ -321,22 +392,29 @@ $(document).ready(function () {
                     url: APP_URL + "api/delete-user/" + id,
                     dataType: "json",
                     beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                        xhr.setRequestHeader('Authorization','Bearer ' + token );
+                        $("#loading").modal('show') 
                     },
                     success: function(response){
                         
+                        setTimeout(()=>{
+                            $("#loading").modal('hide') 
                             Swal.fire({
-                                icon : 'success',
-                                confirmButtonText: 'Ok',
-                                title : 'Deleted!',
-                                text : 'Your file has been deleted.',
-                                
-                                
+                                position: 'center',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                willClose: () => {
+                                    table.draw()
+                                }
                             }).then((result) => {
-                                if (result.isConfirmed) {
-                                    getDataEmployee();
-                                } 
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    
+                                    table.draw()
+                                }
                             })
+                        },1000)
         
                     }
                 });
@@ -350,72 +428,7 @@ $(document).ready(function () {
 
     /////////////////////////////////////////
 
-    /////////////Delete many Data///////////////////
-
-    $('#delete-all').on('click', function(e) {
-
-        var allVals = [];  
-        $(".sub-check:checked").each(function() {  
-            allVals.push($(this).attr('data-id'));
-        });  
-        if(allVals.length <=0)  
-        {  
-            Swal.fire({
-                icon : 'warning',
-                confirmButtonText: 'Ok',
-                title : 'Warning!',
-                text : 'Please select row!!',
-            })
-
-        }  else {  
-        
-            var join_selected_values = allVals.join(","); 
-            var token = $('#token').val()
-            var data = {'ids' : join_selected_values}
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    
-                    $.ajax({
-                        type: "DELETE",
-                        url: APP_URL + "api/delete-all-user",
-                        dataType: "json",
-                        data : data,
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                        },
-                        success: function(response){
-                            
-                                Swal.fire({
-                                    icon : 'success',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Deleted!',
-                                    text : 'Your file has been deleted.',
-                                    
-                                    
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $("#master-check").prop('checked', false); 
-                                        getDataEmployee();
-                                    } 
-                                })
-            
-                        }
-                    });
-                  
-                }
-              })
-        
-        }  
-    });
+    
 
 
 
@@ -448,22 +461,28 @@ $(document).ready(function () {
                         dataType: "json",
                         beforeSend: function(xhr, settings) { 
                             xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                            $("#loading").modal('show') 
                         },
                         success: function(response){
                             
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-            
-                                    getDataEmployee();
-            
-                                }
-                             })
+                            setTimeout(()=>{
+                                $("#loading").modal('hide') 
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    willClose: () => {
+                                        table.draw()
+                                    }
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        
+                                        table.draw()
+                                    }
+                                })
+                            },1000)
             
                         }
                     });
@@ -484,22 +503,62 @@ $(document).ready(function () {
 
         
         $("#staticBackdrop").modal('show');
+        $('#new_quit_date').val('')
         $("#input-quit-date").val(id);
         $("#status").val(userStatus);
 
         $( "#new_quit_date" ).focus(function() {
+            var date = new Date();
+            var year = date.toLocaleString("default", { year: "numeric" });
+            var month = date.toLocaleString("default", { month: "2-digit" });
+            var day = date.toLocaleString("default", { day: "2-digit" });
+
+            // Generate yyyy-mm-dd date string
+            var formattedDate = year + "-" + month + "-" + day;
+
             $('#new_quit_date').attr('type', 'date');
+
+            if ($(this).attr('type') == 'date') {
+
+                $(this).attr('min', formattedDate)
+
+            }
             
         })
 
         $( "#new_quit_date" ).focusout(function() {
             $('#new_quit_date').attr('type', 'text');
+
+            var date = new Date();
+            var year = date.toLocaleString("default", { year: "numeric" });
+            var month = date.toLocaleString("default", { month: "2-digit" });
+            var day = date.toLocaleString("default", { day: "2-digit" });
+
+            // Generate yyyy-mm-dd date string
+            var formattedDate = year + "-" + month + "-" + day;
+
+
+            if (formattedDate > $(this).val() && $(this).val() != '') {
+                $('#new_quit_date').addClass('is-invalid');
+                $('#new_quit_dateFeedback').html('Please Enter the quit date > date now')
+            }else{
+                $('#new_quit_date').removeClass('is-invalid');
+            }
         })
+
+        
     }
 
     $(document).on('click', '#input-quit-date', function(e){
         e.preventDefault();
         
+        var date = new Date();
+        var year = date.toLocaleString("default", { year: "numeric" });
+        var month = date.toLocaleString("default", { month: "2-digit" });
+        var day = date.toLocaleString("default", { day: "2-digit" });
+
+        // Generate yyyy-mm-dd date string
+        var formattedDate = year + "-" + month + "-" + day;
         
         var token = $('#token').val()
         var id = $(this).val()
@@ -509,47 +568,59 @@ $(document).ready(function () {
             'quit_date' :  $('#new_quit_date').val(),
         }
 
-        console.log(data+id);
-        
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/set-status-employee/"+ id,
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                
-            },
-            success : function(response){
-                
-                $("#staticBackdrop").modal('hide');
+        if (data.quit_date > formattedDate || data.quit_date == '') {
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/set-status-employee/"+ id,
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                    $("#loading").modal('show') 
+                },
+                success : function(response){
+                    
+                    $("#staticBackdrop").modal('hide');
+    
 
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        getDataEmployee();
-
+                    setTimeout(()=>{
+                        $("#loading").modal('hide') 
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000,
+                            willClose: () => {
+                                table.draw()
+                            }
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                
+                                table.draw()
+                            }
+                        })
+                    },1000)
+                    
+                },
+                error:function(response){
+                    if (!response.success) {
+                        setTimeout(()=>{
+                            $("#loading").modal('hide') 
+                            Swal.fire({
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                text : response.responseJSON.data.error
+                            })
+                        },1000)
+                        
                     }
-                 })
-                
-            },
-            error:function(response){
-                if (!response.success) {
-                    Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : response.responseJSON.data.error
-                    })
                 }
-            }
-        })
+            })
+        }
+        
+        
         
     });
 

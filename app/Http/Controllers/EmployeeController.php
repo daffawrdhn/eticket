@@ -20,7 +20,7 @@ class EmployeeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return view('containers.dashboard.employee');
     }
@@ -56,16 +56,29 @@ class EmployeeController extends BaseController
                 'employee_ktp' => 'required|min:16|unique:employee_tbl',
                 'employee_name' => 'required',
                 'employee_email' => 'required|email|unique:employee_tbl',
+            ],
+            [
+                'organization_id.required' => 'organization field is required',
+                'regional_id.required' => 'regional field is required',
+                'role_id.required' => 'role field is required',
+                'supervisor_id.required' => 'supervisor field is required',
+                'quit_date.required' => 'quit field is required',
+                'join_date.required' => 'join date field is required',
+                'employee_birth.required' => 'date of birth field is required',
+                'employee_email.required' => 'Email field is required',
+                'employee_ktp.required' => 'No. KTP field is required',
+                'employee_name.required' => 'Name field is required',
             ]);
     
             if ($validator->fails()) {
-                $errors =  $validator->errors()->all();
+                $errors =  $validator->errors();
+                $errors->toArray();
                 return $this->sendError('Error validation', ['error' => $errors]);
             }
     
             //generate employee ID 
     
-            $employeeData = Employee::select('employee_id')->latest('created_at')->first();
+            $employeeData = Employee::orderBy('employee_id', 'desc')->first();   
             $employeeCount = (int)$employeeData->employee_id;
             $employeeCount++;
     
@@ -79,7 +92,7 @@ class EmployeeController extends BaseController
     
             $testMailData = [
                 'title' => 'Eticket Mobile Password',
-                'body' => 'This is your password for mobile eticket aplication. Please Change Your Password And Dont Show this mail for another people. thanks',
+                'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks',
                 'password' => $password,
                 'nik' => $employeeId,
             ];
@@ -158,16 +171,20 @@ class EmployeeController extends BaseController
     }
 
 
-    public function getEmployee(){
+    public function getEmployee(Request $request){
         try {
             
-            $datas = Employee::orderBy('created_at', 'desc')->with('Role', 'Organization', 'Regional')->get();
+            $datas = Employee::orderBy('created_at', 'asc')->with('Role', 'Organization', 'Regional')->get();
             $isNow = Carbon::now();
 
             $dataEmployee = [];
             foreach($datas as $d){
                 
                 $data = $d;
+
+                $data['role_name'] = $data->role['role_name'];
+                $data['regional_name'] = $data->regional['regional_name'];
+                $data['organization_name'] = $data->organization['organization_name'];
                 if ($d->quit_date > $isNow) {
                     $data['status'] = 'Active';
                 }else{
@@ -177,12 +194,35 @@ class EmployeeController extends BaseController
                 $dataEmployee[] = $data;
             }
             
-            
 
-            if ($datas) {
-                return $this->sendResponse($dataEmployee, "successs");
-            }else{
-                return $this->sendError('Error validation', ['error' => $isNow]);
+            if ($request->ajax()) {
+                $customers = $dataEmployee;
+                return datatables()->of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                        <div class="btn-group">
+                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear-fill"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" id="reset-pass" href="#" data-id="'. $row->employee_id .'">reset Pass</a></li>
+                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
+                            <li><a class="dropdown-item" id="delete-user" data-id="'. $row->employee_id .'" href="#">Delete</a></li>
+                            </ul>
+                        </div>
+                        ';
+                        return $action;
+                    })->addColumn('status', function ($row) {
+                        if ($row->status == 'Active') {
+                            $html = '<button class="btn btn-sm btn-success" id="status" value="'. $row->status .'" data-id="'. $row->employee_id .'">'. $row->status .'</button>
+                            ';
+                        }
+                        else{
+                            $html = '<button class="btn btn-sm btn-danger" id="status" value="'. $row->status .'" data-id="'. $row->employee_id .'">'. $row->status .'</button>';
+                        }
+                        
+                        return $html;
+                    })->rawColumns(['status', 'action'])->toJson();
             }
 
         } catch (Exception $error) {
@@ -458,10 +498,15 @@ class EmployeeController extends BaseController
 
     public function setStatusEmployee(Request $request, $id){
         try {
-            $valditaor = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(),[
                 'status' => 'required',
                 'quit_date' => 'required'
             ]);
+
+            if ($validator->fails()) {
+                $errors =  $validator->errors()->all();
+                return $this->sendError('Error validation', ['error' => $errors]);
+            }
 
             if ($request->status == 'Active') {
                 $quitDate = Carbon::now();

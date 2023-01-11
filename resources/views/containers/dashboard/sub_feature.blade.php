@@ -56,7 +56,10 @@
                 <form action="#" class="signin-form" id="" method="POST">
                     @csrf
                     <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
-                    <select class="form-select form-control select-feature" style="width: 100%" id="feature_id" name="feature_id" aria-label="Default select example"></select>
+                    <div id="select-feature" class="form-group border-danger">
+                        <select class="form-select form-control select-feature" style="width: 100%" id="feature_id" name="feature_id" aria-label="Default select example"></select>
+                        <div id="feature_idFeedback" class="invalid-feedback"></div>
+                    </div>
                     <div class="form-group mt-4 pb-2">
                         <input type="text" 
                         class="form-control" 
@@ -64,8 +67,8 @@
                         name="sub_feature_name" 
                         autocomplete="off"
                         required>
-                        <label class="form-control-placeholder" for="username">Sub Feature Name</label>
-                        <div id="sub_feature_nameFeedback" class="invalid-feedback"></div>  
+                        <label class="form-control-placeholder" for="sub_feature_name">Sub Feature Name</label>
+                        <div id="sub_feature_nameFeedback" class="invalid-feedback"></div>
                     </div>
             </div>
                     <div class="modal-footer">

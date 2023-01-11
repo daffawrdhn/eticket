@@ -15,6 +15,7 @@
     {{-- <link rel="stylesheet" href="{{ asset('datatables/datatables.min.css') }}"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js%22"> --}}
   
 
 
@@ -28,6 +29,7 @@
     <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js%22"></script> --}}
     <script src="{{ asset('style/js/popper.js') }}"></script>
     <script src="{{ asset('style/js/popper.min.js') }}"></script>
     <script src="{{ asset('style/js/popper.min.js.map') }}"></script>

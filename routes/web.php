@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/setting-user', [EmployeeController::class, 'index']);
+    Route::get('/setting-user', [EmployeeController::class, 'index'])->name('user.get');
     Route::get('/change-password', [PasswordController::class, 'index']);
     Route::get('/setting-role', [RoleController::class, 'index']);
     Route::get('/setting-organization', [OrganizationController::class, 'index']);

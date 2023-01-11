@@ -62,8 +62,8 @@
                         name="role_name" 
                         autocomplete="off"
                         required>
-                        <label class="form-control-placeholder" for="username">Role Name</label>
-                        <div id="role_nameFeedback" class="invalid-feedback"></div>  
+                        <label class="form-control-placeholder" for="role_name">Role Name</label>
+                        <div id="role_nameFeedback" class="invalid-feedback"></div>
                     </div>
                 
             </div>

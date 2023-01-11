@@ -17,7 +17,7 @@
                     <div class="container-fluid p-4 rounded shadow">
                         
                         <div class="container-fluid" id="overflow">
-                            <table class="table table-striped table-hover" id="employeeTable">
+                            <table class="table table-striped table-hover" style="overflow-x: auto" id="employeeTable">
                                 <thead>
                                     <tr >
                                         <th scope="col">Nik</th>
@@ -29,13 +29,6 @@
                                         <th scope="col">Regional</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Action</th>
-                                    </tr>
-                                    <tr id="loading-table">
-                                        <td colspan="8" align="center">
-                                            <div class="container-fluid spinner-border mt-4 d-flex justify-content-center" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                        </td>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="table-employee">
@@ -92,9 +85,9 @@
                         oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                         maxlength="18"
                         required>
-                        <label class="form-control-placeholder" for="employe_ktp">No KTP</label>
+                        <label class="form-control-placeholder" for="employee_ktp">no. KTP</label>
                         <div id="employee_ktpFeedback" class="invalid-feedback"></div>  
-                    </div>
+                    </div>  
                     <div class="form-group mt-4 pb-2 date">
                         <input type="text"
                         class="form-control date" 
@@ -171,6 +164,7 @@
                         autocomplete="off"
                         required>
                         <label class="form-control-placeholder" for="new_quit_date">Quit Date</label>
+                        <div id="new_quit_dateFeedback" class="invalid-feedback"></div>
                     </div>
                 
             </div>
@@ -182,6 +176,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="loading" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loaingLabel" aria-hidden="true">
         <div class="modal-dialog" id="dialog-modal">
             <div class="modal-content">

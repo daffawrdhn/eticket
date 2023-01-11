@@ -61,7 +61,7 @@ $(document).ready(function () {
     // get regional by id
     $(document).on('click', '#edit-regional', function(e){
         e.preventDefault();
-        
+        $('#regional_name').removeClass('is-invalid');
         $(".modal-title").html('Update regional')
         $("#input-regional").removeClass('input-regional');
         $("#input-regional").addClass('update-regional');
@@ -97,7 +97,7 @@ $(document).ready(function () {
 
     $(".regionalAdd").click(function (e) { 
         e.preventDefault();
-        
+        $('#regional_name').removeClass('is-invalid');
         $(".modal-title").html('Add New regional')
         $("#input-regional").removeClass('update-regional');
         $("#input-regional").addClass('input-regional');
@@ -116,47 +116,54 @@ $(document).ready(function () {
         data = {
             'regional_name' : $('#regional_name').val()
         }
-        
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/add-regional",
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
 
-                $("#staticBackdrop").modal('hide');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        $('#regional_name').val('')
-                        getDataRegional();
-
-                    }
-                    })
-                
-            },
-            error:function(response){
-                if (!response.success) {
+        if (data.regional_name == '') {
+            $('#regional_name').addClass('is-invalid');
+            $('#regional_nameFeedback').html('please fill out this field')
+        }else{
+            $('#regional_name').removeClass('is-invalid');
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/add-regional",
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+    
+                    $("#staticBackdrop").modal('hide');
                     Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : "please fill out this field",
-                        
-                        
-                    })
+                        position: 'center',
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+    
+                            $('#regional_name').val('')
+                            getDataRegional();
+    
+                        }
+                        })
+                    
+                },
+                error:function(response){
+                    if (!response.success) {
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : "please fill out this field",
+                            
+                            
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
+        
         
     });
 
@@ -172,47 +179,54 @@ $(document).ready(function () {
             'regional_name' : $('#regional_name').val()
         }   
 
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/update-regional/"+ id,
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-
-                $("#staticBackdrop").modal('hide');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        $('#regional_name').val('')
-                        getDataRegional();
-
-                    }
-                    })
-                
-            },
-            error:function(response){
-                if (!response.success) {
+        if (data.regional_name == '') {
+            $('#regional_name').addClass('is-invalid');
+            $('#regional_nameFeedback').html('please fill out this field')
+        }else{
+            $('#regional_name').removeClass('is-invalid');
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/update-regional/"+ id,
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+    
+                    $("#staticBackdrop").modal('hide');
                     Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : "please fill out this field",
-                        
-                        
-                    })
+                        position: 'center',
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+    
+                            $('#regional_name').val('')
+                            getDataRegional();
+    
+                        }
+                        })
                     
+                },
+                error:function(response){
+                    if (!response.success) {
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : "please fill out this field",
+                            
+                            
+                        })
+                        
+                    }
                 }
-            }
-        })
+            })
+        }
+
     
     });
 

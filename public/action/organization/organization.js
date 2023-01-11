@@ -61,7 +61,7 @@ $(document).ready(function () {
     // get organization by id
     $(document).on('click', '#edit-organization', function(e){
         e.preventDefault();
-        
+        $('#organization_name').removeClass('is-invalid');
         $(".modal-title").html('Update organization')
         $("#input-organization").removeClass('input-organization');
         $("#input-organization").addClass('update-organization');
@@ -102,7 +102,7 @@ $(document).ready(function () {
         $("#input-organization").removeClass('update-organization');
         $("#input-organization").addClass('input-organization');
         $('#organization_name').val('');
-
+        $('#organization_name').removeClass('is-invalid');
         
     });
 
@@ -116,7 +116,11 @@ $(document).ready(function () {
         data = {
             'organization_name' : $('#organization_name').val()
         }
-        
+        if (data.organization_name == '') {
+            $('#organization_name').addClass('is-invalid');
+            $('#organization_nameFeedback').html('please fill out this field')
+        }else{
+            $('#organization_name').removeClass('is-invalid');
             $.ajax({
                 type : "POST",
                 url : APP_URL + "api/add-organization",
@@ -159,6 +163,7 @@ $(document).ready(function () {
                     }
                 }
             })
+        }
         
     });
 
@@ -174,47 +179,54 @@ $(document).ready(function () {
             'organization_name' : $('#organization_name').val()
         }
 
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/update-organization/"+ id,
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-
-                $("#staticBackdrop").modal('hide');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        $('#organization_name').val('')
-                        getDataOrganization();
-
-                    }
-                    })
-                
-            },
-            error:function(response){
-                if (!response.success) {
+        if (data.organization_name == '') {
+            $('#organization_name').addClass('is-invalid');
+            $('#organization_nameFeedback').html('please fill out this field')
+        }else{
+            $('#organization_name').removeClass('is-invalid');
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/update-organization/"+ id,
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+    
+                    $("#staticBackdrop").modal('hide');
                     Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : "please fill out this field",
-                        
-                        
-                    })
+                        position: 'center',
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+    
+                            $('#organization_name').val('')
+                            getDataOrganization();
+    
+                        }
+                        })
                     
+                },
+                error:function(response){
+                    if (!response.success) {
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : "please fill out this field",
+                            
+                            
+                        })
+                        
+                    }
                 }
-            }
-        })
+            })
+        }
+
         
     });
 

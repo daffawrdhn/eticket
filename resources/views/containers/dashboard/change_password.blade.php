@@ -45,11 +45,10 @@
                                             <div class="input-group" id="show-hide-confirm">
                                                 <input type="password" 
                                                 id="confirm-password" 
-                                                name='password' 
+                                                name='confirm-password' 
                                                 class="form-control" 
-                                                name="password" 
                                                 required>
-                                                <label class="form-control-placeholder" for="password">Confirm Password</label>
+                                                <label class="form-control-placeholder" for="confirm-password">Confirm Password</label>
                                                 <div class="input-group-append">
                                                     <a class="btn btn-outline-secondary pt-2 rounded-end"><i class="bi bi-eye-slash" aria-hidden="true"></i></a>
                                                 </div>

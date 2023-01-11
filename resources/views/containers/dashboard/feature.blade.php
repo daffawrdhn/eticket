@@ -60,8 +60,8 @@
                         name="feature_name" 
                         autocomplete="off"
                         required>
-                        <label class="form-control-placeholder" for="username">Feature Name</label>
-                        <div id="feature_nameFeedback" class="invalid-feedback"></div>  
+                        <label class="form-control-placeholder" for="feature_name">Jenis Ticket</label>
+                        <div id="feature_nameFeedback" class="invalid-feedback"></div>
                     </div>
                 
             </div>

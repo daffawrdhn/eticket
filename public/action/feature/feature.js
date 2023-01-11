@@ -60,7 +60,7 @@ $(document).ready(function () {
     // get feature by id
     $(document).on('click', '#edit-feature', function(e){
         e.preventDefault();
-        
+        $('#feature_name').removeClass('is-invalid');
         $(".modal-title").html('Update Feature')
         $("#input-feature").removeClass('input-feature');
         $("#input-feature").addClass('update-feature');
@@ -96,7 +96,7 @@ $(document).ready(function () {
 
     $(".featureAdd").click(function (e) { 
         e.preventDefault();
-        
+        $('#feature_name').removeClass('is-invalid');
         $(".modal-title").html('Add New Feature')
         $("#input-feature").removeClass('update-feature');
         $("#input-feature").addClass('input-feature');
@@ -115,52 +115,58 @@ $(document).ready(function () {
             'feature_name' : $('#feature_name').val()
         }
 
+        if (data.feature_name == '') {
+            $('#feature_name').addClass('is-invalid');
+            $('#feature_nameFeedback').html('please fill out this field')
+        }else{
+            $('#feature_name').removeClass('is-invalid');
+            $.ajax({
+                    type : "POST",
+                    url : APP_URL + "api/add-feature",
+                    data : data,
+                    dataType : "json",
+                    beforeSend: function(xhr, settings) { 
+                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                    },
+                    success : function(response){
+                        
+    
+                        $("#staticBackdrop").modal('hide');
+    
+    
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+    
+                                $('#feature_name').val('')
+                                getDataFeature();
+    
+                            }
+                          })
+                        
+                    },
+                    error:function(response){
+                        if (!response.success) {
+    
+                                Swal.fire({
+                                    icon : 'warning',
+                                    confirmButtonText: 'Ok',
+                                    title : 'Warning!',
+                                    text : "please fill out this field",
+                                    
+                                    
+                                })
+                        }
+                    }
+            })
+        }
         
 
-        $.ajax({
-                type : "POST",
-                url : APP_URL + "api/add-feature",
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-                    
-
-                    $("#staticBackdrop").modal('hide');
-
-
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-
-                            $('#feature_name').val('')
-                            getDataFeature();
-
-                        }
-                      })
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-
-                            Swal.fire({
-                                icon : 'warning',
-                                confirmButtonText: 'Ok',
-                                title : 'Warning!',
-                                text : "please fill out this field",
-                                
-                                
-                            })
-                    }
-                }
-        })
         
     });
 
@@ -175,49 +181,54 @@ $(document).ready(function () {
         data = {
             'feature_name' : $('#feature_name').val()
         }  
-
-        $.ajax({
-                type : "POST",
-                url : APP_URL + "api/update-feature/"+ id,
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-
+        if (data.feature_name == '') {
+            $('#feature_name').addClass('is-invalid');
+            $('#feature_nameFeedback').html('please fill out this field')
+        }else{
+            $('#feature_name').removeClass('is-invalid');
+            $.ajax({
+                    type : "POST",
+                    url : APP_URL + "api/update-feature/"+ id,
+                    data : data,
+                    dataType : "json",
+                    beforeSend: function(xhr, settings) { 
+                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                    },
+                    success : function(response){
     
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-
-                            $('#feature_name').val('')
-                            getDataFeature();
-
-                        }
-                      })
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-
+                        $("#staticBackdrop").modal('hide');
                         Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : "please fill out this field",
-                            
-                            
-                        })
+                            position: 'center',
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+    
+                                $('#feature_name').val('')
+                                getDataFeature();
+    
+                            }
+                          })
                         
+                    },
+                    error:function(response){
+                        if (!response.success) {
+    
+                            Swal.fire({
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                text : "please fill out this field",
+                                
+                                
+                            })
+                            
+                        }
                     }
-                }
-        })
+            })
+        }
 
     });
 

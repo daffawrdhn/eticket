@@ -58,8 +58,8 @@
                         name="organization_name" 
                         autocomplete="off"
                         required>
-                        <label class="form-control-placeholder" for="username">organization Name</label>
-                        <div id="organization_nameFeedback" class="invalid-feedback"></div>  
+                        <label class="form-control-placeholder" for="organization_name">Organization Name</label>
+                        <div id="organization_nameFeedback" class="invalid-feedback"></div>
                     </div>
                 
             </div>

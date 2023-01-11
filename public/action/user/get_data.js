@@ -1,8 +1,67 @@
 $(document).ready(function () {
-    getDataEmployee()
-    search()
-
+    
 });
+
+
+    
+    // $.ajax({
+    //     url : APP_URL + "api/get-user",
+    //     type : 'GET',
+    //     dataType : 'json',
+    //     beforeSend: function(xhr, settings) { 
+    //         xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+    //     },
+    //     success : function(response){
+
+    //             $('#table-employee').html('');
+                
+    //             no = 1
+    //             $(response.data).each(function(key, values){
+    //                 $('#table-employee').append(
+    //                         `<tr id="${values.employee_id}">
+    //                             <td id="employee-list">`+values.employee_id+`</td>
+    //                             <td id="employee-list">`+values.employee_ktp+`</td>
+    //                             <td id="employee-list" class="employee_name">`+values.employee_name+`</td>
+    //                             <td id="employee-list">`+values.employee_email+`</td>
+    //                             <td id="employee-list">`+values.role.role_name+`</td>
+    //                             <td id="employee-list">`+values.organization.organization_name+`</td>
+    //                             <td id="employee-list">`+values.regional.regional_name+`</td>
+    //                             <td id="employee-list">`+
+    //                                 (values.status == 'Active' ? '<button class="btn btn-sm btn-success" id="status" value="'+ values.status +'" data-id="'+ values.employee_id +'">'+ values.status +'</button>': 
+    //                                 '<button class="btn btn-sm btn-danger" id="status" value="'+ values.status +'" data-id="'+ values.employee_id +'">'+ values.status +'</button>')
+    //                             +`</td>
+    //                             <td>
+    //                                 <div class="btn-group">
+    //                                     <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    //                                         <i class="bi bi-gear-fill"></i>
+    //                                     </button>
+    //                                     <ul class="dropdown-menu">
+    //                                     <li><a class="dropdown-item" id="reset-pass" href="#" data-id="`+ values.employee_id +`">reset Pass</a></li>
+    //                                     <li><a class="dropdown-item" id="edit-user" href="#" data-id="`+ values.employee_id +`" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
+    //                                     <li><a class="dropdown-item" id="delete-user" data-id="`+ values.employee_id +`" href="#">Delete</a></li>
+    //                                     </ul>
+    //                                 </div>
+    //                             </td>
+    //                         </tr>`)
+
+                            
+    //             })
+                 
+                
+
+    //     },
+    //     error:function(response){
+    //         if (!response.success) {
+    //                 console.log(response.responseJSON.data.error);
+                
+    //         }
+    //     }
+
+    // })
+
+search()
+
+
 
 // status
 
@@ -17,65 +76,7 @@ function search() {
 
 
 // get data employee
-function getDataEmployee()
-{
-    var token = $('#token').val()
 
-        $.ajax({
-            url : APP_URL + "api/get-user",
-            type : 'GET',
-            dataType : 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-
-                    $('#table-employee').html('');
-                    
-                    no = 1
-                    $(response.data).each(function(key, values){
-                        $('#table-employee').append(
-                                `<tr>
-                                    <td id="employee-list">`+values.employee_id+`</td>
-                                    <td id="employee-list">`+values.employee_ktp+`</td>
-                                    <td id="employee-list" class="employee_name">`+values.employee_name+`</td>
-                                    <td id="employee-list">`+values.employee_email+`</td>
-                                    <td id="employee-list">`+values.role.role_name+`</td>
-                                    <td id="employee-list">`+values.organization.organization_name+`</td>
-                                    <td id="employee-list">`+values.regional.regional_name+`</td>
-                                    <td id="employee-list">`+
-                                        (values.status == 'Active' ? '<button class="btn btn-sm btn-success" id="status" value="'+ values.status +'" data-id="'+ values.employee_id +'">'+ values.status +'</button>': 
-                                        '<button class="btn btn-sm btn-danger" id="status" value="'+ values.status +'" data-id="'+ values.employee_id +'">'+ values.status +'</button>')
-                                    +`</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-gear-fill"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" id="reset-pass" href="#" data-id="`+ values.employee_id +`">reset Pass</a></li>
-                                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="`+ values.employee_id +`" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
-                                            <li><a class="dropdown-item" id="delete-user" data-id="`+ values.employee_id +`" href="#">Delete</a></li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>`)
-                    })
-                     
-                    $("#employeeTable").DataTable();
-
-            },
-            error:function(response){
-                if (!response.success) {
-                        console.log(response.responseJSON.data.error);
-                    
-                }
-            }
-
-        })
-
-    
-}
 
 // get employee by id
 $(document).on('click', '#edit-user', function(e){

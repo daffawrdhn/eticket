@@ -58,8 +58,8 @@
                         name="regional_name" 
                         autocomplete="off"
                         required>
-                        <label class="form-control-placeholder" for="username">Regional Name</label>
-                        <div id="regional_nameFeedback" class="invalid-feedback"></div>  
+                        <label class="form-control-placeholder" for="regional_name">Regional Name</label>
+                        <div id="regional_nameFeedback" class="invalid-feedback"></div>
                     </div>
                 
             </div>

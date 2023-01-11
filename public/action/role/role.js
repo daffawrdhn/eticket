@@ -61,7 +61,7 @@ $(document).ready(function () {
     // get role by id
     $(document).on('click', '#edit-role', function(e){
         e.preventDefault();
-        
+        $('#role_name').removeClass('is-invalid');
         $(".modal-title").html('Update role')
         $("#input-role").removeClass('input-role');
         $("#input-role").addClass('update-role');
@@ -102,7 +102,7 @@ $(document).ready(function () {
         $("#input-role").removeClass('update-role');
         $("#input-role").addClass('input-role');
         $('#role_name').val('');
-
+        $('#role_name').removeClass('is-invalid');
         
     });
 
@@ -110,54 +110,63 @@ $(document).ready(function () {
     $(document).on('click', '.input-role', function(e){
         e.preventDefault();
         
-        
+        $('#role_name').removeClass('is-invalid');
         var token = $('#token').val()
 
         data = {
             'role_name' : $('#role_name').val()
         }
 
-        
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/add-role",
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-                $("#staticBackdrop").modal('hide');
+        if (data.role_name == '') {
+            $('#role_name').addClass('is-invalid');
+            $('#role_nameFeedback').html('please fill out this field')
+        }else{
+            $('#role_name').removeClass('is-invalid');
 
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        $('#role_name').val('')
-                        getDataRole();
-
-                    }
-                    })
-                
-            },
-            error:function(response){
-                if (!response.success) {
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/add-role",
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+                    $("#staticBackdrop").modal('hide');
+    
                     Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : "please fill out this field",
-                        
-                        
-                    })
+                        position: 'center',
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+    
+                            $('#role_name').val('')
+                            getDataRole();
+    
+                        }
+                        })
+                    
+                },
+                error:function(response){
+                    if (!response.success) {
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : "please fill out this field",
+                            
+                            
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
+
+        
+        
         
     });
 
@@ -172,49 +181,56 @@ $(document).ready(function () {
         data = {
             'role_name' : $('#role_name').val()
         }
-  
+        if (data.role_name == '') {
+            $('#role_name').addClass('is-invalid');
+            $('#role_nameFeedback').html('please fill out this field')
+        }else{
+            $('#role_name').removeClass('is-invalid');
 
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/update-role/"+ id,
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-
-                $("#staticBackdrop").modal('hide');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-
-                        $('#role_name').val('')
-                        getDataRole();
-
-                    }
-                    })
-                
-            },
-            error:function(response){
-                if (!response.success) {
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/update-role/"+ id,
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+    
+                    $("#staticBackdrop").modal('hide');
                     Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : "please fill out this field",
-                        
-                        
-                    })
+                        position: 'center',
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+    
+                            $('#role_name').val('')
+                            getDataRole();
+    
+                        }
+                        })
                     
+                },
+                error:function(response){
+                    if (!response.success) {
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : "please fill out this field",
+                            
+                            
+                        })
+                        
+                    }
                 }
-            }
-        })
+            })
+        }
+
+        
     
     });
 
