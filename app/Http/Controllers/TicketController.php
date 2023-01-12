@@ -301,6 +301,7 @@ class TicketController extends BaseController
 
             $input = new Request([
                 'ticket_status_id' => 1,
+                'id' => $employeeId->employee_id,
             ]);
             
             $this->updateStatus($input, $storeTicket->ticket_id);
@@ -346,9 +347,6 @@ public function updateStatus(Request $request, $ticketId)
                 
                 $ticket->supervisor_id = $request->id;
                 
-                if($request->ticket_status_id == 4){
-                    $ticket->supervisor_id = '000000000';
-                }
 
                 $ticket->save();
                 $ticket = Ticket::with('ticketStatus')->find($ticketId);
@@ -357,7 +355,7 @@ public function updateStatus(Request $request, $ticketId)
                     $statusHistory->description = $ticket->ticketStatus->ticket_status_name;
                 } 
 
-                $statusHistory->supervisor_id = $request->id;
+                $statusHistory->supervisor_id = $auth->employee_id;
 
                 if ($statusHistory->status_before == $statusHistory->status_after || $statusHistory->status_after < $statusHistory->status_before) {
                 // Check if status_before and status_after are both 1
