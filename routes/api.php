@@ -19,10 +19,8 @@ Route::post('register', [AuthController::class, 'register'])->name('auth.registe
 
 Route::post('check-data', [CheckDataEmployeeController::class, 'checkEmployee'])->name('auth.checkdata');
 
-Route::get('get-pics/{regionalId}', [TicketController::class, 'getPics'])->name('auth.getPics');
-Route::get('get-helpdesks/{regionalId}', [TicketController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
 
-Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
+
 
 
 
@@ -63,7 +61,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-feature', [FeatureController::class, 'getFeature'])->name('auth.getFeature');
     Route::get('get-feature/{id}', [FeatureController::class, 'show'])->name('auth.getFeatureById');
     Route::post('select-feature', [FeatureController::class, 'selectFeature'])->name('auth.selectFeature');
-
+    Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
     //sub feature
     Route::post('add-sub-feature', [SubFeatureController::class, 'store'])->name('auth.addSubFeature');
@@ -82,9 +80,15 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-approval', [TicketController::class, 'getApproval'])->name('auth.getApproval');
 
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
+    
 
+    // mobile
     Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
     Route::get('get-photo/{ticketId}', [TicketController::class, 'getPhoto'])->name('auth.getPhoto');
+
+    Route::get('get-pics/{regionalId}', [TicketController::class, 'getPics'])->name('auth.getPics');
+    Route::get('get-helpdesks/{regionalId}', [TicketController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
+
 
 
     // User
