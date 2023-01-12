@@ -39,25 +39,45 @@ class TicketController extends BaseController
         
     }
 
-    public function getHelpdesks()
+    public function getHelpdesks($regionalId)
 {
     try
     {
-        $responses = Helpdesk::get();
+        $responses = Helpdesk::where('regional_id',$regionalId)->get();
         $response = [
             'HELPDESK ' => $responses->map(function ($response) {
                 $employee = Employee::where('employee_id', $response->employee_id)->first();
                 return [
                     'employee_id' => $employee->employee_id,
+                    // 'employee_id_int' => intval(sprintf("%08d",$employee->employee_id)),
                     'employee_name' => $employee->employee_name,
                     'supervisor_id' => $employee->supervisor_id,
+                    // 'supervisor_id_int' => 0000000001,
                 ];
             }),
         ];
-        return $this->sendResponse($response, 'Helpdesks collected.');
+
+        return $this->sendResponse($response, 'PICs collected.');
+
     } catch (Exception $error) {
-        return $this->sendError('Error get Helpdesks', ['error' => $error->getMessage()]);
+        return $this->sendError('Error get PICs', ['error' => $error->getMessage()]);
     }
+
+    //     $responses = Helpdesk::get();
+    //     $response = [
+    //         'HELPDESK ' => $responses->map(function ($response) {
+    //             $employee = Employee::where('employee_id', $response->employee_id)->first();
+    //             return [
+    //                 'employee_id' => $employee->employee_id,
+    //                 'employee_name' => $employee->employee_name,
+    //                 'supervisor_id' => $employee->supervisor_id,
+    //             ];
+    //         }),
+    //     ];
+    //     return $this->sendResponse($response, 'Helpdesks collected.');
+    // } catch (Exception $error) {
+    //     return $this->sendError('Error get Helpdesks', ['error' => $error->getMessage()]);
+    // }
 }
 
     public function getPics($regionalId)
@@ -151,8 +171,8 @@ class TicketController extends BaseController
                 
                 foreach ($ticketHistory as $spv) {
                     $spvId = $spv->supervisor_id;
-                    $spvHistory = Employee::where('employee_id',$spvId)->first();
-                    $spv->supervisor = $spvHistory;
+                    $spvHistory = Employee::where('employee_id', $spvId)->first();
+                    $spv['supervisor'] = $spvHistory;
                 }      
             }            
 

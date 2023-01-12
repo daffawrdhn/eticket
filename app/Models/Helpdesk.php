@@ -22,4 +22,8 @@ class Helpdesk extends Model
         return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 
+    public function regional()
+    {
+        return $this->belongsTo(Regional::class, 'regional_id', 'regional_id');
+    }
 }

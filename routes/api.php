@@ -19,7 +19,7 @@ Route::post('register', [AuthController::class, 'register'])->name('auth.registe
 Route::post('check-data', [CheckDataEmployeeController::class, 'checkEmployee'])->name('auth.checkdata');
 
 Route::get('get-pics/{regionalId}', [TicketController::class, 'getPics'])->name('auth.getPics');
-Route::get('get-helpdesks', [TicketController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
+Route::get('get-helpdesks/{regionalId}', [TicketController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
 
 Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
