@@ -86,7 +86,7 @@ class EmployeeController extends BaseController
     
             // generate Password
     
-            $password = EmployeeController::randomPassword(8);
+            $password = 'Plmnko123!';
     
             // send mail
     
@@ -96,10 +96,6 @@ class EmployeeController extends BaseController
                 'password' => $password,
                 'nik' => $employeeId,
             ];
-    
-                
-            
-            
     
             $input = $request->all();
     
@@ -438,9 +434,9 @@ class EmployeeController extends BaseController
                         ]
                     );
                 
-                $sendMail = Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
+                // $sendMail = Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
 
-                if ($sendMail) {
+                // if ($sendMail) {
                     $lastThreePasswordIds = Password::where('employee_id', $id)
                     ->orderBy('updated_at', 'desc')
                     ->take(3)
@@ -454,9 +450,9 @@ class EmployeeController extends BaseController
                     }
 
                     return $this->sendResponse('success', 'success reset password');
-                }else{
-                    return $this->sendError('Error validation', ['error' => 'gagal kirim email']);
-                }
+                // }else{
+                //     return $this->sendError('Error validation', ['error' => 'gagal kirim email']);
+                // }
                 
             }else{
                 return $this->sendError('Error validation', ['error' => $inputPassword]);

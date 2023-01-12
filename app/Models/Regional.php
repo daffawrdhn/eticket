@@ -27,4 +27,9 @@ class Regional extends Model
     {
         return $this->hasMany(Approval::class, 'approval_id', 'approval_id');
     }
+    
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'pic_regional_tbl', 'regional_id', 'employee_id');
+    }
 }

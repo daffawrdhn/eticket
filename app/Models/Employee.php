@@ -89,4 +89,9 @@ protected $hidden = [
     {
         return $this->hasMany(Approval::class, 'approval_id');
     }
+    
+    public function regions()
+    {
+        return $this->belongsToMany(Regional::class, 'pic_regional_tbl', 'employee_id', 'regional_id');
+    }
 }
