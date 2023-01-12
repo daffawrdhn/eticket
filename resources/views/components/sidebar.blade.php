@@ -21,6 +21,7 @@
                         <a class="nav-link" href="/setting-regional">Setting Regional</a>
                         <a class="nav-link" href="/setting-feature">Setting Feature</a>
                         <a class="nav-link" href="/setting-sub-feature">Setting Sub Feature</a>
+                        <a class="nav-link" href="/setting-approval">Setting Approval</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">

@@ -115,6 +115,7 @@ $(document).ready(function () {
             'feature_name' : $('#feature_name').val()
         }
 
+        console.log(data);
         if (data.feature_name == '') {
             $('#feature_name').addClass('is-invalid');
             $('#feature_nameFeedback').html('please fill out this field')
@@ -152,15 +153,26 @@ $(document).ready(function () {
                     },
                     error:function(response){
                         if (!response.success) {
-    
+
+                            if (response.responseJSON.data.error.feature_name !== null) {
                                 Swal.fire({
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',
                                     title : 'Warning!',
-                                    text : "please fill out this field",
+                                    text : response.responseJSON.data.error.feature_name,
                                     
                                     
                                 })
+                            }else{
+                                Swal.fire({
+                                    icon : 'warning',
+                                    confirmButtonText: 'Ok',
+                                    title : 'Warning!',
+                                    text : response.responseJSON.data.error,
+                                    
+                                    
+                                })
+                            }
                         }
                     }
             })
@@ -252,6 +264,7 @@ $(document).ready(function () {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
+
                 $.ajax({
                     type: "DELETE",
                     url: APP_URL + "api/delete-feature/" + id,
@@ -274,6 +287,31 @@ $(document).ready(function () {
                                 } 
                             })
         
+                    },error:function(response){
+                        if (!response.success) {
+                                console.log(response.responseJSON.data.error);
+
+                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : 'This data already has a relationship with the Sub Feature',
+                                    })
+                                }else{
+
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : response.responseJSON.data.error,
+                                        
+                                        
+                                    })
+                                }
+                            
+                            
+                        }
                     }
                 });
               

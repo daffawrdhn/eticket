@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\OrganizationController;
@@ -89,8 +90,9 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-all-user', [EmployeeController::class, 'destroyAll'])->name('auth.deleteAllUser');
     Route::post('set-status-employee/{id}', [EmployeeController::class, 'setStatusEmployee'])->name('auth.setStatusEmployee');
     
-    
-
+    //approval
+    Route::get('get-approval', [ApprovalController::class, 'getApproval'])->name('auth.getApproval');
+    Route::post('add-approval', [ApprovalController::class, 'store'])->name('auth.inputApproval');
     // select data
     Route::post('select-user', [EmployeeController::class, 'selectEmployee'])->name('auth.selectUser');
     Route::post('select-organization', [OrganizationController::class, 'selectOrganization'])->name('auth.selectOrganization');

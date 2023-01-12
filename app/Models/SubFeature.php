@@ -27,5 +27,7 @@ class SubFeature extends Model
     {
         return $this->hasMany(Ticket::class, 'sub_feature_id', 'sub_feature_id');
     }
+
+    
 }
 

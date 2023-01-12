@@ -84,4 +84,9 @@ protected $hidden = [
     {
         return $this->hasMany(Ticket::class, 'employee_id', 'employee_id');
     }
+
+    public function approval()
+    {
+        return $this->hasMany(Approval::class, 'approval_id');
+    }
 }

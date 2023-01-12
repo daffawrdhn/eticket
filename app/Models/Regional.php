@@ -22,4 +22,9 @@ class Regional extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function approval()
+    {
+        return $this->hasMany(Approval::class, 'approval_id', 'approval_id');
+    }
 }

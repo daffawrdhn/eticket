@@ -276,6 +276,31 @@ $(document).ready(function () {
                                 } 
                             })
         
+                    },error:function(response){
+                        if (!response.success) {
+                                console.log(response.responseJSON.data.error);
+
+                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : 'This data already has a relationship with the user',
+                                    })
+                                }else{
+
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : response.responseJSON.data.error,
+                                        
+                                        
+                                    })
+                                }
+                            
+                            
+                        }
                     }
                 });
               

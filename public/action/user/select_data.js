@@ -112,7 +112,7 @@ $(document).ready(function () {
 
 
 
-var selectRegional =   $('#regional_id').select2({
+  var selectRegional =   $('#regional_id').select2({
               placeholder : "Select regional",
               dropdownParent: $("#modalAddUser"),
               ajax: { 
@@ -145,4 +145,40 @@ var selectRegional =   $('#regional_id').select2({
 
           selectRegional.data('select2').$selection.css('height', '45px')
           selectRegional.data('select2').$selection.css('padding-top', '5px')
+
+
+  var selectFeature =   $('#feature_id').select2({
+            placeholder : "Select Feature",
+            dropdownParent: $("#staticBackdrop"),
+            ajax: { 
+                url: APP_URL + "api/select-feature",
+                type: "post",
+                dataType: 'json',
+                delay: 250,
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                data: function (params) {
+                return {
+                    _token: CSRF_TOKEN,
+                    search: params.term // search term
+                };
+                },
+                processResults: function (response) {
+                return {
+                    results: $.map(response.data, function (item) {
+                        
+                        return{
+                            text : item.feature_name,
+                            id: item.feature_id
+                        }
+                    })
+                };
+                },
+                cache: true
+            }
+        })
+
+    selectFeature.data('select2').$selection.css('height', '45px')
+    selectFeature.data('select2').$selection.css('padding-top', '5px')
 });

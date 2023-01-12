@@ -41,7 +41,7 @@ class SubFeatureController extends BaseController
         try {
 
             $validator = Validator::make($request->all(),[
-                'sub_feature_name' => 'required',
+                'sub_feature_name' => 'required|unique:sub_feature_tbl,sub_feature_name',
                 'feature_id' => 'required'
             ]);
     

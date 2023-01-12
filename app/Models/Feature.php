@@ -26,4 +26,13 @@ class Feature extends Model
     {
         return $this->hasMany(Ticket::class, 'feature_id', 'feature_id');
     }
+
+    // public static function boot() {
+    //     parent::boot();
+
+    //     static::deleting(function($feature) { // before delete() method call this
+    //          $feature->subFeatures()->delete();
+    //          // do the rest of the cleanup...
+    //     });
+    // }
 }

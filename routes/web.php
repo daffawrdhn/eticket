@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\LoginController;
@@ -39,6 +40,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/setting-regional', [RegionalController::class, 'index']);
     Route::get('/setting-feature', [FeatureController::class, 'index']);
     Route::get('/setting-sub-feature', [SubFeatureController::class, 'index']);
+    Route::get('/setting-approval', [ApprovalController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
 
 });

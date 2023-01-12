@@ -239,7 +239,7 @@ $(document).ready(function () {
         var id = $(this).val(); 
         var contentList = $("#content-list").html();
         var token = $('#token').val()
-
+        console.log(id);
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -272,6 +272,31 @@ $(document).ready(function () {
                                 } 
                             })
         
+                    },error:function(response){
+                        if (!response.success) {
+                                console.log(response.responseJSON.data.error);
+
+                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : 'This data already has a relationship with the user',
+                                    })
+                                }else{
+
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : response.responseJSON.data.error,
+                                        
+                                        
+                                    })
+                                }
+                            
+                            
+                        }
                     }
                 });
               

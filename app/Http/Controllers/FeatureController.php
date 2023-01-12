@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Feature;
+use App\Models\SubFeature;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ class FeatureController extends BaseController
             try {
 
                 $validator = Validator::make($request->all(),[
-                    'feature_name' => 'required'
+                    'feature_name' => 'required|unique:feature_tbl,feature_name',
                 ]);
         
                 if ($validator->fails()) {
@@ -164,7 +165,14 @@ class FeatureController extends BaseController
     public function destroy($id)
     {
         try {
-            $delete = Feature::where('feature_id', $id)->delete();
+
+            $isFeature = SubFeature::where('feature_id', '$id')->get();
+            
+            if ($isFeature) {
+                return $this->sendResponse('warning', 'this data is already exists in another table, are you sure to delete this data ??');
+            }
+
+            $delete = Feature::find($id)->delete();
 
             if ($delete) {
                 return $this->sendResponse($delete, 'success delete data');
