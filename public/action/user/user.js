@@ -3,6 +3,7 @@ $(document).ready(function () {
     var table = $('#employeeTable').DataTable({
                 responsive: true,
                 processing: true,
+                autoWidth : false,
                 serverSide: true,
                 ajax: { 
                     url: APP_URL + "api/get-user",

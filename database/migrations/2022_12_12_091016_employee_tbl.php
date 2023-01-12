@@ -33,7 +33,7 @@ return new class extends Migration
         Schema::create('employee_tbl', function(
             Blueprint $table
         ){
-            $table->string('employee_id')->unique()->index();
+            $table->string('employee_id')->unique()->index()->primary();
             // $table->string('password');
             $table->integer('password_id');
             $table->integer('organization_id')->unsigned();

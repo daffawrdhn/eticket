@@ -119,32 +119,32 @@ class ApprovalController extends BaseController
             $datas = Approval::with('regional', 'employee')->get();
 
             return $this->sendResponse($datas, 'success input new approval');
-            // $approvalData = [];
-            // $no =1;
-            // foreach($datas as $d){
-            //     $data = $d;
+            $approvalData = [];
+            $no =1;
+            foreach($datas as $d){
+                $data = $d;
 
-            //     $data['no'] = $no;
-            //     $data['regional_name'] = $d->regional['regional_name'];
-            //     $data['employee_id'] = $d->employee['employee_id'];
-            //     $data['employee_name'] = $d->employee['employee_name'];
+                $data['no'] = $no;
+                $data['regional_name'] = $d->regional['regional_name'];
+                $data['employee_id'] = $d->employee['employee_id'];
+                $data['employee_name'] = $d->employee['employee_name'];
 
-            //     $approvalData[] = $data;
-            //     $no++;
-            // }
+                $approvalData[] = $data;
+                $no++;
+            }
             
 
-            // if ($request->ajax()) {
-            //     $customers = $approvalData;
-            //     return datatables()->of($customers)
-            //         ->addColumn('action', function ($row) {
-            //             $action = '
-            //                 <button id="edit-approval" value="'. $row->employee_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop><i class="bi bi-pencil-fill"></i></button>
-            //                 <button id="delete-approval" value="'. $row->employee_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
-            //             ';
-            //             return $action;
-            //         })->toJson();
-            // }
+            if ($request->ajax()) {
+                $customers = $approvalData;
+                return datatables()->of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                            <button id="edit-approval" value="'. $row->employee_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-approval" value="'. $row->employee_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                        ';
+                        return $action;
+                    })->toJson();
+            }
 
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);
