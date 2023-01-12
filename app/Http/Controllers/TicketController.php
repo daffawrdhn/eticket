@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Employee;
 use App\Models\Feature;
+use App\Models\Helpdesk;
+use App\Models\RegionalPIC;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Exception;
@@ -36,6 +38,53 @@ class TicketController extends BaseController
     {
         
     }
+
+    public function getHelpdesks()
+{
+    try
+    {
+        $responses = Helpdesk::get();
+        $response = [
+            'HELPDESK ' => $responses->map(function ($response) {
+                $employee = Employee::where('employee_id', $response->employee_id)->first();
+                return [
+                    'employee_id' => $employee->employee_id,
+                    'employee_name' => $employee->employee_name,
+                    'supervisor_id' => $employee->supervisor_id,
+                ];
+            }),
+        ];
+        return $this->sendResponse($response, 'Helpdesks collected.');
+    } catch (Exception $error) {
+        return $this->sendError('Error get Helpdesks', ['error' => $error->getMessage()]);
+    }
+}
+
+    public function getPics($regionalId)
+{
+    try
+    {
+        $responses = RegionalPIC::where('regional_id',$regionalId)->get();
+        $response = [
+            'PIC ' => $responses->map(function ($response) {
+                $employee = Employee::where('employee_id', $response->employee_id)->first();
+                return [
+                    'employee_id' => $employee->employee_id,
+                    // 'employee_id_int' => intval(sprintf("%08d",$employee->employee_id)),
+                    'employee_name' => $employee->employee_name,
+                    'supervisor_id' => $employee->supervisor_id,
+                    // 'supervisor_id_int' => 0000000001,
+                ];
+            }),
+        ];
+
+        return $this->sendResponse($response, 'PICs collected.');
+
+    } catch (Exception $error) {
+        return $this->sendError('Error get PICs', ['error' => $error->getMessage()]);
+    }
+}
+
 
     public function getPhoto($ticketId)
 {
@@ -273,6 +322,7 @@ public function updateStatus(Request $request, $ticketId)
     try {
         $validator = Validator::make($request->all(), [
             'ticket_status_id' => 'required',
+            'id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -294,7 +344,8 @@ public function updateStatus(Request $request, $ticketId)
 
                 $ticket->ticket_status_id = $request->ticket_status_id;
                 
-                $ticket->supervisor_id = $auth->supervisor_id;
+                $ticket->supervisor_id = $request->id;
+                
                 if($request->ticket_status_id == 4){
                     $ticket->supervisor_id = '000000000';
                 }
@@ -306,7 +357,7 @@ public function updateStatus(Request $request, $ticketId)
                     $statusHistory->description = $ticket->ticketStatus->ticket_status_name;
                 } 
 
-                $statusHistory->supervisor_id = $auth->employee_id;
+                $statusHistory->supervisor_id = $request->id;
 
                 if ($statusHistory->status_before == $statusHistory->status_after || $statusHistory->status_after < $statusHistory->status_before) {
                 // Check if status_before and status_after are both 1

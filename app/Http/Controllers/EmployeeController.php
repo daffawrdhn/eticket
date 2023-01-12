@@ -73,7 +73,7 @@ class EmployeeController extends BaseController
     
             // generate Password
     
-            $password = EmployeeController::randomPassword(8);
+            $password = 'Plmnko123!';
     
             // send mail
     

@@ -22,4 +22,9 @@ class Regional extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'pic_regional_tbl', 'regional_id', 'employee_id');
+    }
 }

@@ -12,14 +12,18 @@ use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Http\Controllers\TicketController;
-use Illuminate\Support\Facades\File;
-use Illuminate\Http\Response;
-
 
 Route::post('login', [AuthController::class, 'signin'])->name('auth.login');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::post('check-data', [CheckDataEmployeeController::class, 'checkEmployee'])->name('auth.checkdata');
+
+Route::get('get-pics/{regionalId}', [TicketController::class, 'getPics'])->name('auth.getPics');
+Route::get('get-helpdesks', [TicketController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
+
+Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
+
+
 
 
 Route::middleware('auth:api')->group( function () {
@@ -77,7 +81,6 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-approval', [TicketController::class, 'getApproval'])->name('auth.getApproval');
 
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
-    Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
     Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
     Route::get('get-photo/{ticketId}', [TicketController::class, 'getPhoto'])->name('auth.getPhoto');
