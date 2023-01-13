@@ -11,20 +11,15 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Settings</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Approval</li>
+                        <li class="breadcrumb-item active">Approval>>Regional PIC</li>
                     </ol>
 
                     <div class="container-fluid p-4 rounded shadow position-relative">
-                        <button class="btn btn-danger btn-sm mb-5" id="delete-all">Delete All</button>
+                        
                         <div class="container-fluid" id="overflow">    
                             <table class="table" id="approvalTable">
                                 <thead>
                                     <tr>
-                                    <th scope="col p-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="master-check">
-                                        </div>
-                                    </th>
                                     <th scope="col">No</th>
                                     <th scope="col">Regional Approval</th>
                                     <th scope="col">NIK</th>

@@ -23,11 +23,6 @@ $(document).ready(function () {
                     $(response.data).each(function(key, values){
 
                         $('#table-feature').append(`<tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.feature_id +`">
-                                </div>
-                            </td>
                             <td>`+ no++ +`</td>
                             <td id="feature-list">`+values.feature_name+`</td>
                             <td>
@@ -61,7 +56,7 @@ $(document).ready(function () {
     $(document).on('click', '#edit-feature', function(e){
         e.preventDefault();
         $('#feature_name').removeClass('is-invalid');
-        $(".modal-title").html('Update Feature')
+        $(".modal-title").html('Update Jenis Tiket')
         $("#input-feature").removeClass('input-feature');
         $("#input-feature").addClass('update-feature');
 
@@ -97,7 +92,7 @@ $(document).ready(function () {
     $(".featureAdd").click(function (e) { 
         e.preventDefault();
         $('#feature_name').removeClass('is-invalid');
-        $(".modal-title").html('Add New Feature')
+        $(".modal-title").html('Add New Jenis Tiket')
         $("#input-feature").removeClass('update-feature');
         $("#input-feature").addClass('input-feature');
         $('#feature_name').val('');

@@ -24,11 +24,7 @@ $(document).ready(function () {
                     $(response.data).each(function(key, values){
 
                         $('#table-regional').append(`<tr>
-                            <td>
-                                <div class="form-check">
-                                    <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.regional_id +`">
-                                </div>
-                            </td>
+                            
                             <td>`+ no++ +`</td>
                             <td id="regional-list">`+values.regional_name+`</td>
                             <td>

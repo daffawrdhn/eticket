@@ -13,6 +13,7 @@ class Helpdesk extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'regional_id',
         'employee_id', 
     ];
 

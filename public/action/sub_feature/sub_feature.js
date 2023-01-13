@@ -22,11 +22,6 @@ $(document).ready(function () {
                         no = 1;
                         $(response.data).each(function(key, values){
                             $('#table-sub_feature').append(`<tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input sub-check" type="checkbox" value="" id="flexCheckDefault" data-id="`+ values.sub_feature_id +`">
-                                    </div>
-                                </td>
                                 <td>`+ no++ +`</td>
                                 <td id="sub_feature-list">`+(values.feature == null ? 'null' : values.feature.feature_name)+`</td>
                                 <td id="sub_feature-list">`+values.sub_feature_name+`</td>

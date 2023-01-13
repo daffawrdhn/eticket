@@ -166,6 +166,48 @@ class EmployeeController extends BaseController
         
     }
 
+    public function selectEmployeeByRegional(Request $request, $id){
+        if ($id == 0) {
+            $response = [
+                "id" => null,
+                "text" => "pelase select regional"
+            ];
+
+            return $this->sendResponse($response, 'success'); 
+
+        }else{
+        
+        $search = $request->search;
+
+        if($search == ''){
+            $employees = Employee::orderby('employee_name','asc')
+                            ->select('employee_id','employee_name')
+                            ->where('regional_id', $id)
+                            ->limit(5)
+                            ->get();
+        }else{
+            $employees = Employee::orderby('employee_name','asc')
+                        ->where('employee_name', 'ILIKE', "%".$search."%")
+                        ->where('regional_id', $id)
+                        ->limit(5)
+                        ->get();
+        }
+
+        if ($employees) {
+            $response = array();
+            foreach($employees as $employee){
+                $response[] = array(
+                    "id"=>$employee->employee_id,
+                    "text"=>$employee->employee_name
+                );
+            }
+            return $this->sendResponse($response, 'success'); 
+        }
+
+        }
+        
+    }
+
 
     public function getEmployee(Request $request){
         try {
@@ -298,7 +340,7 @@ class EmployeeController extends BaseController
 
             foreach($emailValidation as $email){
                 if ($email['employee_email'] != null) {
-                    return $this->sendError('Error validation', ['error' =>  'email already exist']);
+                    return $this->sendError('Error validation', ['error' =>  ['email already exist']]);
                 }
             }
 
@@ -309,7 +351,7 @@ class EmployeeController extends BaseController
 
             foreach($ktpValidation as $ktp){
                 if ($ktp['employee_ktp'] != null) {
-                    return $this->sendError('Error validation', ['error' => 'ktp already exist']);
+                    return $this->sendError('Error validation', ['error' => ['ktp already exist']]);
                 }
             }
 

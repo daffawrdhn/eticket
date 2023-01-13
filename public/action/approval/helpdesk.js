@@ -11,7 +11,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: { 
-            url: APP_URL + "api/get-regional-pic",
+            url: APP_URL + "api/get-helpdesk",
             type: "GET",
             dataType: 'json',
             beforeSend: function(xhr, settings) { 
@@ -95,7 +95,7 @@ $(document).ready(function () {
 
                     $.ajax({
                         type : "POST",
-                        url : APP_URL + "api/add-regional-pic",
+                        url : APP_URL + "api/add-helpdesk",
                         data : data,
                         dataType : "json",
                         beforeSend: function(xhr, settings) { 
@@ -123,17 +123,11 @@ $(document).ready(function () {
                     
                                     }
                                 })
-                            },1000)
-                                    
-
-                                
-                            
-                            
+                            },1000)  
                         },
                         error:function(response){
                             if (!response.success) {
                                 setTimeout(() => {
-                                    $("#loading").modal('hide');
                                     Swal.fire({
                                         icon : 'warning',
                                         confirmButtonText: 'Ok',
@@ -170,7 +164,7 @@ $(document).ready(function () {
 
         
         $.ajax({
-            url : APP_URL + "api/get-regional-pic/"+ id,
+            url : APP_URL + "api/get-helpdesk/"+ id,
             type : 'GET',
             dataType : 'json',
             beforeSend: function(xhr, settings) { 
@@ -215,7 +209,7 @@ $(document).on('click', '.update-approval', function(e){
 
     $.ajax({
         type : "POST",
-        url : APP_URL + "api/update-regional-pic/"+ id,
+        url : APP_URL + "api/update-helpdesk/"+ id,
         data : data,
         dataType : "json",
         beforeSend: function(xhr, settings) { 
@@ -281,7 +275,7 @@ $(document).on('click', '#delete-approval', function(e){
         if (result.isConfirmed) {
             $.ajax({
                 type: "DELETE",
-                url: APP_URL + "api/delete-regional-pic/" + id,
+                url: APP_URL + "api/delete-helpdesk/" + id,
                 dataType: "json",
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
@@ -432,15 +426,15 @@ $(document).on('click', '#master-check', function(e){
                             placeholder : "Select Regional",
                             dropdownParent: $("#staticBackdrop"),
                             ajax: { 
-                                url: () => {
-                                    var employeeId = $('#employee_id').val()
-                                    var url
-                                    if(employeeId == null){
-                                        return url = APP_URL + "api/select-regional"
-                                    }else{
-                                        return url = APP_URL + "api/select-regional/"+employeeId
-                                    }
-                                },
+                                url: () => { 
+                                        var employeeId = $('#employee_id').val()
+                                        var url
+                                        if(employeeId == null){
+                                            return url = APP_URL + "api/select-regional"
+                                        }else{
+                                            return url = APP_URL + "api/select-regional/"+employeeId
+                                        }
+                                    },
                                 type: "post",
                                 dataType: 'json',
                                 delay: 250,

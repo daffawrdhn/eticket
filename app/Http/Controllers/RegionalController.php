@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Employee;
 use App\Models\Regional;
 use Exception;
 use Illuminate\Http\Request;
@@ -217,6 +218,42 @@ class RegionalController extends BaseController
             return $this->sendResponse($response, 'success'); 
         }
 
+        
+    }
+
+
+    public function selectRegionalByEmployeeId(Request $request, $id){
+        $search = $request->search;
+        $isRegionalId = Employee::find($id);
+        
+        if($search == ''){
+            $regionals = Regional::orderby('regional_name','asc')
+                            ->select('regional_id','regional_name')
+                            ->where('regional_id', $isRegionalId->regional_id)
+                            ->limit(5)
+                            ->get();
+
+                            return $this->sendResponse($regionals, 'success'); 
+        }else{
+            $regionals = Regional::orderby('regional_name','asc')
+                        ->where('regional_name', 'ILIKE', "%".$search."%")
+                        ->where('regional_id', $id)
+                        ->limit(5)
+                        ->get();
+        }
+
+        if ($regionals) {
+            $response = array();
+            foreach($regionals as $regional){
+                $response[] = array(
+                    "regional_id"=>$regional->regional_id,
+                    "regional_name"=>$regional->regional_name
+                );
+            }
+            return $this->sendResponse($response, 'success'); 
+        }
+
+        
         
     }
 }

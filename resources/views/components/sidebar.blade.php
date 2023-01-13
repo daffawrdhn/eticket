@@ -21,7 +21,16 @@
                         <a class="nav-link" href="/setting-regional">Setting Regional</a>
                         <a class="nav-link" href="/setting-feature">Setting Feature</a>
                         <a class="nav-link" href="/setting-sub-feature">Setting Sub Feature</a>
-                        <a class="nav-link" href="/setting-approval">Setting Approval</a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                            Approval
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/setting-regional-pic">Regional PIC</a>
+                                <a class="nav-link" href="/setting-Helpdesk">HCIS Helpdesk</a>
+                            </nav>
+                        </div>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">

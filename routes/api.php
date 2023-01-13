@@ -5,14 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
-use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\HelpdeskController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\RegionalController;
+use App\Http\Controllers\RegionalPicController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Http\Controllers\TicketController;
+use App\Models\RegionalPIC;
 
 Route::post('login', [AuthController::class, 'signin'])->name('auth.login');
 Route::post('register', [AuthController::class, 'register'])->name('auth.register');
@@ -86,8 +88,8 @@ Route::middleware('auth:api')->group( function () {
     Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
     Route::get('get-photo/{ticketId}', [TicketController::class, 'getPhoto'])->name('auth.getPhoto');
 
-    Route::get('get-pics/{regionalId}', [TicketController::class, 'getPics'])->name('auth.getPics');
-    Route::get('get-helpdesks/{regionalId}', [TicketController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
+    Route::get('get-pics/{regionalId}', [RegionalPicController::class, 'getPics'])->name('auth.getPics');
+    Route::get('get-helpdesks/{regionalId}', [HelpdeskController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
 
 
 
@@ -102,13 +104,30 @@ Route::middleware('auth:api')->group( function () {
     Route::post('set-status-employee/{id}', [EmployeeController::class, 'setStatusEmployee'])->name('auth.setStatusEmployee');
     
     //approval
-    Route::get('get-approval', [ApprovalController::class, 'getApproval'])->name('auth.getApproval');
-    Route::post('add-approval', [ApprovalController::class, 'store'])->name('auth.inputApproval');
+    Route::get('get-regional-pic', [RegionalPicController::class, 'getDataRegionalPic'])->name('auth.getDataRegionalPic');
+    Route::post('add-regional-pic', [RegionalPicController::class, 'store'])->name('auth.inputRegionalPic');
+    Route::get('get-regional-pic/{id}', [RegionalPicController::class, 'show'])->name('auth.getRegionalPicById');
+    Route::post('update-regional-pic/{id}', [RegionalPicController::class, 'update'])->name('auth.updateRegionalPic');
+    Route::delete('delete-regional-pic/{id}', [RegionalPicController::class, 'destroy'])->name('auth.deletePic');
+
+    // helpdesk
+    Route::get('get-helpdesk', [HelpdeskController::class, 'getDataHelpdesk'])->name('auth.getDataHelpdesk');
+    Route::post('add-helpdesk', [HelpdeskController::class, 'store'])->name('auth.inputHelpdesk');
+    Route::get('get-helpdesk/{id}', [HelpdeskController::class, 'show'])->name('auth.getHelpdeskById');
+    Route::post('update-helpdesk/{id}', [HelpdeskController::class, 'update'])->name('auth.updateHelpdesk');
+    Route::delete('delete-helpdesk/{id}', [HelpdeskController::class, 'destroy'])->name('auth.deleteHelpdesk');
+
+
     // select data
     Route::post('select-user', [EmployeeController::class, 'selectEmployee'])->name('auth.selectUser');
     Route::post('select-organization', [OrganizationController::class, 'selectOrganization'])->name('auth.selectOrganization');
     Route::post('select-role', [RoleController::class, 'selectRole'])->name('auth.selectRolel');
     Route::post('select-regional', [RegionalController::class, 'selectRegional'])->name('auth.selectRegional');
+    Route::post('select-regional/{id}', [RegionalController::class, 'selectRegionalByEmployeeId'])->name('auth.selectRegionalByEmployee');
+    Route::post('select-employee/{id}', [EmployeeController::class, 'selectEmployeeByRegional'])->name('auth.selectEmployeeByRegional');
+
+
+
 
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 

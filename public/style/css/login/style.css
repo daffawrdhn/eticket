@@ -8452,7 +8452,7 @@ h1, h2, h3, h4, h5,
 
 .label-form{
     top: 2px;
-    padding: 7px 0 0 15px;
+    padding: 7px 0 0 0px;
     opacity: 1;
     text-transform: uppercase;
     font-size: 12px;

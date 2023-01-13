@@ -120,19 +120,23 @@
                         <div id="quit_dateFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="form-group mt-4">
+                        <label class="label-form" for="supervisor_id">Select Supervisor</label>
                         <select class="form-select form-control" id="supervisor_id" name="supervisor_id" style="width: 100%" aria-label="Default select example"></select>
                         
                     </div>
                     <div class="form-group mt-4">
+                        <label class="label-form" for="role_id">Select User Role</label>
                         <select class="form-select mt-4 overflow-auto" data-live-search="true" id="role_id" name="role_id" style="width: 100%; margin-bottom:20px"  aria-label="Default select example" style="height: 50px"></select>
                         
                     </div>
                     <div class="form-group mt-4">
+                        <label class="label-form" for="organization_id">Select Organization</label>
                         <select class="form-select  mt-4" id="organization_id" name="organization_id" style="width: 100%" aria-label="Default select example"></select>
                         </div>
                     <div class="form-group mt-4">
+                    <label class="label-form" for="organization_id">Select Regional</label>
                         <select class="form-select  mt-4" id="regional_id" name="regional_id" aria-label="Default select example" style="width: 100%"  style="height: 50px"></select>
-                            </div>
+                    </div>
                 
             </div>
                     <div class="modal-footer">

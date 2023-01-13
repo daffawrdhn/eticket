@@ -244,24 +244,24 @@ $(document).ready(function () {
                 success : function(response){
                     
                     $("#modalAddUser").modal('hide');
-
                     setTimeout(()=>{
                         $("#loading").modal('hide') 
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            willClose: () => {
-                                table.draw()
-                            }
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                
-                                table.draw()
-                            }
-                        })
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                willClose: () => {
+                                    table.draw()
+                                }
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    
+                                    table.draw()
+                                }
+                            })
+                        
                     },1000)
                     
                     
@@ -390,33 +390,61 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 $.ajax({
                     type: "DELETE",
-                    url: APP_URL + "api/delete-user/" + id,
+                    url: APP_URL + "api/delete-user/"+  id,
                     dataType: "json",
                     beforeSend: function(xhr, settings) { 
                         xhr.setRequestHeader('Authorization','Bearer ' + token );
                         $("#loading").modal('show') 
+                        console.log('ok');
                     },
                     success: function(response){
+                    
+                            setTimeout(()=>{
+
+                                $("#loading").modal('hide') 
+
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    willClose: () => {
+                                        table.draw()
+                                    }
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        
+                                        table.draw()
+                                    }
+                                })
+                            },1000)
                         
-                        setTimeout(()=>{
-                            $("#loading").modal('hide') 
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                willClose: () => {
-                                    table.draw()
+                    },error:function(response){
+                        if (!response.success) {
+
+                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
+                                    $("#loading").modal('hide') 
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : 'This data already has a relationship with Another Table',
+                                    })
+                                }else{
+
+                                    Swal.fire({
+                                        icon : 'warning',
+                                        confirmButtonText: 'Ok',
+                                        title : 'Warning!',
+                                        text : response.responseJSON.data.error,
+                                        
+                                        
+                                    })
                                 }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    
-                                    table.draw()
-                                }
-                            })
-                        },1000)
-        
+                            
+                            
+                        }
                     }
                 });
               
