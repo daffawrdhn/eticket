@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Mail\SendMail;
 use Exception;
 use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends BaseController
 {
@@ -252,7 +254,7 @@ class EmployeeController extends BaseController
 
             if ($request->ajax()) {
                 $customers = $dataEmployee;
-                return datatables()->of($customers)
+                return DataTables::of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
                         <div class="btn-group">
