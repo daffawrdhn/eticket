@@ -145,17 +145,21 @@ class EmployeeController extends BaseController
 
 
     public function selectEmployee(Request $request){
-        $search = $request->search;
+        
 
-        if($search == ''){
-            $employees = Employee::orderby('employee_name','asc')->select('employee_id','employee_name')->limit(5)->get();
+        if($request->search == ''){
+            $employees = Employee::orderby('employee_name','asc')
+                            ->select('employee_id','employee_name')
+                            ->limit(5)
+                            ->get();
         }else{
             $number = "/^[1-9][0-9]*$/";
-            if (preg_match($number, $search)) {
-                $employees = Employee::orderby('employee_name','asc')->where('employee_id', 'ILIKE', "%".$search."%")->limit(5)->get();
-                
+            if (preg_match($number, $request->search)) {
+                $employees = Employee::orderby('employee_name','asc')->where('employee_id', 'ILIKE', "%".$request->search."%")->limit(5)->get();
+
             }else{
-                $employees = Employee::orderby('employee_name','asc')->where('employee_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+                $employees = Employee::orderby('employee_name','asc')->where('employee_name', 'ILIKE', "%".$request->search."%")->limit(5)->get();
+
             }
         }
 
