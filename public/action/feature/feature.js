@@ -130,16 +130,15 @@ $(document).ready(function () {
                     error:function(response){
                         if (!response.success) {
 
-                            if (response.responseJSON.data.error.feature_name !== null) {
+                            if (response.responseJSON.data.error.errorInfo[1]  == 7) {
                                 Swal.fire({
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',
                                     title : 'Warning!',
-                                    text : response.responseJSON.data.error.feature_name,
-                                    
-                                    
+                                    text : 'This data already has a relationship in another table',
                                 })
                             }else{
+
                                 Swal.fire({
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',

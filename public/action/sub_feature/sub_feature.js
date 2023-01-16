@@ -355,7 +355,7 @@ $(document).on('click', '#delete-sub_feature', function(e){
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',
                                     title : 'Warning!',
-                                    text : 'This data already has a relationship with the sub feature',
+                                    text : 'This data already has a relationship in another table',
                                 })
                             }else{
 
