@@ -10,7 +10,7 @@ use App\Models\RegionalPIC;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\Datatables\Facades\Datatables;
 
 class HelpdeskController extends BaseController
 {

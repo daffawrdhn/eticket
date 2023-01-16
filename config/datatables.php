@@ -91,7 +91,7 @@ return [
          * List of columns to be escaped. If set to *, all columns are escape.
          * Note: You can set the value to empty array to disable XSS protection.
          */
-        'escape'    => '*',
+        'escape'    => [],
 
         /*
          * List of columns that are allowed to display html content.

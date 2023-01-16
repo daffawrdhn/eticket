@@ -216,7 +216,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
-        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'DataTables' => Yajra\DataTables\Facades\Datatables::class,
     ])->toArray(),
 
 
