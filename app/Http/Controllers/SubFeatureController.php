@@ -7,6 +7,7 @@ use App\Models\SubFeature;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class SubFeatureController extends BaseController
 {
@@ -226,7 +227,7 @@ class SubFeatureController extends BaseController
             
             if ($request->ajax()) {
                 $customers = $approvalData;
-                return datatables()->of($customers)
+                return DataTables::of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
                             <button id="edit-sub_feature" value="'. $row->sub_feature_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
