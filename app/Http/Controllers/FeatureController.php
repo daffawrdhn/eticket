@@ -51,13 +51,20 @@ class FeatureController extends BaseController
                     return $this->sendError('Error validation', ['error' => $validator->errors()]);
                 }else{
 
-                    $feature['feature_name'] = $request->feature_name;
-                    $storeFeature = Feature::create($feature);
+                    $checkFeature = Feature::where('feature_name', 'ILIKE', '%'. $request->feature_name .'%')->first();
 
-                    if ($storeFeature) {
-                        return $this->sendResponse($feature, 'success input new feature');
+                    if ($checkFeature != null) {
+                        return $this->sendError('Error validation', ['error' => 'Feature Name has Already been taken']);
                     }else{
-                        return $this->sendError('Error validation', ['error' => $storeFeature]);
+
+                        $feature['feature_name'] = $request->feature_name;
+                        $storeFeature = Feature::create($feature);
+
+                        if ($storeFeature) {
+                            return $this->sendResponse($feature, 'success input new feature');
+                        }else{
+                            return $this->sendError('Error validation', ['error' => $storeFeature]);
+                        }
                     }
                 }
 
@@ -137,17 +144,24 @@ class FeatureController extends BaseController
                 return $this->sendError('Error validation', ['error' => $validator->errors()]);
             }else{
 
-                $updateFeature = Feature::where('feature_id', $id)
-                    ->update([
-                        'feature_name' => $request->feature_name
-                    ]);
+                $checkFeature = Feature::where('feature_name', 'ILIKE', '%'. $request->feature_name .'%')->first();
 
-                $data = Feature::find($id);
-
-                if ($updateFeature) {
-                    return $this->sendResponse($data, 'success update data');
+                if ($checkFeature != null) {
+                    return $this->sendError('Error validation', ['error' => 'Feature Name has Already been taken']);
                 }else{
-                    return $this->sendError('Error validation', ['error' => $updateFeature]);
+
+                    $updateFeature = Feature::where('feature_id', $id)
+                        ->update([
+                            'feature_name' => $request->feature_name
+                        ]);
+    
+                    $data = Feature::find($id);
+    
+                    if ($updateFeature) {
+                        return $this->sendResponse($data, 'success update data');
+                    }else{
+                        return $this->sendError('Error validation', ['error' => $updateFeature]);
+                    }
                 }
             }
 
@@ -166,18 +180,19 @@ class FeatureController extends BaseController
     {
         try {
 
-            $isFeature = SubFeature::where('feature_id', '$id')->get();
+            $isFeature = SubFeature::where('feature_id', $id)->first();
             
-            if ($isFeature) {
-                return $this->sendResponse('warning', 'this data is already exists in another table, are you sure to delete this data ??');
-            }
+            if ($isFeature != null) {
+                return $this->sendError('Error validation', ['error' => ['this data is already exists in another table']]);
 
-            $delete = Feature::find($id)->delete();
-
-            if ($delete) {
-                return $this->sendResponse($delete, 'success delete data');
             }else{
-                return $this->sendError('Error validation', ['error' => $delete]);
+                $delete = Feature::where('feature_id',$id)->delete();
+    
+                if ($delete) {
+                    return $this->sendResponse($delete, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $delete]);
+                }
             }
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);
@@ -232,5 +247,39 @@ class FeatureController extends BaseController
             return $this->sendResponse($response, 'success'); 
         }
 
+    }
+
+    public function featureDataTable(Request $request){
+        try {
+            
+            $datas = Feature::all();
+            
+            $features = [];
+            $no =1;
+            foreach($datas as $d){
+                $data = $d;
+                
+                $data['no'] = $no;
+                $data['feature_name'] = $d->feature_name;
+
+                $features[] = $data;
+                $no++;
+            }
+            
+            if ($request->ajax()) {
+                $customers = $features;
+                return datatables()->of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                            <button id="edit-feature" value="'. $row->feature_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-feature" value="'. $row->feature_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                        ';
+                        return $action;
+                    })->toJson();
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 }

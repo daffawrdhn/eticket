@@ -31,7 +31,7 @@ $(document).ready(function () {
             },
             
         ]   
-});
+    });
 
 
     
@@ -42,19 +42,20 @@ $(document).ready(function () {
         e.preventDefault();
         console.log('ok');
         $(".modal-title").html('Add New Approval')
-        $("#input-approval").removeClass('update-sub-feature');
-        $("#input-approval").addClass('input-sub-feature');
+        $("#input-approval").removeClass('update-approval');
+        $("#input-approval").addClass('input-approval');
         $('#employee_id option:selected').remove();
         $('#regional_id option:selected').remove();
         $("div#select-regional .select2-selection--single").css('border', '1px solid #aaa');
         $("div#select-employee .select2-selection--single").css('border', '1px solid #aaa');
         $('#regional_idFeedback').hide()
         $('#employee_idFeedback').hide()
+        $('#select-employee').attr('data-id', '1')
         
     });
 
 // //post data 
-    $(document).on('click', '.input-sub-feature', function(e){
+    $(document).on('click', '.input-approval', function(e){
         e.preventDefault();
         
         var token = $('#token').val()
@@ -124,11 +125,6 @@ $(document).ready(function () {
                                     }
                                 })
                             },1000)
-                                    
-
-                                
-                            
-                            
                         },
                         error:function(response){
                             if (!response.success) {
@@ -161,6 +157,7 @@ $(document).ready(function () {
         $(".modal-title").html('Update Regional PIC')
         $("#input-approval").removeClass('input-approval');
         $("#input-approval").addClass('update-approval');
+        $('#select-employee').attr('data-id', '0')
 
         
         var id = $(this).val();
@@ -393,7 +390,7 @@ $(document).on('click', '#master-check', function(e){
                     
                     $.ajax({
                         type: "DELETE",
-                        url: APP_URL + "api/delete-all-sub-feature",
+                        url: APP_URL + "api/delete-all-approval",
                         dataType: "json",
                         data : data,
                         beforeSend: function(xhr, settings) { 
@@ -434,8 +431,10 @@ $(document).on('click', '#master-check', function(e){
                             ajax: { 
                                 url: () => {
                                     var employeeId = $('#employee_id').val()
+                                    var dataId = $('#select-employee').attr('data-id')
                                     var url
-                                    if(employeeId == null){
+                                    console.log(dataId);
+                                    if(dataId == 1){
                                         return url = APP_URL + "api/select-regional"
                                     }else{
                                         return url = APP_URL + "api/select-regional/"+employeeId

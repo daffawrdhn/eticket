@@ -59,16 +59,23 @@ class RegionalPicController extends BaseController
                 if ($checkData) {
                     return $this->sendError('Error validation', ['error' => 'data has already been taken']);
                 }else{
-                    
-                    $input['regional_id'] = $request->regional_id;
-                    $input['employee_id'] = $request->employee_id;
 
-                    $postApproval = RegionalPIC::create($input);
 
-                    if ($postApproval) {
-                        return $this->sendResponse('success', 'success input new regional pic');
+                    $checkEmployee = Helpdesk::where('employee_id', $request->employee_id)->first();
+
+                    if ($checkEmployee == null) {
+                        $input['regional_id'] = $request->regional_id;
+                        $input['employee_id'] = $request->employee_id;
+
+                        $postApproval = RegionalPIC::create($input);
+
+                        if ($postApproval) {
+                            return $this->sendResponse('success', 'success input new regional pic');
+                        }else{
+                            return $this->sendError('Error validation', ['error' => $postApproval]);
+                        }
                     }else{
-                        return $this->sendError('Error validation', ['error' => $postApproval]);
+                        return $this->sendError('Error validation', ['error' => 'Employee Has Already Exist in Approval Helpdesk ']);
                     }
                 }
                 
@@ -209,6 +216,10 @@ class RegionalPicController extends BaseController
                 if ($checkData != null) {
                     return $this->sendError('Error validation', ['error' => 'data already has been taken']);
                 }else{
+
+                    $checkEmployee = Helpdesk::where('employee_id', $request->employee_id)->first();
+
+                    if ($checkEmployee == null) {
                         $updatePic = RegionalPIC::where('id', $id)
                             ->update([
                                 'regional_id' => $request->regional_id,
@@ -220,6 +231,9 @@ class RegionalPicController extends BaseController
                         }else{
                             return $this->sendError('Error validation', ['error' => $updatePic]);
                         }
+                    }else{
+                        return $this->sendError('Error validation', ['error' => 'Employee Has Already Exist in Approval Helpdesk ']);
+                    }
                     
                 }
             }

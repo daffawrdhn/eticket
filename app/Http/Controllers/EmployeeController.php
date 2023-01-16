@@ -149,15 +149,23 @@ class EmployeeController extends BaseController
         if($search == ''){
             $employees = Employee::orderby('employee_name','asc')->select('employee_id','employee_name')->limit(5)->get();
         }else{
-            $employees = Employee::orderby('employee_name','asc')->where('employee_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+            $number = "/^[1-9][0-9]*$/";
+            if (preg_match($number, $search)) {
+                $employees = Employee::orderby('employee_name','asc')->where('employee_id', 'ILIKE', "%".$search."%")->limit(5)->get();
+                
+            }else{
+                $employees = Employee::orderby('employee_name','asc')->where('employee_name', 'ILIKE', "%".$search."%")->limit(5)->get();
+            }
         }
+
+        // return $this->sendResponse($employees, 'success'); 
 
         if ($employees) {
             $response = array();
             foreach($employees as $employee){
                 $response[] = array(
                     "id"=>$employee->employee_id,
-                    "text"=>$employee->employee_name
+                    "text"=> "".$employee->employee_id." - ".$employee->employee_name.""
                 );
             }
             return $this->sendResponse($response, 'success'); 
@@ -176,21 +184,30 @@ class EmployeeController extends BaseController
             return $this->sendResponse($response, 'success'); 
 
         }else{
-        
-        $search = $request->search;
 
-        if($search == ''){
+        if($request->search == ''){
             $employees = Employee::orderby('employee_name','asc')
                             ->select('employee_id','employee_name')
                             ->where('regional_id', $id)
                             ->limit(5)
                             ->get();
         }else{
-            $employees = Employee::orderby('employee_name','asc')
-                        ->where('employee_name', 'ILIKE', "%".$search."%")
+            $number = "/^[0-9]*$/";
+            if (preg_match($number, $request->search)) {
+                
+                $employees = Employee::orderby('employee_name','asc')
+                        ->where('employee_id', 'ILIKE', "%".$request->search."%")
                         ->where('regional_id', $id)
                         ->limit(5)
                         ->get();
+            }else{
+                $employees = Employee::orderby('employee_name','asc')
+                        ->where('employee_name', 'ILIKE', "%".$request->search."%")
+                        ->where('regional_id', $id)
+                        ->limit(5)
+                        ->get();
+            }
+            
         }
 
         if ($employees) {
@@ -198,10 +215,10 @@ class EmployeeController extends BaseController
             foreach($employees as $employee){
                 $response[] = array(
                     "id"=>$employee->employee_id,
-                    "text"=>$employee->employee_name
+                    "text"=> "".$employee->employee_id." - ".$employee->employee_name.""
                 );
             }
-            return $this->sendResponse($response, 'success'); 
+            return $this->sendResponse($response, 'success end'); 
         }
 
         }

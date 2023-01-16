@@ -63,6 +63,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-feature', [FeatureController::class, 'getFeature'])->name('auth.getFeature');
     Route::get('get-feature/{id}', [FeatureController::class, 'show'])->name('auth.getFeatureById');
     Route::post('select-feature', [FeatureController::class, 'selectFeature'])->name('auth.selectFeature');
+    Route::get('get-feature-table', [FeatureController::class, 'featureDataTable'])->name('auth.getFeatureDataTable');
     Route::get('get-features', [TicketController::class, 'features'])->name('auth.getFeatures');
 
     //sub feature
@@ -71,6 +72,7 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-sub-feature/{id}', [SubFeatureController::class, 'destroy'])->name('auth.deleteSubFeature');
     Route::delete('delete-all-sub-feature', [SubFeatureController::class, 'destroyAll'])->name('auth.deleteAllSubFeature');
     Route::get('get-sub-feature', [SubFeatureController::class, 'getSubFeature'])->name('auth.getSubFeature');
+    Route::get('get-sub-feature-table', [SubFeatureController::class, 'subFeatureDataTable'])->name('auth.getSubFeatureDataTable');
     Route::get('get-sub-feature/{id}', [SubFeatureController::class, 'show'])->name('auth.getSubFeatureById');
 
     //Ticket

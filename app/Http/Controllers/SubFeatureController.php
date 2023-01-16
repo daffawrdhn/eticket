@@ -202,4 +202,42 @@ class SubFeatureController extends BaseController
             return $this->sendError('Error validation', ['error' => $validator->errors()]);
         }
     }
+
+    public function subFeatureDataTable(Request $request){
+        try {
+            
+            $datas = SubFeature::with('feature')->get();
+
+            $approvalData = [];
+            $no =1;
+            foreach($datas as $d){
+
+                $data = $d;
+
+
+
+                $data['no'] = $no;
+                $data['feature_name'] = $d->feature['feature_name'];
+                $data['sub_feature_name'] = $d->sub_feature_name;
+
+                $approvalData[] = $data;
+                $no++;
+            }
+            
+            if ($request->ajax()) {
+                $customers = $approvalData;
+                return datatables()->of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                            <button id="edit-sub_feature" value="'. $row->sub_feature_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-sub_feature" value="'. $row->sub_feature_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                        ';
+                        return $action;
+                    })->toJson();
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
 }

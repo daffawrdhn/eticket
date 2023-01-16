@@ -54,12 +54,12 @@
                     <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
                     <div id="select-regional" class="form-group border-danger">
                         <label class="label-form" for="employee_id">Select Regional</label>
-                        <select class="" style="width: 100%" id="regional_id" name="regional_id" aria-label="Default select example"></select>
+                        <select class="" style="width: 100%"  id="regional_id" name="regional_id" aria-label="Default select example"></select>
                         <div id="regional_idFeedback" class="invalid-feedback"></div>
                     </div>
-                    <div id="select-employee" class="form-group border-danger">
+                    <div id="select-employee" data-id="" class="form-group border-danger">
                         <label class="label-form" for="employee_id">Select Employee</label>
-                        <select class="" style="width: 100%" id="employee_id" name="employee_id" aria-label="Default select example"></select>
+                        <select class="" style="width: 100%"  id="employee_id" name="employee_id" aria-label="Default select example"></select>
                         <div id="employee_idFeedback" class="invalid-feedback"></div>
                     </div>
             </div>

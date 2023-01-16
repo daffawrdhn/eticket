@@ -1,56 +1,33 @@
 $(document).ready(function () {
 
     
-        getDataFeature();
-
-    
-
-    //getdata
-    function getDataFeature()
-    {
-        var token = $('#token').val()
-        $.ajax({
-            url : APP_URL + "api/get-feature",
-            type : 'GET',
-            dataType : 'json',
+    var token = $('#token').val()
+    var table = $('#featureTable').DataTable({
+        responsive: true,
+        autoWidth : false,
+        processing: true,
+        serverSide: true,
+        ajax: { 
+            url: APP_URL + "api/get-feature-table",
+            type: "GET",
+            dataType: 'json',
             beforeSend: function(xhr, settings) { 
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
             },
-            success : function(response){
-
-                    $('#table-feature').html('');
-                    no = 1;
-                    $(response.data).each(function(key, values){
-
-                        $('#table-feature').append(`<tr>
-                            <td>`+ no++ +`</td>
-                            <td id="feature-list">`+values.feature_name+`</td>
-                            <td>
-                            <button type="button" id="edit-feature" class="btn btn-sm btn-success" value="`+ values.feature_id +`" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                                <button type="button" id="delete-feature" class="btn btn-danger btn-sm" value="`+ values.feature_id +`">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    })
-                
-
+        },
+        columns: [
+            {data: 'no', name: 'no'},
+            {data: 'feature_name', name: 'feature_name'},
+            {
+                data: 'action', 
+                name: 'action', 
+                orderable: true, 
+                searchable: true,
             },
-            error:function(response){
-                if (!response.success) {
-                        // $('#alert').show();
-                        // $('#alert').html(response.responseJSON.data.error);
+            
+        ]   
+    });
 
-
-                        console.log(response.responseJSON.data.error);
-                    
-                }
-            }
-
-        });
-    }
 
     // get feature by id
     $(document).on('click', '#edit-feature', function(e){
@@ -128,22 +105,26 @@ $(document).ready(function () {
                         
     
                         $("#staticBackdrop").modal('hide');
-    
-    
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-    
-                                $('#feature_name').val('')
-                                getDataFeature();
-    
-                            }
-                          })
+                        setTimeout(()=>{
+                                    
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                willClose: () => {
+                                    table.draw()
+                                }
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    
+                                    table.draw()
+                                    
+                
+                                }
+                            })
+                        },1000)
                         
                     },
                     error:function(response){
@@ -204,20 +185,26 @@ $(document).ready(function () {
                     success : function(response){
     
                         $("#staticBackdrop").modal('hide');
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-    
-                                $('#feature_name').val('')
-                                getDataFeature();
-    
-                            }
-                          })
+                        setTimeout(()=>{
+                                    
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                willClose: () => {
+                                    table.draw()
+                                }
+                            }).then((result) => {
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    
+                                    table.draw()
+                                    
+                
+                                }
+                            })
+                        },1000)
                         
                     },
                     error:function(response){
@@ -227,7 +214,7 @@ $(document).ready(function () {
                                 icon : 'warning',
                                 confirmButtonText: 'Ok',
                                 title : 'Warning!',
-                                text : "please fill out this field",
+                                text : response.responseJSON.data.error,
                                 
                                 
                             })
@@ -262,50 +249,43 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "DELETE",
-                    url: APP_URL + "api/delete-feature/" + id,
+                    url: APP_URL + "api/delete-feature/"+id,
                     dataType: "json",
                     beforeSend: function(xhr, settings) { 
                         xhr.setRequestHeader('Authorization','Bearer ' + token ); 
                     },
                     success: function(response){
                         
+                        setTimeout(()=>{
+                                    
                             Swal.fire({
-                                icon : 'success',
-                                confirmButtonText: 'Ok',
-                                title : 'Deleted!',
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Deleted!',
                                 text : 'Your file has been deleted.',
-                                
-                                
+                                showConfirmButton: false,
+                                timer: 2000,
+                                willClose: () => {
+                                    table.draw()
+                                }
                             }).then((result) => {
-                                if (result.isConfirmed) {
-                                    getDataFeature();
-                                } 
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    
+                                    table.draw()
+                                    
+                
+                                }
                             })
+                        },1000)
         
                     },error:function(response){
                         if (!response.success) {
-                                console.log(response.responseJSON.data.error);
-
-                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : 'This data already has a relationship with the Sub Feature',
-                                    })
-                                }else{
-
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                        
-                                        
-                                    })
-                                }
-                            
-                            
+                            Swal.fire({ 
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                text : response.responseJSON.data.error,
+                            })
                         }
                     }
                 });
@@ -387,7 +367,7 @@ $(document).ready(function () {
                                     }).then((result) => {
                                         if (result.isConfirmed) {
                                             $("#master-check").prop('checked', false); 
-                                            getDataFeature();
+                                        
                                         } 
                                     })
                 

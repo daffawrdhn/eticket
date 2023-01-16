@@ -1,54 +1,33 @@
 $(document).ready(function () {
 
     
-    getDataSubFeature();
-
-    //getdata
-    function getDataSubFeature()
-    {
-        var token = $('#token').val()
-
-            $.ajax({
-                url : APP_URL + "api/get-sub-feature",
-                type : 'GET',
-                dataType : 'json',
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-    
-                        $('#table-sub_feature').html('');
-    
-                        no = 1;
-                        $(response.data).each(function(key, values){
-                            $('#table-sub_feature').append(`<tr>
-                                <td>`+ no++ +`</td>
-                                <td id="sub_feature-list">`+(values.feature == null ? 'null' : values.feature.feature_name)+`</td>
-                                <td id="sub_feature-list">`+values.sub_feature_name+`</td>
-                                <td>
-                                <button type="button" id="edit-sub_feature" class="btn btn-sm btn-success" value="`+ values.sub_feature_id +`" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                    <i class="bi bi-pencil-fill"></i>
-                                </button>
-                                    <button type="button" id="delete-sub_feature" class="btn btn-danger btn-sm" value="`+ values.sub_feature_id +`">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>
-                                </td>
-                            </tr>`);
-                        })
-                    
-    
-                },
-                error:function(response){
-                    if (!response.success) {
-                            console.log(response.responseJSON.data.error);
-                        
-                    }
-                }
-    
-            })
-
-        
-    }
+    var token = $('#token').val()
+    var table = $('#subFeatureTable').DataTable({
+        responsive: true,
+        autoWidth : false,
+        processing: true,
+        serverSide: true,
+        ajax: { 
+            url: APP_URL + "api/get-sub-feature-table",
+            type: "GET",
+            dataType: 'json',
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+        },
+        columns: [
+            {data: 'no', name: 'no'},
+            {data: 'feature_name', name: 'feature_name'},
+            {data: 'sub_feature_name', name: 'sub_feature_name'},
+            {
+                data: 'action', 
+                name: 'action', 
+                orderable: true, 
+                searchable: true,
+            },
+            
+        ]   
+    });
 
     // get sub_feature by id
     $(document).on('click', '#edit-sub_feature', function(e){
@@ -153,20 +132,26 @@ $(document).ready(function () {
                         success : function(response){
                             $("#staticBackdrop").modal('hide');
 
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-
-                                    $('#sub_feature_name').val('')
-                                    getDataSubFeature();
-
-                                }
-                            })
+                            setTimeout(()=>{
+                                    
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    willClose: () => {
+                                        table.draw()
+                                    }
+                                }).then((result) => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        
+                                        table.draw()
+                                        
+                    
+                                    }
+                                })
+                            },1000)
                             
                         },
                         error:function(response){
@@ -270,20 +255,26 @@ $(document).on('click', '.update-sub-feature', function(e){
         success : function(response){
 
             $("#staticBackdrop").modal('hide');
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: response.message,
-                showConfirmButton: false,
-                timer: 2000
-            }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-
-                    $('#sub_feature_name').val('')
-                    getDataSubFeature();
-
-                }
+            setTimeout(()=>{
+                                    
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: response.message,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    willClose: () => {
+                        table.draw()
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        
+                        table.draw()
+                        
+    
+                    }
                 })
+            },1000)
             
         },
         error:function(response){
@@ -332,19 +323,28 @@ $(document).on('click', '#delete-sub_feature', function(e){
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
                 },
                 success: function(response){
+                    setTimeout(()=>{
+                                    
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text : 'Your file has been deleted.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            willClose: () => {
+                                table.draw()
+                            }
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                
+                                table.draw()
+                                
+            
+                            }
+                        })
+                    },1000)
                     
-                    Swal.fire({
-                        icon : 'success',
-                        confirmButtonText: 'Ok',
-                        title : 'Deleted!',
-                        text : 'Your file has been deleted.',
-                        
-                        
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            getDataSubFeature();
-                        } 
-                    })
     
                 },error:function(response){
                     if (!response.success) {

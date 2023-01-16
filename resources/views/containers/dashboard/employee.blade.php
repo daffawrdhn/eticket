@@ -83,7 +83,7 @@
                         name="employee_ktp" 
                         autocomplete="off"
                         oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-                        maxlength="18"
+                        maxlength="16"
                         required>
                         <label class="form-control-placeholder" for="employee_ktp">no. KTP</label>
                         <div id="employee_ktpFeedback" class="invalid-feedback"></div>  
