@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Mail\SendMail;
 use Exception;
 use Illuminate\Support\Facades\Mail;
-use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends BaseController

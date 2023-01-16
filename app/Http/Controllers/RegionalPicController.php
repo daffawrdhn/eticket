@@ -10,6 +10,7 @@ use App\Models\RegionalPIC;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class RegionalPicController extends BaseController
 {
@@ -137,7 +138,7 @@ class RegionalPicController extends BaseController
 
             if ($request->ajax()) {
                 $customers = $approvalData;
-                return datatables()->of($customers)
+                return DataTables::of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
                             <button id="edit-approval" value="'. $row->id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>

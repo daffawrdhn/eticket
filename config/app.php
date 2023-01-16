@@ -197,7 +197,7 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
 
-        Yajra\Datatables\DatatablesServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
 
     ],
 
@@ -216,7 +216,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
-        'DataTables' => Yajra\Datatables\Datatables::class,
+        'DataTables' => Yajra\DataTables\Facades\Datatables::class,
     ])->toArray(),
 
 
