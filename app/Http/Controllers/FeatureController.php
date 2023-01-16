@@ -9,8 +9,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
-
 
 
 class FeatureController extends BaseController
@@ -271,7 +269,7 @@ class FeatureController extends BaseController
             
             if ($request->ajax()) {
                 $customers = $features;
-                return DataTables::of($customers)
+                return datatables()->of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
                             <button id="edit-feature" value="'. $row->feature_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
