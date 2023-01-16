@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendMail;
-use \Yajra\Datatables\Datatables;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
