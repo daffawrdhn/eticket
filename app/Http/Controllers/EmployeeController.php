@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Http\Requests\EmployeeFormRequest;
 use App\Models\Employee;
 use App\Models\Password;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendMail;
+use \Yajra\Datatables\Datatables;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 
@@ -252,7 +252,7 @@ class EmployeeController extends BaseController
 
             if ($request->ajax()) {
                 $customers = $dataEmployee;
-                return datatables()->of($customers)
+                return DataTables()->of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
                         <div class="btn-group">
