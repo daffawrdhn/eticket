@@ -164,7 +164,6 @@ $(document).ready(function () {
                                         title : 'Warning!',
                                         text : response.responseJSON.data.error.sub_feature_name,
                                         
-                                        
                                     })
                                 }else{
                                     Swal.fire({

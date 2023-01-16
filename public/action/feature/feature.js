@@ -129,25 +129,22 @@ $(document).ready(function () {
                     },
                     error:function(response){
                         if (!response.success) {
-
-                            if (response.responseJSON.data.error.errorInfo[1]  == 7) {
+                            setTimeout(() => {
+                                $("#loading").modal('hide');
                                 Swal.fire({
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',
                                     title : 'Warning!',
-                                    text : 'This data already has a relationship in another table',
+                                    html : '<ul></ul>',
+                                    didOpen: () => {
+                                        const ul = Swal.getHtmlContainer().querySelector('ul')
+                                        $.each(response.responseJSON.data.error, function (key, value) { 
+                                             $(ul).append('<li>'+ value +'</li>');
+                                        });
+                                      },
                                 })
-                            }else{
-
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : response.responseJSON.data.error,
-                                    
-                                    
-                                })
-                            }
+                            },500)
+                            
                         }
                     }
             })
