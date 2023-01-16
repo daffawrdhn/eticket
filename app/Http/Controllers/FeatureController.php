@@ -147,7 +147,7 @@ class FeatureController extends BaseController
                 return $this->sendError('Error validation', ['error' => $validator->errors()]);
             }else{
 
-                $checkFeature = Feature::where('feature_name', 'ILIKE', '%'. $request->feature_name .'%')->first();
+                $checkFeature = Feature::where('feature_name', $request->feature_name)->first();
 
                 if ($checkFeature != null) {
                     return $this->sendError('Error validation', ['error' => 'Feature Name has Already been taken']);
