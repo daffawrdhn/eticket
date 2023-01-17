@@ -242,55 +242,61 @@ $(document).on('click', '.update-sub-feature', function(e){
         'feature_id' : $('#feature_id').val()
     }
 
+    if (data.sub_feature_name == '') {
+        $('#sub_feature_name').addClass('is-invalid');
+        $('#sub_feature_nameFeedback').html('please fill out this field')
+    }else{
 
-    $.ajax({
-        type : "POST",
-        url : APP_URL + "api/update-sub-feature/"+ id,
-        data : data,
-        dataType : "json",
-        beforeSend: function(xhr, settings) { 
-            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-        },
-        success : function(response){
-
-            $("#staticBackdrop").modal('hide');
-            setTimeout(()=>{
-                                    
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: response.message,
-                    showConfirmButton: false,
-                    timer: 2000,
-                    willClose: () => {
-                        table.draw()
-                    }
-                }).then((result) => {
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        
-                        table.draw()
-                        
+        $.ajax({
+            type : "POST",
+            url : APP_URL + "api/update-sub-feature/"+ id,
+            data : data,
+            dataType : "json",
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+            success : function(response){
     
-                    }
-                })
-            },1000)
-            
-        },
-        error:function(response){
-            if (!response.success) {
-
+                $("#staticBackdrop").modal('hide');
+                setTimeout(()=>{
+                                        
                     Swal.fire({
-                        icon : 'warning',
-                        confirmButtonText: 'Ok',
-                        title : 'Warning!',
-                        text : response.responseJSON.data.error,
-                        
-                        
+                        position: 'center',
+                        icon: 'success',
+                        title: response.message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        willClose: () => {
+                            table.draw()
+                        }
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            
+                            table.draw()
+                            
+        
+                        }
                     })
+                },1000)
                 
+            },
+            error:function(response){
+                if (!response.success) {
+    
+                        Swal.fire({
+                            icon : 'warning',
+                            confirmButtonText: 'Ok',
+                            title : 'Warning!',
+                            text : response.responseJSON.data.error,
+                            
+                            
+                        })
+                    
+                }
             }
-        }
-    })
+        })
+    }
+
 
 });
 
