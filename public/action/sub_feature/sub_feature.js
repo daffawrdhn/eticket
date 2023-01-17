@@ -256,7 +256,7 @@ $(document).on('click', '.update-sub-feature', function(e){
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
             },
             success : function(response){
-    
+                $('#sub_feature_name').removeClass('is-invalid');
                 $("#staticBackdrop").modal('hide');
                 setTimeout(()=>{
                                         
