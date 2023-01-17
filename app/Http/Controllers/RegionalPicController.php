@@ -120,10 +120,10 @@ class RegionalPicController extends BaseController
             $approvalData = [];
             $no =1;
             foreach($datas as $d){
+                $data = $d;
                 $getRegional = Regional::find($d->regional_id);
                 $getEmployee = Employee::find($d->employee_id);
 
-                $data = $d;
 
 
 
