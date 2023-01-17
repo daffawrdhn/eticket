@@ -196,7 +196,7 @@ $(document).ready(function () {
         $(".modal-title").html('Update Sub Feature')
         $("#input-sub_feature").removeClass('input-sub_feature');
         $("#input-sub_feature").addClass('update-sub_feature');
-
+        $('#sub_feature_name').removeClass('is-invalid');
         
         var id = $(this).val();
         
@@ -233,7 +233,7 @@ $(document).ready(function () {
 $(document).on('click', '.update-sub-feature', function(e){
     e.preventDefault();
     
-    $('#sub_feature_name').removeClass('is-invalid');
+    
     var token = $('#token').val()
     var id = $(this).val();
 
