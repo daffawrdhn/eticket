@@ -64,7 +64,9 @@ class RegionalPicController extends BaseController
 
                     $checkEmployee = Helpdesk::where('employee_id', $request->employee_id)->first();
 
-                    if ($checkEmployee == null) {
+                    if ($checkEmployee != null) {
+                        return $this->sendError('Error validation', ['error' => 'Employee Has Already Exist in Approval Helpdesk ']);
+                    }else{
                         $input['regional_id'] = $request->regional_id;
                         $input['employee_id'] = $request->employee_id;
 
@@ -75,8 +77,6 @@ class RegionalPicController extends BaseController
                         }else{
                             return $this->sendError('Error validation', ['error' => $postApproval]);
                         }
-                    }else{
-                        return $this->sendError('Error validation', ['error' => 'Employee Has Already Exist in Approval Helpdesk ']);
                     }
                 }
                 
