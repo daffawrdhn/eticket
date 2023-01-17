@@ -57,7 +57,7 @@ class RegionalPicController extends BaseController
                                         ->where('regional_id', $request->regional_id)
                                         ->first();
 
-                if ($checkData) {
+                if ($checkData != null) {
                     return $this->sendError('Error validation', ['error' => 'data has already been taken']);
                 }else{
 
