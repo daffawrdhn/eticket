@@ -424,25 +424,31 @@ $(document).ready(function () {
                         if (!response.success) {
 
                                 if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                    $("#loading").modal('hide') 
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : 'This data already has a relationship with Another Table',
-                                    })
+                                    setTimeout(() =>{
+                                        $("#loading").modal('hide') 
+                                        Swal.fire({
+                                            icon : 'warning',
+                                            confirmButtonText: 'Ok',
+                                            title : 'Warning!',
+                                            text : 'This data already has a relationship with Another Table',
+                                        })
+                                    
+                                    },1000)
                                 }else{
+                                    setTimeout(() =>{
+                                        $("#loading").modal('hide') 
 
-                                    Swal.fire({
+                                        Swal.fire({
                                         icon : 'warning',
                                         confirmButtonText: 'Ok',
                                         title : 'Warning!',
                                         text : response.responseJSON.data.error,
-                                        
-                                        
-                                    })
+                                            
+                                            
+                                        })
+                                    
+                                    },1000)
                                 }
-                            
                             
                         }
                     }

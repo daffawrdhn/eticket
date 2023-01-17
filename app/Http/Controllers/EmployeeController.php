@@ -10,6 +10,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendMail;
+use App\Models\Helpdesk;
+use App\Models\RegionalPIC;
+use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
@@ -420,14 +423,27 @@ class EmployeeController extends BaseController
     public function destroy($id)
     {
         try {
-            $delete = Employee::where('employee_id', $id)->delete();
-            $deletePassword = Password::where('employee_id', $id)->delete();
+            
 
-            if ($delete) {
-                return $this->sendResponse($delete, 'success delete data');
+            $employeeRegionalPic = RegionalPIC::where('employee_id', $id)->first();
+            $employeeHelpdesk = Helpdesk::where('employee_id', $id)->first();
+            $employeeTicket = Ticket::where('employee_id', $id)->first();
+
+            if ($employeeRegionalPic != null || $employeeHelpdesk != null || $employeeTicket != null) {
+                
+                $delete = Employee::where('employee_id', $id)->delete();
+                $deletePassword = Password::where('employee_id', $id)->delete();
+    
+    
+                if ($delete) {
+                    return $this->sendResponse($delete, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $delete]);
+                }
             }else{
-                return $this->sendError('Error validation', ['error' => $delete]);
+                return $this->sendError('Error validation', ['error' => 'this data is already exists in another table']);
             }
+
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);
         }
