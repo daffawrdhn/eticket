@@ -233,7 +233,7 @@ $(document).ready(function () {
 $(document).on('click', '.update-sub-feature', function(e){
     e.preventDefault();
     
-    
+    $('#sub_feature_name').removeClass('is-invalid');
     var token = $('#token').val()
     var id = $(this).val();
 
