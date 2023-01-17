@@ -78,6 +78,7 @@ $(document).ready(function () {
         $(".modal-title").html('Add New sub_feature')
         $("#input-sub_feature").removeClass('update-sub-feature');
         $("#input-sub_feature").addClass('input-sub-feature');
+        $('#sub_feature_name').removeClass('is-invalid');
         $('#feature_id option:selected').remove();
         $('#sub_feature_name').val('');
         $('#is-invalid').hide()
