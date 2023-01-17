@@ -163,25 +163,25 @@ class HelpdeskController extends BaseController
             $approvalData = [];
             $no =1;
             foreach($datas as $d){
+                $data = $d;
                 $getRegional = Regional::find($d->regional_id);
                 $getEmployee = Employee::find($d->employee_id);
 
-                $data = $d;
 
 
 
                 $data['no'] = $no;
                 $data['regional_name'] = $getRegional->regional_name;
-                $data['employee_id'] = $getEmployee->employee_id;
-                $data['employee_name'] = $getEmployee->employee_name;
+                $data['employee_id'] = $getEmployee == null ? 0 : $getEmployee->employee_id;
+                $data['employee_name'] = $getEmployee == null ? 'null' : $getEmployee->employee_name;
 
                 $approvalData[] = $data;
                 $no++;
             }
-
+            // return $this->sendResponse($approvalData, 'success update data');
             if ($request->ajax()) {
                 $customers = $approvalData;
-                return DataTables::of($customers)
+                return datatables()->of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
                             <button id="edit-approval" value="'. $row->id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
@@ -190,7 +190,7 @@ class HelpdeskController extends BaseController
                         return $action;
                     })->toJson();
             }
-
+            
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);
         }
