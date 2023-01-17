@@ -128,11 +128,18 @@ $(document).ready(function () {
                         error:function(response){
                             if (!response.success) {
                                 setTimeout(() => {
+                                    $("#loading").modal('hide');
                                     Swal.fire({
                                         icon : 'warning',
                                         confirmButtonText: 'Ok',
                                         title : 'Warning!',
-                                        html : response.responseJSON.data.error
+                                        html : '<ul></ul>',
+                                        didOpen: () => {
+                                            const ul = Swal.getHtmlContainer().querySelector('ul')
+                                            $.each(response.responseJSON.data.error, function (key, value) { 
+                                                 $(ul).append('<li>'+ value +'</li>');
+                                            });
+                                          },
                                     })
                                 },500)
                                 
