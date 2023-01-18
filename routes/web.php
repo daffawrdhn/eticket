@@ -12,6 +12,8 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\RegionalPicController;
+use App\Http\Controllers\ReportRegionalController;
+use App\Http\Controllers\ReportSummaryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,8 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/setting-sub-feature', [SubFeatureController::class, 'index']);
     Route::get('/setting-regional-pic', [RegionalPicController::class, 'index']);
     Route::get('/setting-Helpdesk', [HelpdeskController::class, 'index']);
+    Route::get('/report-data-sumary', [ReportSummaryController::class, 'index']);
+    Route::get('/report-regional', [ReportRegionalController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
 
 });

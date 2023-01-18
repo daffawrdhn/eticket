@@ -305,7 +305,7 @@ class EmployeeController extends BaseController
             $employee = Employee::with('Role', 'Organization', 'Regional')->where('employee_id', $id)->first();
             $supervisor = Employee::select('employee_name')->where('employee_id', $employee->supervisor_id)->first();
 
-
+            
             if ($employee && $supervisor) {
 
                 $employee['supervisor'] = $supervisor;

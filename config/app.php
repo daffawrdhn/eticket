@@ -198,6 +198,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
+        \Yajra\DataTables\ButtonsServiceProvider::class
 
     ],
 

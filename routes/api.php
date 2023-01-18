@@ -11,6 +11,7 @@ use App\Http\Controllers\HelpdeskController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\RegionalPicController;
+use App\Http\Controllers\ReportRegionalController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Http\Controllers\TicketController;
@@ -129,6 +130,8 @@ Route::middleware('auth:api')->group( function () {
     Route::post('select-employee/{id}', [EmployeeController::class, 'selectEmployeeByRegional'])->name('auth.selectEmployeeByRegional');
 
 
+    // ////report
+    Route::get('get-report-regional/{id}', [ReportRegionalController::class, 'getReport'])->name('auth.getReport');
 
 
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
