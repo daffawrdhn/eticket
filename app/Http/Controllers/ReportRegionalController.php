@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\Html\Button;
 
 class ReportRegionalController extends BaseController
 {
@@ -60,12 +61,7 @@ class ReportRegionalController extends BaseController
 
             if ($request->ajax()) {
                 $costumers = $tickets;
-                return DataTables::of($costumers)
-                ->dom('Bfrtip')
-                ->buttons(
-                    Button::make('excel')
-                )
-                ->toJson();
+                return DataTables::of($costumers)->toJson();
             }
 
         } catch (Exception $error) {
