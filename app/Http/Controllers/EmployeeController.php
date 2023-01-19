@@ -89,7 +89,7 @@ class EmployeeController extends BaseController
     
             // generate Password
     
-            $password = 'Plmnko123!';
+            $password = 'Admin123!';
     
             // send mail
     
@@ -488,7 +488,7 @@ class EmployeeController extends BaseController
 
     public function resetPassword($id){
         try {
-            $password = EmployeeController::randomPassword(8);
+            $password = 'Admin123!';
 
 
             $input['employee_id'] = $id;

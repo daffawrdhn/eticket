@@ -39,6 +39,75 @@ class TicketController extends BaseController
         
     }
 
+    public function getSummary()
+    {
+        try
+        {
+            $auth = Auth::user();
+            $open = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 1)->count(); // Open
+            $ap1 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 2)->count(); // Approve 1
+            $ap2 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 3)->count(); // Approve 2
+            $ap3 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 4)->count(); // Approve 3
+            $completed = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 5)->count(); // Completed
+            $rejected = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 6)->count(); // Rejected
+            $total = Ticket::where('employee_id', $auth->employee_id)->count(); // Rejected
+            $summary = [
+                'open' => $open,
+                'ap1' => $ap1,
+                'ap2' => $ap2,
+                'ap3' => $ap3,
+                'completed' => $completed,
+                'rejected' => $rejected,
+                'total' => $total
+                ];
+                return $this->sendResponse($summary, 'Summary collected.');
+
+        } catch (Exception $error) {
+            return $this->sendError('Summary error', ['error' => $error->getMessage()]);
+        }
+    }
+
+    public function getHistory()
+    {
+        try
+        {
+            $auth = Auth::user();
+            $history = TicketStatusHistory::select('ticket_id')->where('supervisor_id', $auth->employee_id)->get();
+            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                ->whereIn('ticket_id', $history->pluck('ticket_id'))
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+
+                //  dd($tickets->ticket_id);
+
+            foreach ($tickets as $ticket) {
+                $ticketId = $ticket->ticket_id;
+                $supervisorId = $ticket->supervisor_id;
+                $employeeId = $ticket->employee_id;
+
+                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
+
+                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+
+                $ticket->history = $ticketHistory;
+                
+                foreach ($ticketHistory as $spv) {
+                    $spvId = $spv->supervisor_id;
+                    $spvHistory = Employee::where('employee_id', $spvId)->first();
+                    $spv['supervisor'] = $spvHistory;
+                }      
+            }            
+
+
+            return $this->sendResponse($tickets, 'Tickets collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
+        }
+    }
+
     public function getPhoto($ticketId)
 {
     try

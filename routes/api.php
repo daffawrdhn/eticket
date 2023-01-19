@@ -22,11 +22,6 @@ Route::post('register', [AuthController::class, 'register'])->name('auth.registe
 Route::post('check-data', [CheckDataEmployeeController::class, 'checkEmployee'])->name('auth.checkdata');
 
 
-
-
-
-
-
 Route::middleware('auth:api')->group( function () {
 
     Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('auth.forgotpassword');
@@ -82,14 +77,16 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('get-ticket', [TicketController::class, 'getTicket'])->name('auth.getTicket');
     Route::get('get-approval', [TicketController::class, 'getApproval'])->name('auth.getApproval');
-
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
+
+    Route::get('get-history', [TicketController::class, 'getHistory'])->name('auth.getHistory');
+    Route::get('get-summary', [TicketController::class, 'getSummary'])->name('auth.getSummary');
+
     
 
     // mobile
     Route::patch('update-ticket/status/{ticketId}', [TicketController::class, 'updateStatus'])->name('auth.updateStatus');
     Route::get('get-photo/{ticketId}', [TicketController::class, 'getPhoto'])->name('auth.getPhoto');
-
     Route::get('get-pics/{regionalId}', [RegionalPicController::class, 'getPics'])->name('auth.getPics');
     Route::get('get-helpdesks/{regionalId}', [HelpdeskController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
 
