@@ -121,7 +121,7 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-helpdesk/{id}', [HelpdeskController::class, 'destroy'])->name('auth.deleteHelpdesk');
 
     //DeptHead
-    Route::get('get-depthead', [DeptheadController::class, 'getDepthead'])->name('auth.getDepthead');
+    Route::get('get-data-depthead', [DeptheadController::class, 'getDataDepthead'])->name('auth.getDepthead');
     Route::post('add-depthead', [DeptheadController::class, 'store'])->name('auth.inputDepthead');
     Route::get('get-depthead/{id}', [DeptheadController::class, 'show'])->name('auth.getDeptheadById');
     Route::post('update-depthead/{id}', [DeptheadController::class, 'update'])->name('auth.updateDepthead');

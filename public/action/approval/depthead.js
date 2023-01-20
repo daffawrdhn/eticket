@@ -11,7 +11,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: { 
-            url: APP_URL + "api/get-depthead",
+            url: APP_URL + "api/get-data-depthead",
             type: "GET",
             dataType: 'json',
             beforeSend: function(xhr, settings) { 
