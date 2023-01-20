@@ -208,8 +208,6 @@ class TicketController extends BaseController
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-
-                    
             }
 
                 //  dd($tickets->ticket_id);
@@ -323,7 +321,7 @@ class TicketController extends BaseController
 
             $input = new Request([
                 'ticket_status_id' => 1,
-                'id' => $employeeId->employee_id,
+                'id' => $employeeId->supervisor_id,
             ]);
             
             $this->updateStatus($input, $storeTicket->ticket_id);
