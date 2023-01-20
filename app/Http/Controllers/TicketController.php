@@ -152,6 +152,7 @@ class TicketController extends BaseController
         try
         {
             $auth = Auth::user();
+            $espv = Employee::where('employee_id', $auth->supervisor_id)->first();
             $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
                  ->where('employee_id', $auth->employee_id)
                  ->orderBy('created_at', 'desc')
@@ -178,7 +179,7 @@ class TicketController extends BaseController
                 }      
             }            
 
-
+            $tickets['EmployeeSPV'] = $espv;
             return $this->sendResponse($tickets, 'Tickets collected.'); 
 
         } catch (Exception $error) {
