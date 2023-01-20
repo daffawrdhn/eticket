@@ -11,23 +11,22 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Settings</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Approval>>Helpdesk</li>
+                        <li class="breadcrumb-item active">Approval>>Dept Head</li>
                     </ol>
 
                     <div class="container-fluid p-4 rounded shadow position-relative">
                         
                         <div class="container-fluid" id="overflow">    
-                            <table class="table" id="approvalTable">
+                            <table class="table" id="deptheadTable">
                                 <thead>
                                     <tr>
                                     <th scope="col">No</th>
-                                    <th scope="col">Regional Approval</th>
                                     <th scope="col">NIK</th>
-                                    <th scope="col">Employee Name</th>
+                                    <th scope="col">Dept Head Name</th>
                                     <th scope="col">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-group-divider" id="table-approval">
+                                <tbody class="table-group-divider" id="table-depthead">
                                     
                                 </tbody>
                                 </table>
@@ -45,18 +44,13 @@
         <div class="modal-dialog" id="dialog-modal">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add New Approval Helpdesk</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add New Dept Head</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="#" class="signin-form" id="" method="POST">
                     @csrf
                     <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
-                    <div id="select-regional" class="form-group border-danger">
-                        <label class="label-form" for="employee_id">Select Regional</label>
-                        <select class="" style="width: 100%"  id="regional_id" name="regional_id" aria-label="Default select example"></select>
-                        <div id="regional_idFeedback" class="invalid-feedback"></div>
-                    </div>
                     <div id="select-employee" data-id="" class="form-group border-danger">
                         <label class="label-form" for="employee_id">Select Employee</label>
                         <select class="" style="width: 100%"  id="employee_id" name="employee_id" aria-label="Default select example"></select>
@@ -73,7 +67,7 @@
     </div>
 
 
-    <script src="{{ asset('action/approval/helpdesk.js') }}"></script>
+    <script src="{{ asset('action/approval/depthead.js') }}"></script>
 @endsection
 
 
