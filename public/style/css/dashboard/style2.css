@@ -16,3 +16,7 @@
   overflow-x: auto;
   min-height: 50vh;
 }
+
+#summaryTable tbody tr:last-child {
+  font-weight: bold !important;
+}

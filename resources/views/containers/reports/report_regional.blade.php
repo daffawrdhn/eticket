@@ -48,6 +48,7 @@
                                     <th scope="col">Ticket Title</th>
                                     <th scope="col">Ticket Description</th>
                                     <th scope="col">Ticket Status</th>
+                                    <th scope="col">Date</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="table-regional">

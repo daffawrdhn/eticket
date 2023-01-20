@@ -37,7 +37,7 @@ class ReportRegionalController extends BaseController
                 endforeach;
             }
 
-            // return $this->sendResponse($datas, 'success');
+            
             $tickets = [];
             $no =1;
             foreach($datas as $d){
@@ -54,11 +54,12 @@ class ReportRegionalController extends BaseController
                 $data['ticket_title'] = $d->ticket_title;
                 $data['ticket_description'] = $d->ticket_description;
                 $data['ticket_status'] = $d->ticketStatus['ticket_status_name'];
+                $data['date'] = date('d-m-Y', strtotime($d->created_at));
 
                 $tickets[] = $data;
                 $no++;
             }
-
+            // return $this->sendResponse($tickets, 'success');
             if ($request->ajax()) {
                 $costumers = $tickets;
                 return DataTables::of($costumers)->toJson();

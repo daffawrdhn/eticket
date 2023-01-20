@@ -13,17 +13,27 @@
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active">Report Data Summary</li>
                     </ol>
-
                     <div class="container-fluid p-4 rounded shadow position-relative">
+                        <div class="container-fluid d-flex flex-row justify-content-between">
+                            <div class="col-md-5 col-sm-12 d-flex flex-row mb-5">
+                                <div class="col-6 ">
+                                    <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" id="btnExport" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
+                                <iframe id="txtArea1" style="display:none"></iframe>
+                            </div>
+                        </div>
                         <div class="container-fluid" id="overflow">    
-                            <table class="table" id="summaryTable">
+                            <table class="table table-striped" id="summaryTable">
                                 <thead>
                                     <tr>
-                                    <th scope="col">no</th>
-                                    <th scope="col">Regional</th>
-                                    <th scope="col">ticket approval</th>
-                                    <th scope="col">ticket reject</th>
-                                    <th scope="col">total ticket</th>
+                                        <th scope="col">Regional</th>
+                                        <th scope="col">Ticket Proccess</th>
+                                        <th scope="col">Ticket Approval</th>
+                                        <th scope="col">Ticket Reject</th>
+                                        <th scope="col">Total Ticket</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="table-summary">
@@ -38,7 +48,7 @@
         </div>
     </div>
 
-    {{-- <script src="{{ asset('action/sub_feature/sub_feature.js') }}"></script> --}}
+    <script src="{{ asset('action/report/report_summary.js') }}"></script>
 @endsection
 
 

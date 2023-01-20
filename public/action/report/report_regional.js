@@ -51,6 +51,7 @@ $(document).ready(function () {
             {data: 'ticket_title', name: 'ticket_title'},
             {data: 'ticket_description', name: 'ticket_description'},
             {data: 'ticket_status', name: 'ticket_status'},
+            {data: 'date', name: 'date'},
             
         ] ,
     })
