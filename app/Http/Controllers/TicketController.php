@@ -161,11 +161,10 @@ class TicketController extends BaseController
 
             foreach ($tickets as $ticket) {
                 $ticketId = $ticket->ticket_id;
-                $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
 
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
-                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id', $auth->supervisor_id)->first();
 
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
 
@@ -173,7 +172,7 @@ class TicketController extends BaseController
                 
                 foreach ($ticketHistory as $spv) {
                     $spvId = $spv->supervisor_id;
-                    $spvHistory = Employee::where('employee_id', $auth->supervisor_id)->first();
+                    $spvHistory = Employee::where('employee_id', $spvId)->first();
                     $spv['supervisor'] = $spvHistory;
                 }      
             }            
