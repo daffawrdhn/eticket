@@ -1,5 +1,7 @@
 $(document).ready(function () {
-
+    setInterval(()=>{
+        table.draw()
+    },15000)
 
     $(document).on('click','#btnExport', function (e) {
 

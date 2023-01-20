@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+    setInterval(()=>{
+        table.draw()
+    },15000)
+
     $('#select-regional').on('select2:select', function (e) {
         var data = e.params.data.id;
 
