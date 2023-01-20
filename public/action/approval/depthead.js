@@ -5,13 +5,13 @@ $(document).ready(function () {
 
     //getdata
     var token = $('#token').val()
-    var table = $('#approvalTable').DataTable({
+    var table = $('#deptheadTable').DataTable({
         responsive: true,
         autoWidth : false,
         processing: true,
         serverSide: true,
         ajax: { 
-            url: APP_URL + "api/get-helpdesk",
+            url: APP_URL + "api/get-depthead",
             type: "GET",
             dataType: 'json',
             beforeSend: function(xhr, settings) { 
@@ -20,7 +20,6 @@ $(document).ready(function () {
         },
         columns: [
             {data: 'no', name: 'no'},
-            {data: 'regional_name', name: 'regional_name'},
             {data: 'employee_id', name: 'employee_id'},
             {data: 'employee_name', name: 'employee_name'},
             {
@@ -41,122 +40,91 @@ $(document).ready(function () {
     $(".approvalAdd").click(function (e) { 
         e.preventDefault();
         console.log('ok');
-        $(".modal-title").html('Add New Approval')
-        $("#input-approval").removeClass('update-sub-feature');
-        $("#input-approval").addClass('input-sub-feature');
+        $(".modal-title").html('Add New Dept Head')
+        $("#input-approval").removeClass('update-depthead');
+        $("#input-approval").addClass('input-depthead');
         $('#employee_id option:selected').remove();
-        $('#regional_id option:selected').remove();
-        $("div#select-regional .select2-selection--single").css('border', '1px solid #aaa');
         $("div#select-employee .select2-selection--single").css('border', '1px solid #aaa');
-        $('#regional_idFeedback').hide()
         $('#employee_idFeedback').hide()
         
     });
 
 // //post data 
-    $(document).on('click', '.input-sub-feature', function(e){
+    $(document).on('click', '.input-depthead', function(e){
         e.preventDefault();
         
         var token = $('#token').val()
 
         data = {
             'employee_id' : $('#employee_id').val(),
-            'regional_id' : $('#regional_id').val()
         }
-
-        if (data.employee_id == null && data.regional_id == null) {
-            $(".select2-selection--single").css('border', '1px solid red');
-            $('#regional_idFeedback').html('please fill out this field')
+        if (data.employee_id == null) {
             $('#employee_idFeedback').html('please fill out this field')
-            $('#regional_idFeedback').show()
             $('#employee_idFeedback').show()
+            $("div#select-employee .select2-selection--single").css('border', '1px solid red');
             
-
         }else{
-            if (data.employee_id == null) {
-                $('#employee_idFeedback').html('please fill out this field')
-                $('#employee_idFeedback').show()
-                $("div#select-regional .select2-selection--single").css('border', '1px solid #aaa');
-                $("div#select-employee .select2-selection--single").css('border', '1px solid red');
-                $('#regional_idFeedback').hide()
-                
-            }else{
-                if (data.regional_id == null) {
-                    $("div#select-regional .select2-selection--single").css('border', '1px solid red');
-                    $("div#select-employee .select2-selection--single").css('border', '1px solid #aaa');
-                    $('#regional_idFeedback').html('please fill out this field')
-                    $('#regional_idFeedback').show()
-                    $('#employee_idFeedback').hide()
-                    
-                }else{
-                    $(".select2-selection--single").css('border', '1px solid #aaa');
-                    $('#regional_idFeedback').hide()
-                    $('#employee_idFeedback').hide()
+            $(".select2-selection--single").css('border', '1px solid #aaa');
+            $('#employee_idFeedback').hide()
 
-                    $.ajax({
-                        type : "POST",
-                        url : APP_URL + "api/add-helpdesk",
-                        data : data,
-                        dataType : "json",
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                        },
-                        success : function(response){
-                            $("#staticBackdrop").modal('hide');
-        
-                            setTimeout(()=>{
-                                    
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    willClose: () => {
-                                        table.draw()
-                                    }
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        
-                                        table.draw()
-                                        
-                    
-                                    }
-                                })
-                            },1000)  
-                        },
-                        error:function(response){
-                            if (!response.success) {
-                                setTimeout(() => {
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        html : response.responseJSON.data.error
-                                    })
-                                },500)
-                                
-                                
+            $.ajax({
+                type : "POST",
+                url : APP_URL + "api/add-depthead",
+                data : data,
+                dataType : "json",
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+                success : function(response){
+                    $("#staticBackdrop").modal('hide');
+
+                    setTimeout(()=>{
+                            
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 2000,
+                            willClose: () => {
+                                table.draw()
                             }
-                        }
-                    })
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
                                 
+                                table.draw()
+                                
+            
+                            }
+                        })
+                    },1000)  
+                },
+                error:function(response){
+                    if (!response.success) {
+                        setTimeout(() => {
+                            Swal.fire({
+                                icon : 'warning',
+                                confirmButtonText: 'Ok',
+                                title : 'Warning!',
+                                html : response.responseJSON.data.error
+                            })
+                        },500)
+                        
+                        
+                    }
                 }
-            }
+            })
+                            
         }
-
-        
-    
     });
 
     $(document).on('click', '#edit-approval', function(e){
         e.preventDefault();
         
-        $(".modal-title").html('Update Regional PIC')
+        $(".modal-title").html('Update Dept Head')
         $("#input-approval").removeClass('input-approval');
         $("#input-approval").addClass('update-approval');
-        $(".select2-selection--single").css('border', '1px solid #aaa');
-        $('#regional_idFeedback').hide()
+        $("div#select-employee .select2-selection--single").css('border', '1px solid #aaa');
         $('#employee_idFeedback').hide()
         
         var id = $(this).val();
@@ -166,7 +134,7 @@ $(document).ready(function () {
 
         
         $.ajax({
-            url : APP_URL + "api/get-helpdesk/"+ id,
+            url : APP_URL + "api/get-depthead/"+ id,
             type : 'GET',
             dataType : 'json',
             beforeSend: function(xhr, settings) { 
@@ -176,11 +144,8 @@ $(document).ready(function () {
                 $('#employee_id').append(`
                     <option selected value="${response.data.employee.employee_id}">${response.data.employee.employee_name}</option>
                 `)
-                $('#regional_id').append(`
-                    <option selected value="${response.data.regional.regional_id}">${response.data.regional.regional_name}</option>
-                `)
 
-                $('#input-approval').val(response.data.regional_pic['id']);
+                $('#input-approval').val(response.data.depthead['id']);
             },
             error:function(response){
                 if (!response.success) {
@@ -211,7 +176,7 @@ $(document).on('click', '.update-approval', function(e){
 
     $.ajax({
         type : "POST",
-        url : APP_URL + "api/update-helpdesk/"+ id,
+        url : APP_URL + "api/update-depthead/"+ id,
         data : data,
         dataType : "json",
         beforeSend: function(xhr, settings) { 
@@ -277,7 +242,7 @@ $(document).on('click', '#delete-approval', function(e){
         if (result.isConfirmed) {
             $.ajax({
                 type: "DELETE",
-                url: APP_URL + "api/delete-helpdesk/" + id,
+                url: APP_URL + "api/delete-depthead/" + id,
                 dataType: "json",
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
@@ -389,7 +354,7 @@ $(document).on('click', '#master-check', function(e){
                     
                     $.ajax({
                         type: "DELETE",
-                        url: APP_URL + "api/delete-all-sub-feature",
+                        url: APP_URL + "api/delete-all-depthead",
                         dataType: "json",
                         data : data,
                         beforeSend: function(xhr, settings) { 
@@ -420,69 +385,14 @@ $(document).on('click', '#master-check', function(e){
         }  
     });
 
-    // Select Sub Regional
-
+    //select employee
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var token = $('#token').val()
-    var selectRegional =   $('#regional_id').select2({
-                            placeholder : "Select Regional",
-                            dropdownParent: $("#staticBackdrop"),
-                            ajax: { 
-                                url: () => { 
-                                        var employeeId = $('#employee_id').val()
-                                        var url
-                                        if(employeeId == null){
-                                            return url = APP_URL + "api/select-regional"
-                                        }else{
-                                            return url = APP_URL + "api/select-regional/"+employeeId
-                                        }
-                                    },
-                                type: "post",
-                                dataType: 'json',
-                                delay: 250,
-                                beforeSend: function(xhr, settings) { 
-                                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                                },
-                                data: function (params) {
-                                return {
-                                    _token: CSRF_TOKEN,
-                                    search: params.term // search term
-                                };
-                                },
-                                processResults: function (response) {
-                                return {
-                                    results: $.map(response.data, function (item) {
-                                        
-                                        return{
-                                            text : item.regional_name,
-                                            id: item.regional_id
-                                        }
-                                    })
-                                };
-                                },
-                                cache: true
-                            }
-                        })
-
-                    selectRegional.data('select2').$selection.css('height', '45px')
-                    selectRegional.data('select2').$selection.css('padding-top', '5px')
-
-    
-    
     var selectUser =   $('#employee_id').select2({
                         placeholder : "Select Employee",
                         dropdownParent: $("#staticBackdrop"),
                         ajax: { 
-                            url:  () => { 
-                                var regionalId = $("#regional_id").val()
-                                var url
-                                
-                                if (regionalId == null) {
-                                    return url = "api/select-employee/0"
-                                }else{
-                                    return url = "api/select-employee/"+regionalId
-                                }
-                             },
+                            url:  APP_URL + "api/select-user",
                             type: "post",
                             dataType: 'json',
                             delay: 250,

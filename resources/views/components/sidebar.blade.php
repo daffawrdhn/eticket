@@ -29,6 +29,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/setting-regional-pic">Regional PIC</a>
                                 <a class="nav-link" href="/setting-Helpdesk">HCIS Helpdesk</a>
+                                <a class="nav-link" href="/setting-depthead">Dept Head</a>
                             </nav>
                         </div>
                     </nav>

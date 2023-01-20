@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\DeptheadController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HelpdeskController;
@@ -121,6 +122,12 @@ Route::middleware('auth:api')->group( function () {
     Route::post('update-helpdesk/{id}', [HelpdeskController::class, 'update'])->name('auth.updateHelpdesk');
     Route::delete('delete-helpdesk/{id}', [HelpdeskController::class, 'destroy'])->name('auth.deleteHelpdesk');
 
+    //DeptHead
+    Route::get('get-depthead', [DeptheadController::class, 'getDepthead'])->name('auth.getDepthead');
+    Route::post('add-depthead', [DeptheadController::class, 'store'])->name('auth.inputDepthead');
+    Route::get('get-depthead/{id}', [DeptheadController::class, 'show'])->name('auth.getDeptheadById');
+    Route::post('update-depthead/{id}', [DeptheadController::class, 'update'])->name('auth.updateDepthead');
+    Route::delete('delete-depthead/{id}', [DeptheadController::class, 'destroy'])->name('auth.deleteDepthead');
 
     // select data
     Route::post('select-user', [EmployeeController::class, 'selectEmployee'])->name('auth.selectUser');
