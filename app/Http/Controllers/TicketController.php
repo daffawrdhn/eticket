@@ -163,8 +163,10 @@ class TicketController extends BaseController
                 $ticketId = $ticket->ticket_id;
                 $employeeId = $ticket->employee_id;
 
+                $spv = Employee::with('organization', 'regional')->find($employeeId);
+
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
-                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id', $auth->supervisor_id)->first();
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$spv->supervisor_id)->first();
 
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
 
