@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\DeptheadController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HelpdeskController;
@@ -91,6 +92,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get-photo/{ticketId}', [TicketController::class, 'getPhoto'])->name('auth.getPhoto');
     Route::get('get-pics/{regionalId}', [RegionalPicController::class, 'getPics'])->name('auth.getPics');
     Route::get('get-helpdesks/{regionalId}', [HelpdeskController::class, 'getHelpdesks'])->name('auth.getHelpdesks');
+    Route::get('get-depthead', [DeptheadController::class, 'getDepthead'])->name('auth.getDepthead');
 
 
 
