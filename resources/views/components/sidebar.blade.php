@@ -40,32 +40,8 @@
                 </a>
                 <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                            BU/Regional
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="#">BU Jabodebek</a>
-                                <a class="nav-link" href="#">BU Banten</a>
-                                <a class="nav-link" href="#">BU Jabar</a>
-                                <a class="nav-link" href="#">BU Jawa Tengah Utara</a>
-                                <a class="nav-link" href="#">BU Jawa Tengah Selatan</a>
-                                <a class="nav-link" href="#">BU Jawa Timur BNT</a>
-                                <a class="nav-link" href="#">BU Sumbagut</a>
-                                <a class="nav-link" href="#">BU Sumbagsel</a>
-                                <a class="nav-link" href="#">BU Kalimantan Sulawesi</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                            Data Sumary
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="#">Sumary Data</a>
-                            </nav>
-                        </div>
+                        <a class="nav-link" href="/report-data-sumary">Data Sumary</a>
+                        <a class="nav-link" href="/report-regional">Regional</a>
                     </nav>
                 </div>
                 <div class="sb-sidenav-menu-heading">Addons</div>
