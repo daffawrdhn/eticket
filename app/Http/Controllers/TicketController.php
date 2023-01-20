@@ -78,19 +78,14 @@ class TicketController extends BaseController
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-
-                //  dd($tickets->ticket_id);
-
             foreach ($tickets as $ticket) {
+
                 $ticketId = $ticket->ticket_id;
-                $supervisorId = $ticket->supervisor_id;
                 $employeeId = $ticket->employee_id;
-
+                $spv = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
-                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$supervisorId)->first();
-
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$spv->supervisor_id)->first();
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
-
                 $ticket->history = $ticketHistory;
                 
                 foreach ($ticketHistory as $spv) {
@@ -99,7 +94,6 @@ class TicketController extends BaseController
                     $spv['supervisor'] = $spvHistory;
                 }      
             }            
-
 
             return $this->sendResponse($tickets, 'Tickets collected.'); 
 
