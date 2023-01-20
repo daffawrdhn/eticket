@@ -134,13 +134,7 @@ $(document).ready(function () {
                                         icon : 'warning',
                                         confirmButtonText: 'Ok',
                                         title : 'Warning!',
-                                        html : '<ul></ul>',
-                                        didOpen: () => {
-                                            const ul = Swal.getHtmlContainer().querySelector('ul')
-                                            $.each(response.responseJSON.data.error, function (key, value) { 
-                                                 $(ul).append('<li>'+ value +'</li>');
-                                            });
-                                          },
+                                        text : response.responseJSON.data.error,
                                     })
                                 },500)
                                 
