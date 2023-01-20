@@ -40,8 +40,8 @@
                                     <th scope="col">no</th>
                                     <th scope="col">NIk</th>
                                     <th scope="col">Employee Name</th>
-                                    <th scope="col">Supervisor NIK</th>
-                                    <th scope="col">Supervisor Name</th>
+                                    <th scope="col">Approval NIK</th>
+                                    <th scope="col">Approval Name</th>
                                     <th scope="col">Regional</th>
                                     <th scope="col">Jenis Ticket</th>
                                     <th scope="col">Sub Feature</th>
