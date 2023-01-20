@@ -312,7 +312,7 @@ $(document).on('click', '#delete-approval', function(e){
                                     icon : 'warning',
                                     confirmButtonText: 'Ok',
                                     title : 'Warning!',
-                                    text : 'This data already has a relationship with the sub feature',
+                                    text : 'This data already has a relationship with the ticket table',
                                 })
                             }else{
 
