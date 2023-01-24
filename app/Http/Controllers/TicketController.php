@@ -184,7 +184,7 @@ class TicketController extends BaseController
         try
         {
             $auth = Auth::user();
-            $id = Regional::whereRaw("LOWER(regional_name) = 'head office' or LOWER(regional_name) = 'head' or LOWER(regional_name) = 'ho'")->value('id');
+            $id = Regional::whereRaw("LOWER(regional_name) like '%head office%' or LOWER(regional_name) like '%head%' or LOWER(regional_name) like '%ho%'")->value('id');
 
             dd($id);
             
