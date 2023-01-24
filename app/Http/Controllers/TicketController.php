@@ -356,10 +356,7 @@ public function updateStatus(Request $request, $ticketId)
                 $statusHistory->status_after = $request->ticket_status_id;
 
                 $ticket->ticket_status_id = $request->ticket_status_id;
-                
                 $ticket->supervisor_id = $request->id;
-                
-
                 $ticket->save();
                 $ticket = Ticket::with('ticketStatus')->find($ticketId);
 
@@ -388,7 +385,11 @@ public function updateStatus(Request $request, $ticketId)
 
                 $statusHistory['supervisor'] = Employee::where('employee_id',$auth->supervisor_id)->first();
 
-                return $this->sendResponse($statusHistory, 'Ticket Status Updated!');
+                if ($ticket->ticket_status_id == 6){
+                    return $this->sendResponse($statusHistory, 'Ticket Success rejected!');
+                } else {
+                    return $this->sendResponse($statusHistory, 'Ticket Status Updated!');
+                }
 
             }
         } catch (Exception $error) {
