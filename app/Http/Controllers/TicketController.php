@@ -278,11 +278,15 @@ class TicketController extends BaseController
                 $image->move(public_path('storage/'), $filename);
             
                 $thumbnail = Image::make(public_path('storage/' . $filename));
-            
+                if($thumbnail->width() >1280 or $thumbnail->height()>1280){
+                  $thumbnail->resize(1280, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                  });
+                }
                 $thumbnail->save(public_path('storage/' . $filename));
             } else {
                 $filename = '';
-            }
+            }            
 
             $ticket = [
                 'employee_id' => $employeeId->employee_id,
