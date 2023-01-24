@@ -188,7 +188,8 @@ class TicketController extends BaseController
             
             if ($auth->regional_id == $id) {
 
-                $tickets = Ticket::whereHas('employee', function($query) use ($id){
+                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                ->whereHas('employee', function($query) use ($id){
                     $query->where('regional_id', $id);
                 })
                 ->where('employee_id', '!=', Auth::user()->employee_id)
