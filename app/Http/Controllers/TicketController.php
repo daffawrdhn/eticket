@@ -193,6 +193,8 @@ class TicketController extends BaseController
                     $query->where('regional_id', $id);
                 })
                 ->where('employee_id', '!=', Auth::user()->employee_id)
+                ->whereBetween('ticket_status_id', [1, 4])
+                ->orderBy('created_at', 'desc')
                 ->get();    
 
             } else {
