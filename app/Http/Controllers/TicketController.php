@@ -7,7 +7,6 @@ use App\Models\Employee;
 use App\Models\Feature;
 use App\Models\Helpdesk;
 use App\Models\RegionalPIC;
-use App\Models\Regional;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Exception;
@@ -184,28 +183,12 @@ class TicketController extends BaseController
         try
         {
             $auth = Auth::user();
-            $id = Regional::whereRaw("LOWER(regional_name) like '%head office%' or LOWER(regional_name) like '%head%' or LOWER(regional_name) like '%ho%'")->value('regional_id');
-            
-            if ($auth->regional_id == $id) {
-
-                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
-                ->whereHas('employee', function($query) use ($id){
-                    $query->where('regional_id', $id);
-                })
-                ->where('employee_id', '!=', Auth::user()->employee_id)
-                ->whereBetween('ticket_status_id', [1, 4])
-                ->orderBy('created_at', 'desc')
-                ->get();    
-
-            } else {
 
                 $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
                     ->where('supervisor_id', $auth->employee_id)
                     ->whereBetween('ticket_status_id', [1, 4])
                     ->orderBy('created_at', 'desc')
                     ->get();
-
-            }
 
                 //  dd($tickets->ticket_id);
 
@@ -323,17 +306,6 @@ class TicketController extends BaseController
             
             $this->updateStatus($input, $storeTicket->ticket_id);
             
-            // $regional = Regional::whereRaw("LOWER(regional_name) like '%head%' OR LOWER(regional_name) like '%ho%'")->first();
-            // $id = $regional->id;
-
-            // if ($employeeId->regional_id == $id){
-            //     $input = new Request([
-            //         'ticket_status_id' => 3,
-            //         'id' => $request->pic_regional,
-            //     ]);
-                
-            //     $this->updateStatus($input, $storeTicket->ticket_id);
-            // } 
 
             if ($storeTicket instanceof Ticket) {
                 return $this->sendResponse($storeTicket, 'Ticket Created!');
@@ -372,7 +344,10 @@ public function updateStatus(Request $request, $ticketId)
                 $statusHistory->status_after = $request->ticket_status_id;
 
                 $ticket->ticket_status_id = $request->ticket_status_id;
+                
                 $ticket->supervisor_id = $request->id;
+                
+
                 $ticket->save();
                 $ticket = Ticket::with('ticketStatus')->find($ticketId);
 
