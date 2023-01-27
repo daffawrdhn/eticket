@@ -108,7 +108,7 @@ class EmployeeController extends BaseController
             $input['api_token'] = null;
             $user = Employee::create($input);
 
-            Mail::to($request->employee_email)->send(new SendMail($testMailData));
+            // Mail::to($request->employee_email)->send(new SendMail($testMailData));
 
             // if (Mail::failures()) {
             //     return $this->sendError('Error Mail', ['error' => Mail::failures()]);
