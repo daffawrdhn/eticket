@@ -29,6 +29,7 @@
     <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <script src="{{ asset('style/js/jquery.table2excel.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('style/js/chart.min.js') }}"></script>
     {{-- <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js%22"></script> --}}
     <script src="{{ asset('style/js/popper.js') }}"></script>
