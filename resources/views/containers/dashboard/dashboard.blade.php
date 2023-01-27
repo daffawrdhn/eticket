@@ -88,7 +88,6 @@
             </main>
         </div>
     </div>
-    <script src="{{ asset('style/js/chart.min.js') }}"></script>
     <script src="{{ asset('action/chart/chart_demo.js') }}"></script>
     
 @endsection
