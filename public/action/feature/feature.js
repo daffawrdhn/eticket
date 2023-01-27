@@ -107,42 +107,16 @@ $(document).ready(function () {
                         $("#staticBackdrop").modal('hide');
                         setTimeout(()=>{
                                     
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                willClose: () => {
-                                    table.draw()
-                                }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    
-                                    table.draw()
-                                    
-                
-                                }
-                            })
+                            modalSuccess(response.message, table)
+
                         },1000)
                         
                     },
                     error:function(response){
                         if (!response.success) {
+                            console.log(response.responseJSON.data.error);
                             setTimeout(() => {
-                                $("#loading").modal('hide');
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    html : '<ul></ul>',
-                                    didOpen: () => {
-                                        const ul = Swal.getHtmlContainer().querySelector('ul')
-                                        $.each(response.responseJSON.data.error, function (key, value) { 
-                                             $(ul).append('<li>'+ value +'</li>');
-                                        });
-                                      },
-                                })
+                                modalError(response.responseJSON.data.error.feature_name)
                             },500)
                             
                         }
@@ -183,37 +157,15 @@ $(document).ready(function () {
                         $("#staticBackdrop").modal('hide');
                         setTimeout(()=>{
                                     
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                willClose: () => {
-                                    table.draw()
-                                }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    
-                                    table.draw()
-                                    
-                
-                                }
-                            })
+                            modalSuccess(response.message, table)
+
                         },1000)
                         
                     },
                     error:function(response){
                         if (!response.success) {
     
-                            Swal.fire({
-                                icon : 'warning',
-                                confirmButtonText: 'Ok',
-                                title : 'Warning!',
-                                text : response.responseJSON.data.error,
-                                
-                                
-                            })
+                            modalError(response.responseJSON.data.error)
                             
                         }
                     }
@@ -254,34 +206,13 @@ $(document).ready(function () {
                         
                         setTimeout(()=>{
                                     
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Deleted!',
-                                text : 'Your file has been deleted.',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                willClose: () => {
-                                    table.draw()
-                                }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    
-                                    table.draw()
-                                    
-                
-                                }
-                            })
+                            modalSuccess(response.message, table)
+                            
                         },1000)
         
                     },error:function(response){
                         if (!response.success) {
-                            Swal.fire({ 
-                                icon : 'warning',
-                                confirmButtonText: 'Ok',
-                                title : 'Warning!',
-                                text : response.responseJSON.data.error,
-                            })
+                            modalError(response.responseJSON.data.error)
                         }
                     }
                 });

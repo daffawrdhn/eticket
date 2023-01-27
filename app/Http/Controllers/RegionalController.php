@@ -8,6 +8,7 @@ use App\Models\Regional;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class RegionalController extends BaseController
 {
@@ -43,11 +44,11 @@ class RegionalController extends BaseController
             try {
 
                 $validator = Validator::make($request->all(),[
-                    'regional_name' => 'required'
+                    'regional_name' => 'required|unique:regional_tbl,regional_name'
                 ]);
         
                 if ($validator->fails()) {
-                    return $this->sendError('Error validation', ['error' => $validator->errors()]);
+                    return $this->sendError('Error validation', ['error' => $validator->errors()->all()]);
                 }else{
 
                     $regional['regional_name'] = $request->regional_name;
@@ -255,5 +256,38 @@ class RegionalController extends BaseController
 
         
         
+    }
+
+    public function dataTableRegional(Request $request){
+        try {
+            
+            $datas = Regional::all();
+            
+            $regionals = [];
+            $no =1;
+            foreach($datas as $d){
+                $data = $d;
+                
+                $data['no'] = $no;
+                $data['regional_name'] = $d->regional_name;
+
+                $regionals[] = $data;
+                $no++;
+            }
+            if ($request->ajax()) {
+                $customers = $regionals;
+                return DataTables::of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                            <button id="edit-regional" value="'. $row->regional_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-regional" value="'. $row->regional_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                        ';
+                        return $action;
+                    })->toJson();
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 }

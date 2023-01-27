@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\DeptheadController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
@@ -34,6 +35,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('update-organization/{id}', [OrganizationController::class, 'update'])->name('auth.updateOrganization');
     Route::delete('delete-organization/{id}', [OrganizationController::class, 'destroy'])->name('auth.deleteOrganization');
     Route::delete('delete-all-organization', [OrganizationController::class, 'destroyAll'])->name('auth.deleteAllOrganization');
+    Route::get('get-organization-datatable', [OrganizationController::class, 'dataTableOrganization'])->name('auth.dataTableOrganization');
     Route::get('get-organization', [OrganizationController::class, 'getOrganization'])->name('auth.getOrganization');
     Route::get('get-organization/{id}', [OrganizationController::class, 'show'])->name('auth.getOrganizationById');
 
@@ -42,6 +44,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('update-regional/{id}', [RegionalController::class, 'update'])->name('auth.updateRegional');
     Route::delete('delete-regional/{id}', [RegionalController::class, 'destroy'])->name('auth.deleteRegional');
     Route::delete('delete-all-regional', [RegionalController::class, 'destroyAll'])->name('auth.deleteAllRegional');
+    Route::get('get-regional-datatable', [RegionalController::class, 'dataTableRegional'])->name('auth.dataTableRegional');
     Route::get('get-regional', [RegionalController::class, 'getRegional'])->name('auth.getRegional');
     Route::get('get-regional/{id}', [RegionalController::class, 'show'])->name('auth.getRegionalById');
 
@@ -51,6 +54,7 @@ Route::middleware('auth:api')->group( function () {
     Route::delete('delete-role/{id}', [RoleController::class, 'destroy'])->name('auth.deleteRole');
     Route::delete('delete-all-role', [RoleController::class, 'destroyAll'])->name('auth.deleteAllRole');
     Route::get('get-role', [RoleController::class, 'getRole'])->name('auth.getRole');
+    Route::get('get-role-datatable', [RoleController::class, 'dataTableRole'])->name('auth.dataTableRole');
     Route::get('get-role/{id}', [RoleController::class, 'show'])->name('auth.getRoleById');
     
     //feature
@@ -139,7 +143,11 @@ Route::middleware('auth:api')->group( function () {
     // ////report
     Route::get('get-report-regional/{id}', [ReportRegionalController::class, 'getReport'])->name('auth.getReport');
     Route::get('get-report-summary', [ReportSummaryController::class, 'getDataSumary'])->name('auth.getDataSumary');
-
+    
+    //chart
+    Route::get('get-pie-chart', [ChartController::class,'pieChart'])->name('auth.pieChart');
+    Route::get('get-bar-chart', [ChartController::class,'barChart'])->name('auth.barChart');
+    Route::get('get-sumary-dashboard', [ReportSummaryController::class, 'sumaryDashboard'])->name('auth.dashboardSumary');
 
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 

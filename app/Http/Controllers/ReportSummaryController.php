@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Constraint\Count;
 use Yajra\DataTables\Facades\DataTables;
 
 class ReportSummaryController extends BaseController
@@ -73,6 +74,36 @@ class ReportSummaryController extends BaseController
                 $costumers = $datas;
                 return DataTables::of($costumers)->toJson();
             }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
+    }
+
+
+    public function sumaryDashboard(){
+        try {
+                $tickets = Ticket::all();
+                $open = 0;
+                $reject = 0;
+                $approve = 0;
+                foreach($tickets as $ticket){
+                    if ($ticket->ticket_status_id == 5) {
+                        $approve += 1;
+                    }else if ($ticket->ticket_status_id == 6) {
+                        $reject += 1;
+                    }else{
+                        $open += 1;
+                     } 
+                }
+                
+
+            $datas['approve'] = $approve;
+            $datas['reject'] = $reject;
+            $datas['open'] = $open;
+            $datas['total_ticket'] = Count(Ticket::all());
+
+            return $this->sendResponse($datas, 'success');
 
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);

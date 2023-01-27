@@ -264,4 +264,6 @@ class RegionalPicController extends BaseController
             return $this->sendError('Error validation', ['error' => $error]);
         }
     }
+
+    
 }

@@ -135,23 +135,7 @@ $(document).ready(function () {
 
                             setTimeout(()=>{
                                     
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    willClose: () => {
-                                        table.draw()
-                                    }
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        
-                                        table.draw()
-                                        
-                    
-                                    }
-                                })
+                                modalSuccess(response.message, table)
                             },1000)
                             
                         },
@@ -159,24 +143,10 @@ $(document).ready(function () {
                             if (!response.success) {
                                 
                                 if (response.responseJSON.data.error.sub_feature_name !== null) {
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error.sub_feature_name,
-                                        
-                                    })
+                                    var text = response.responseJSON.data.error.sub_feature_name
+                                    modalError(text)
                                 }else{
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                        
-                                        
-                                    })
-
-                                    
+                                    modalError(response.responseJSON.data.error)
                                 }
                                 
                             }
@@ -261,38 +231,14 @@ $(document).on('click', '.update-sub-feature', function(e){
                 $("#staticBackdrop").modal('hide');
                 setTimeout(()=>{
                                         
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        willClose: () => {
-                            table.draw()
-                        }
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            
-                            table.draw()
-                            
-        
-                        }
-                    })
+                    modalSuccess(response.message, table)
+
                 },1000)
                 
             },
             error:function(response){
                 if (!response.success) {
-    
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : response.responseJSON.data.error,
-                            
-                            
-                        })
-                    
+                    modalError(response.responseJSON.data.error)
                 }
             }
         })
