@@ -21,10 +21,28 @@ class ReportRegionalController extends BaseController
     public function getReport(Request $request, $id){
         try {
             if ($id == 0) {
-                $datas = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+
+                if ($request->regional_id == 0) {
+                    # code...
+                    $datas = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+                }else{
+                    $employees = Employee::where('regional_id', $request->regional_id)->get();
+                
+                    $datas = [];
+                    foreach($employees as $employee):
+                        $ticket = Ticket::where('employee_id', $employee->employee_id)
+                            ->whereBetween('created_at', [$request->start_date, $request->end_date])        
+                            ->with('feature', 'subFeature', 'ticketStatus')    
+                            ->get();
+
+                        foreach ($ticket as $t) {
+                            $datas[] = $t;
+                        }
+                    endforeach;
+                }
             }else{
                 $employees = Employee::where('regional_id', $id)->get();
-                // return $this->sendResponse($employees, 'succes');
+                
                 $datas = [];
                 foreach($employees as $employee):
                     $ticket = Ticket::where('employee_id', $employee->employee_id)
@@ -37,7 +55,7 @@ class ReportRegionalController extends BaseController
                 endforeach;
             }
 
-            
+            // return $this->sendResponse($datas, 'success');
             $tickets = [];
             $no =1;
             foreach($datas as $d){

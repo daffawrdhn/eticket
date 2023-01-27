@@ -27,6 +27,9 @@
                                     <div class="col-4">
                                         <button class="btn btn-primary" id="select-all">all data</button>
                                     </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-light border" data-bs-toggle="modal" data-bs-target="#search">Search<i class="bi bi-search"></i></button>
+                                    </div>
                                 </div>
                                 <div>
                                     <button type="button" id="btnExport" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
@@ -62,7 +65,56 @@
             </main>
         </div>
     </div>
-   
+
+    <div class="modal fade" id="search" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Searc Report</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" id="alert" role="alert">
+                    please fill out this field
+                </div>
+                <div class="spinner-border container-fluid text-center" id="isLoading" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div id="select-regional" class="form-group border-danger">
+                    <label class="label-form" for="employee_id">Select Regional</label>
+                    <select class="" style="width: 100%" id="regional-select" name="regional_id" aria-label="Default select example"></select>
+                    <div id="regional_idFeedback" class="invalid-feedback"></div>
+                </div>
+                <div class="form-group mt-4 pb-2 date">
+                    <label class="label-form" for="start_date">Start Date</label>
+                    <input type="date"
+                    class="form-control date" 
+                    id="start-date" 
+                    name="start_date" 
+                    autocomplete="off"
+                    required>
+                    <div id="start-dateFeedback" class="invalid-feedback"></div>
+                </div>
+                <div class="form-group mt-4 pb-2 date">
+                    <label class="label-form" for="end_date">End Date</label>
+                    <input type="date"
+                    class="form-control date" 
+                    id="end-date" 
+                    name="end_date" 
+                    min=""
+                    autocomplete="off"
+                    required>
+                    <div id="end-dateFeedback" class="invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="searchReport">search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <script src="{{ asset('action/report/report_regional.js') }}"></script>
 @endsection
 
