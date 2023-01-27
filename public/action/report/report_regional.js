@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     setInterval(()=>{
         table.draw()
-    },15000)
+    },300000)
 
     $('#select-regional').on('select2:select', function (e) {
         var data = e.params.data.id;
@@ -35,6 +35,11 @@ $(document).ready(function () {
         autoWidth : false,
         processing: true,
         serverSide: true,
+        format: {
+            text: {
+                dataType: "text"
+            }
+        },
         ajax: { 
             url: APP_URL + "api/get-report-regional/0",
             type: "GET",

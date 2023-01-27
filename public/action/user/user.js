@@ -148,29 +148,14 @@ $(document).ready(function () {
                         $("#modalAddUser").modal('hide');
         
                         setTimeout(()=>{
-                            $("#loading").modal('hide') 
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                willClose: () => {
-                                    table.draw()
-                                }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    
-                                    table.draw()
-                                    
-                
-                                }
-                            })
+                            $("#loading").modal('hide')
+                            modalSuccess(response.message, table)
                         },1000)
                         
                     },
                     error:function(response){
                         if (!response.success) {
+                            console.log(response.responseJSON.data.error);
                             setTimeout(() => {
                                 $("#loading").modal('hide');
                                 Swal.fire({
@@ -246,21 +231,7 @@ $(document).ready(function () {
                     $("#modalAddUser").modal('hide');
                     setTimeout(()=>{
                         $("#loading").modal('hide') 
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                                willClose: () => {
-                                    table.draw()
-                                }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    
-                                    table.draw()
-                                }
-                            })
+                            modalSuccess(response.message, table)
                         
                     },1000)
                     
@@ -330,13 +301,7 @@ $(document).ready(function () {
                         $("#modalAddUser").modal('hide');
                         setTimeout(() => { 
                             $("#loading").modal('hide') 
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000
-                            })
+                            modalSuccess(response.message, table)
                          },1000)
                     },
                     error:function(response){
@@ -344,13 +309,7 @@ $(document).ready(function () {
             
                             setTimeout(() => { 
                                 $("#loading").modal('hide');
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : response.responseJSON.data.error,
-                                    
-                                })
+                                modalError(response.responseJSON.data.error)
                                 
                              },1000)
                             
@@ -394,8 +353,7 @@ $(document).ready(function () {
                     dataType: "json",
                     beforeSend: function(xhr, settings) { 
                         xhr.setRequestHeader('Authorization','Bearer ' + token );
-                        $("#loading").modal('show') 
-                        console.log('ok');
+                        $("#loading").modal('show')
                     },
                     success: function(response){
                     
@@ -403,50 +361,22 @@ $(document).ready(function () {
 
                                 $("#loading").modal('hide') 
 
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    willClose: () => {
-                                        table.draw()
-                                    }
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        
-                                        table.draw()
-                                    }
-                                })
+                                modalSuccess(response.message, table)
                             },1000)
                         
                     },error:function(response){
                         if (!response.success) {
-
-                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
+                                if (response.responseJSON.data.error.errorInfo[1]  == null) {
                                     setTimeout(() =>{
                                         $("#loading").modal('hide') 
-                                        Swal.fire({
-                                            icon : 'warning',
-                                            confirmButtonText: 'Ok',
-                                            title : 'Warning!',
-                                            text : 'This data already has a relationship with Another Table',
-                                        })
-                                    
+                                        modalError(response.responseJSON.data.error)
+                                        
                                     },1000)
                                 }else{
                                     setTimeout(() =>{
                                         $("#loading").modal('hide') 
-
-                                        Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                            
-                                            
-                                        })
-                                    
+                                        var text = 'This data already has a relationship with Another Table'
+                                        modalError(text)
                                     },1000)
                                 }
                             
@@ -502,21 +432,7 @@ $(document).ready(function () {
                             
                             setTimeout(()=>{
                                 $("#loading").modal('hide') 
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    willClose: () => {
-                                        table.draw()
-                                    }
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        
-                                        table.draw()
-                                    }
-                                })
+                                modalSuccess(response.message, table)
                             },1000)
             
                         }
@@ -620,21 +536,7 @@ $(document).ready(function () {
 
                     setTimeout(()=>{
                         $("#loading").modal('hide') 
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.message,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            willClose: () => {
-                                table.draw()
-                            }
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                
-                                table.draw()
-                            }
-                        })
+                        modalSuccess(response.message, table)
                     },1000)
                     
                 },
@@ -642,12 +544,7 @@ $(document).ready(function () {
                     if (!response.success) {
                         setTimeout(()=>{
                             $("#loading").modal('hide') 
-                            Swal.fire({
-                                icon : 'warning',
-                                confirmButtonText: 'Ok',
-                                title : 'Warning!',
-                                text : response.responseJSON.data.error
-                            })
+                            modalError(response.responseJSON.data.error)
                         },1000)
                         
                     }

@@ -37,18 +37,18 @@
                             <table class="table" id="regionalTable">
                                 <thead>
                                     <tr>
-                                    <th scope="col">no</th>
-                                    <th scope="col">NIk</th>
-                                    <th scope="col">Employee Name</th>
-                                    <th scope="col">Approval NIK</th>
-                                    <th scope="col">Approval Name</th>
-                                    <th scope="col">Regional</th>
-                                    <th scope="col">Jenis Ticket</th>
-                                    <th scope="col">Sub Feature</th>
-                                    <th scope="col">Ticket Title</th>
-                                    <th scope="col">Ticket Description</th>
-                                    <th scope="col">Ticket Status</th>
-                                    <th scope="col">Date</th>
+                                    <th scope="col" data-type="text">no</th>
+                                    <th scope="col" data-type="text">NIk</th>
+                                    <th scope="col" data-type="text">Employee Name</th>
+                                    <th scope="col" data-type="text">Approval NIK</th>
+                                    <th scope="col" data-type="text">Approval Name</th>
+                                    <th scope="col" data-type="text">Regional</th>
+                                    <th scope="col" data-type="text">Jenis Ticket</th>
+                                    <th scope="col" data-type="text">Sub Feature</th>
+                                    <th scope="col" data-type="text">Ticket Title</th>
+                                    <th scope="col" data-type="text">Ticket Description</th>
+                                    <th scope="col" data-type="text">Ticket Status</th>
+                                    <th scope="col" data-type="text">Date</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="table-regional">

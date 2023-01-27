@@ -8,6 +8,7 @@ use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrganizationController extends BaseController
 {
@@ -42,11 +43,11 @@ class OrganizationController extends BaseController
         try {
 
             $validator = Validator::make($request->all(),[
-                'organization_name' => 'required'
+                'organization_name' => 'required|unique:organization_tbl,organization_name'
             ]);
     
             if ($validator->fails()) {
-                return $this->sendError('Error validation', ['error' => $validator->errors()]);
+                return $this->sendError('Error validation', ['error' => $validator->errors()->all()]);
             }else{
 
                 $organization['organization_name'] = $request->organization_name;
@@ -219,5 +220,38 @@ class OrganizationController extends BaseController
         }
 
         
+    }
+
+    public function dataTableOrganization(Request $request){
+        try {
+            
+            $datas = Organization::all();
+            
+            $organizations = [];
+            $no =1;
+            foreach($datas as $d){
+                $data = $d;
+                
+                $data['no'] = $no;
+                $data['organization_name'] = $d->organization_name;
+
+                $organizations[] = $data;
+                $no++;
+            }
+            if ($request->ajax()) {
+                $customers = $organizations;
+                return DataTables::of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                            <button id="edit-organization" value="'. $row->organization_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-organization" value="'. $row->organization_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                        ';
+                        return $action;
+                    })->toJson();
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 }

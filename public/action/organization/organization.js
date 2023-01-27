@@ -1,58 +1,32 @@
 $(document).ready(function () {
 
    
-    getDataOrganization();
-    
-        
-    
-
-    //getdata
-    function getDataOrganization()
-    {
-        var token = $('#token').val()
-        $.ajax({
-            url : APP_URL + "api/get-organization",
-            type : 'GET',
-            dataType : 'json',
+    var token = $('#token').val()
+    var table = $('#organizationTable').DataTable({
+        responsive: true,
+        autoWidth : false,
+        processing: true,
+        serverSide: true,
+        ajax: { 
+            url: APP_URL + "api/get-organization-datatable",
+            type: "GET",
+            dataType: 'json',
             beforeSend: function(xhr, settings) { 
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
             },
-            success : function(response){
-
-                    $('#table-organization').html('');
-                    no = 1;
-                    $(response.data).each(function(key, values){
-
-                        $('#table-organization').append(`<tr>
-                            
-                            <td>`+ no++ +`</td>
-                            <td id="organization-list">`+values.organization_name+`</td>
-                            <td>
-                            <button type="button" id="edit-organization" class="btn btn-sm btn-success" value="`+ values.organization_id +`" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                                <button type="button" id="delete-organization" class="btn btn-danger btn-sm" value="`+ values.organization_id +`">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    })
-                
-
+        },
+        columns: [
+            {data: 'no', name: 'no'},
+            {data: 'organization_name', name: 'organization_name'},
+            {
+                data: 'action', 
+                name: 'action', 
+                orderable: true, 
+                searchable: true,
             },
-            error:function(response){
-                if (!response.success) {
-                        // $('#alert').show();
-                        // $('#alert').html(response.responseJSON.data.error);
-
-
-                        console.log(response.responseJSON.data.error);
-                    
-                }
-            }
-
-        });
-    }
+            
+        ]   
+    });
 
     // get organization by id
     $(document).on('click', '#edit-organization', function(e){
@@ -128,34 +102,14 @@ $(document).ready(function () {
                 success : function(response){
 
                     $("#staticBackdrop").modal('hide');
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-
-                            $('#organization_name').val('')
-                            getDataOrganization();
-
-                        }
-                      })
+                    modalSuccess(response.message, table)
                     
                 },
                 error:function(response){
                     if (!response.success) {
-                            
+                        modalError(response.responseJSON.data.error)
 
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : "please fill out this field",
-                            
-                            
-                        })
+                        
                     }
                 }
             })
@@ -191,32 +145,12 @@ $(document).ready(function () {
                 success : function(response){
     
                     $("#staticBackdrop").modal('hide');
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-    
-                            $('#organization_name').val('')
-                            getDataOrganization();
-    
-                        }
-                        })
+                    modalSuccess(response.message, table)
                     
                 },
                 error:function(response){
                     if (!response.success) {
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : "please fill out this field",
-                            
-                            
-                        })
+                        modalError(response.responseJSON.data.error)
                         
                     }
                 }
@@ -255,40 +189,17 @@ $(document).ready(function () {
                     },
                     success: function(response){
                         
-                            Swal.fire({
-                                icon : 'success',
-                                confirmButtonText: 'Ok',
-                                title : 'Deleted!',
-                                text : 'Your file has been deleted.',
-                                
-                                
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    getDataOrganization();
-                                } 
-                            })
+                        modalSuccess(response.message, table)
         
                     },error:function(response){
                         if (!response.success) {
-                                console.log(response.responseJSON.data.error);
 
                                 if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : 'This data already has a relationship with the user',
-                                    })
+                                    var text = 'This data already has a relationship with the user'
+                                    modalError(text)
                                 }else{
 
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                        
-                                        
-                                    })
+                                    modalError(response.responseJSON.data.error)
                                 }
                             
                             

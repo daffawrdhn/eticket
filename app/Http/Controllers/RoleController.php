@@ -7,6 +7,9 @@ use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends BaseController
 {
@@ -218,5 +221,38 @@ class RoleController extends BaseController
         }
 
         
+    }
+
+    public function dataTableRole(Request $request){
+        try {
+            
+            $datas = Role::all();
+            
+            $roles = [];
+            $no =1;
+            foreach($datas as $d){
+                $data = $d;
+                
+                $data['no'] = $no;
+                $data['role_name'] = $d->role_name;
+
+                $roles[] = $data;
+                $no++;
+            }
+            if ($request->ajax()) {
+                $customers = $roles;
+                return DataTables::of($customers)
+                    ->addColumn('action', function ($row) {
+                        $action = '
+                            <button id="edit-role" value="'. $row->role_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
+                            <button id="delete-role" value="'. $row->role_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                        ';
+                        return $action;
+                    })->toJson();
+            }
+
+        } catch (Exception $error) {
+            return $this->sendError('Error validation', ['error' => $error]);
+        }
     }
 }

@@ -50,7 +50,8 @@ return [
         ],
 
         'mailgun' => [
-            'transport' => 'mailgun',
+            'domain' => env('sandbox783c20caab3d476bb94d54ccd9e3fe5f.mailgun.org'),
+            'secret' => env('94aa491c3d43e5197e0c48e3e9d55b32-c9746cf8-e29a74ae'),
         ],
 
         'postmark' => [

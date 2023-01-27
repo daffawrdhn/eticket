@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
     
-    
 
     //getdata
     var token = $('#token').val()

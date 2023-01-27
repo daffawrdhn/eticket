@@ -89,7 +89,7 @@ class EmployeeController extends BaseController
     
             // generate Password
     
-            $password = 'Admin123!';
+            $password = $this->randomPassword(8);
     
             // send mail
     
@@ -107,7 +107,12 @@ class EmployeeController extends BaseController
             $input['device_id'] = null; 
             $input['api_token'] = null;
             $user = Employee::create($input);
-            
+
+            // Mail::to($request->employee_email)->send(new SendMail($testMailData));
+
+            // if (Mail::failures()) {
+            //     return $this->sendError('Error Mail', ['error' => Mail::failures()]);
+            // }
             // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
             $inputPassword['password'] = bcrypt($password);
@@ -117,7 +122,7 @@ class EmployeeController extends BaseController
                 $password = Password::create($inputPassword);
     
                 if ($password) {
-                    // Mail::to($request->employee_email)->send(new SendMail($testMailData));
+                    
                     $token = $user->createToken('MyAuthApp')->plainTextToken;
                     Employee::where('employee_id', $user->employee_id)
                     ->update(
@@ -139,7 +144,7 @@ class EmployeeController extends BaseController
             return $this->sendResponse($success, 'User created successfully.');
 
         } catch (Exception $error) {
-            return $this->sendError('Error validation', ['error' => $error]);
+            return $this->sendError('Error', ['error' => $error]);
         }
 
         
@@ -428,13 +433,14 @@ class EmployeeController extends BaseController
             $employeeHelpdesk = Helpdesk::where('employee_id', $id)->first();
             $employeeTicket = Ticket::where('employee_id', $id)->first();
 
-            if ($employeeRegionalPic != null || $employeeHelpdesk != null || $employeeTicket != null) {
+            if ($employeeRegionalPic == null || $employeeHelpdesk == null || $employeeTicket == null) {
                 
                 $delete = Employee::where('employee_id', $id)->delete();
-                $deletePassword = Password::where('employee_id', $id)->delete();
+                
     
     
                 if ($delete) {
+                    $deletePassword = Password::where('employee_id', $id)->delete();
                     return $this->sendResponse($delete, 'success delete data');
                 }else{
                     return $this->sendError('Error validation', ['error' => $delete]);

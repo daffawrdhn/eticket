@@ -1,58 +1,32 @@
 $(document).ready(function () {
 
    
-    getDataRegional();
-    
-        
-    
-
-    //getdata
-    function getDataRegional()
-    {
-        var token = $('#token').val()
-        $.ajax({
-            url : APP_URL + "api/get-regional",
-            type : 'GET',
-            dataType : 'json',
+    var token = $('#token').val()
+    var table = $('#regionalTable').DataTable({
+        responsive: true,
+        autoWidth : false,
+        processing: true,
+        serverSide: true,
+        ajax: { 
+            url: APP_URL + "api/get-regional-datatable",
+            type: "GET",
+            dataType: 'json',
             beforeSend: function(xhr, settings) { 
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
             },
-            success : function(response){
-
-                    $('#table-regional').html('');
-                    no = 1;
-                    $(response.data).each(function(key, values){
-
-                        $('#table-regional').append(`<tr>
-                            
-                            <td>`+ no++ +`</td>
-                            <td id="regional-list">`+values.regional_name+`</td>
-                            <td>
-                            <button type="button" id="edit-regional" class="btn btn-sm btn-success" value="`+ values.regional_id +`" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                                <button type="button" id="delete-regional" class="btn btn-danger btn-sm" value="`+ values.regional_id +`">
-                                    <i class="bi bi-trash-fill"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    })
-                
-
+        },
+        columns: [
+            {data: 'no', name: 'no'},
+            {data: 'regional_name', name: 'regional_name'},
+            {
+                data: 'action', 
+                name: 'action', 
+                orderable: true, 
+                searchable: true,
             },
-            error:function(response){
-                if (!response.success) {
-                        // $('#alert').show();
-                        // $('#alert').html(response.responseJSON.data.error);
-
-
-                        console.log(response.responseJSON.data.error);
-                    
-                }
-            }
-
-        });
-    }
+            
+        ]   
+    });
 
     // get regional by id
     $(document).on('click', '#edit-regional', function(e){
@@ -129,32 +103,12 @@ $(document).ready(function () {
                 success : function(response){
     
                     $("#staticBackdrop").modal('hide');
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-    
-                            $('#regional_name').val('')
-                            getDataRegional();
-    
-                        }
-                        })
+                    modalSuccess(response.message, table)
                     
                 },
                 error:function(response){
                     if (!response.success) {
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : "please fill out this field",
-                            
-                            
-                        })
+                        modalError(response.responseJSON.data.error)
                     }
                 }
             })
@@ -191,32 +145,12 @@ $(document).ready(function () {
                 success : function(response){
     
                     $("#staticBackdrop").modal('hide');
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-    
-                            $('#regional_name').val('')
-                            getDataRegional();
-    
-                        }
-                        })
+                    modalSuccess(response.message, table)
                     
                 },
                 error:function(response){
                     if (!response.success) {
-                        Swal.fire({
-                            icon : 'warning',
-                            confirmButtonText: 'Ok',
-                            title : 'Warning!',
-                            text : "please fill out this field",
-                            
-                            
-                        })
+                        modalError(response.responseJSON.data.error)
                         
                     }
                 }
@@ -255,40 +189,18 @@ $(document).ready(function () {
                     },
                     success: function(response){
                         
-                            Swal.fire({
-                                icon : 'success',
-                                confirmButtonText: 'Ok',
-                                title : 'Deleted!',
-                                text : 'Your file has been deleted.',
-                                
-                                
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    getDataRegional();
-                                } 
-                            })
+                            modalSuccess(response.message)
         
                     },error:function(response){
                         if (!response.success) {
                                 console.log(response.responseJSON.data.error);
 
                                 if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : 'This data already has a relationship with the user',
-                                    })
+                                    var text = 'This data already has a relationship with the user'
+                                    modalError(text)
                                 }else{
 
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                        
-                                        
-                                    })
+                                    modalError(response.responseJSON.data.error)
                                 }
                             
                             
