@@ -62,9 +62,9 @@ class ReportRegionalController extends BaseController
                 $getEmployee = Employee::with('regional')->where('employee_id', $d->employee_id)->first();
                 $getSupervisor = Employee::where('employee_id', $d->supervisor_id)->first();
                 $data['no'] = $no;
-                $data['employee_id'] = $d->employee_id;
+                $data['employee_id'] = "'".$d->employee_id;
                 $data['employee_name'] = $getEmployee->employee_name;
-                $data['supervisor_id'] = $d->supervisor_id;
+                $data['supervisor_id'] = "'".$d->supervisor_id;
                 $data['supervisor_name'] = $getSupervisor->employee_name;
                 $data['regional'] = $getEmployee->regional->regional_name;
                 $data['jenis_ticket'] = $d->feature['feature_name'];
