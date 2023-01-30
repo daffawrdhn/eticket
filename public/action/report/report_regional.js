@@ -26,11 +26,20 @@ $(document).ready(function () {
 
     $(document).on('click','#btnExport', function (e) {
 
+        var data_type = 'data:application/vnd.ms-excel';
+        var table_div = document.getElementById('regionalTable');
+        var table_html = table_div.outerHTML.replace(/ /g, '%20');
+
+        var a = document.createElement('a');
+        a.href = data_type + ', ' + table_html;
+        a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+        a.click();
+
         // fnExcelReport()
 
-        $("#regionalTable").table2excel({
-            filename: "Table.xls"
-        });
+        // // $("#regionalTable").table2excel({
+        // //     filename: "Table.xls"
+        // // });
 
     });
 
@@ -102,7 +111,7 @@ $(document).ready(function () {
 
         if ( data == null) {
             data = {
-                'regional_id' : 0
+                'regional_id' : 0,
             }
         }
         //getdata
@@ -237,9 +246,9 @@ $(document).ready(function () {
         }
     
         tab_text=tab_text+"</table>";
-        tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-        tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-        tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+        // tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        // tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+        // tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
     
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE "); 

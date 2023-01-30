@@ -31,12 +31,12 @@
                                         <button class="btn btn-light border" data-bs-toggle="modal" data-bs-target="#search">Search<i class="bi bi-search"></i></button>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="tooltipButtonEdit">
                                     <button type="button" id="btnExport" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
+                                    <p class="tooltiptext">Export to Excel</p>
                                     <iframe id="txtArea1" style="display:none"></iframe>
                                 </div>
-                            </div>
-                            <div class="col-md-6" id="export" ></div>    
+                            </div>  
                             <table class="table" id="regionalTable">
                                 <thead>
                                     <tr>
@@ -113,7 +113,7 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
 
     <script src="{{ asset('action/report/report_regional.js') }}"></script>
 @endsection

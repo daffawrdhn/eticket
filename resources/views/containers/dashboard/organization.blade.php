@@ -27,7 +27,10 @@
                                 <tbody class="table-group-divider" id="table-organization"></tbody>
                             </table>
                         </div>
-                        <button class="btn btn-dark rounded-circle shadow fs-4 organizationAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                        <div class="tooltipButtonAdd">
+                            <button class="btn btn-dark rounded-circle shadow fs-4 organizationAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                            <p class="tooltiptext">Add Organization</p>
+                        </div>
                     </div>
                 </div>
             </main>

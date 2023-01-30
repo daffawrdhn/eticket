@@ -273,7 +273,7 @@ class EmployeeController extends BaseController
                             </button>
                             <ul class="dropdown-menu">
                             <li><a class="dropdown-item" id="reset-pass" href="#" data-id="'. $row->employee_id .'">reset Pass</a></li>
-                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
+                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Edit</a></li>
                             <li><a class="dropdown-item" id="delete-user" data-id="'. $row->employee_id .'" href="#">Delete</a></li>
                             </ul>
                         </div>

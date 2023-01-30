@@ -37,7 +37,10 @@
                             </table>
                         </div>
 
-                        <button class="btn btn-dark rounded-circle shadow fs-3 text-center userAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#modalAddUser"><i class="bi bi-plus"></i></button>
+                        <div class="tooltipButtonAdd">
+                            <button class="btn btn-dark rounded-circle shadow fs-3 text-center userAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#modalAddUser"><i class="bi bi-plus"></i></button>
+                            <p class="tooltiptext">Add Users</p>
+                        </div>
                     </div>
                 </div>
             </main>

@@ -28,7 +28,7 @@ $(document).ready(function () {
             data: {
                 labels: response.data.regional,
                 datasets: [{
-                label: "Revenue",
+                label: "Ticket",
                 backgroundColor: "rgba(2,117,216,1)",
                 borderColor: "rgba(2,117,216,1)",
                 data: response.data.total_ticket,
@@ -82,7 +82,7 @@ $(document).ready(function () {
                 labels: response.data.labels,
                 datasets: [{
                 data: response.data.data,
-                backgroundColor: ['#ffc107', '#dc3545', '#28a745'],
+                backgroundColor: ['blue', 'grey', 'yellow', 'orange', 'red', 'green'],
                 }],
             },
             });

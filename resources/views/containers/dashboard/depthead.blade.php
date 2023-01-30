@@ -29,9 +29,11 @@
                                 <tbody class="table-group-divider" id="table-depthead">
                                     
                                 </tbody>
-                                </table>
-
-                            <button class="btn btn-dark rounded-circle shadow fs-4 approvalAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                            </table>
+                            <div class="tooltipButtonAdd">
+                                <button class="btn btn-dark rounded-circle shadow fs-4 approvalAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                                <p class="tooltiptext">Add DeptHead</p>
+                            </div>
                     
                         </div>    
                     </div>
