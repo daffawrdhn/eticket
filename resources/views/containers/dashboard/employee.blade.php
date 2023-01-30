@@ -15,7 +15,13 @@
                     </ol>
 
                     <div class="container-fluid p-4 rounded shadow">
-                        
+                        <div class="d-flex justify-content-end mb-5" style="">
+                            <div class="tooltipButtonEdit" style="width: 50px">
+                                <button type="button" id="btnExport" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
+                                <p class="tooltiptext">Export to Excel</p>
+                                <iframe id="txtArea1" style="display:none"></iframe>
+                            </div>
+                        </div>
                         <div class="container-fluid" id="overflow">
                             <table class="table table-striped table-hover" style="overflow-x: auto" id="employeeTable">
                                 <thead>
@@ -24,6 +30,8 @@
                                         <th scope="col">No.Ktp</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
+                                        <th scope="col">supervisor Id</th>
+                                        <th scope="col">Supervisor Name</th>
                                         <th scope="col">Role</th>
                                         <th scope="col">Organization</th>
                                         <th scope="col">Regional</th>

@@ -246,9 +246,10 @@ class EmployeeController extends BaseController
 
             $dataEmployee = [];
             foreach($datas as $d){
-                
+                $employee = Employee::where('employee_id', $d->supervisor_id)->first();
                 $data = $d;
 
+                $data['supervisor_name'] = $employee->employee_name;
                 $data['role_name'] = $data->role['role_name'];
                 $data['regional_name'] = $data->regional['regional_name'];
                 $data['organization_name'] = $data->organization['organization_name'];

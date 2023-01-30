@@ -18,6 +18,8 @@ $(document).ready(function () {
                     {data: 'employee_ktp', name: 'employee_ktp'},
                     {data: 'employee_name', name: 'employee_name'},
                     {data: 'employee_email', name: 'employee_email'}, 
+                    {data: 'supervisor_id', name: 'supervisor_id'}, 
+                    {data: 'supervisor_name', name: 'supervisor_name'}, 
                     {data: 'role_name', name: 'role_name'}, 
                     {data: 'organization_name', name: 'organization_name'}, 
                     {data: 'regional_name', name: 'regional_name'}, 
