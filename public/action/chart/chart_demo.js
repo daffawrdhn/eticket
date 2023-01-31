@@ -1,6 +1,10 @@
 $(document).ready(function () {
     var token = $('#token').val()
 
+    setInterval(()=>{
+        
+    },1000)
+
     // total ticket
     
     $.ajax({
@@ -64,6 +68,7 @@ $(document).ready(function () {
             }
             });
     }
+    
     var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
     $('#timeBar').html('updated at '+time)
     $('#timePie').html('updated at '+time)
