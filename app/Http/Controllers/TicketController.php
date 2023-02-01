@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Mail;
 
 
 class TicketController extends BaseController
@@ -312,6 +313,13 @@ class TicketController extends BaseController
             
 
             if ($storeTicket instanceof Ticket) {
+
+                Mail::raw('Test email from Laravel and SendGrid', function ($message) {
+                    $au = Auth::user();
+                    $message->to($au->employee_ktp);
+                    $message->subject('Test Email');
+                });
+
                 return $this->sendResponse($storeTicket, 'Ticket Created!');
             } else {
                 return $this->sendError('Error creating ticket', ['error' => $storeTicket]);
