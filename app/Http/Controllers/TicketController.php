@@ -325,11 +325,6 @@ class TicketController extends BaseController
                             'subject' => 'Ticket Created ID:'.$storeTicket->ticket_id,
                             'body' => 'Ticket with ID:'.$storeTicket->ticket_id.' succesfully created, waiting for Approval 1/AP1.'
                           ],
-                          [
-                            'email' => $spvId->employee_email,
-                            'subject' => 'Approval 1/AP1 on ticket ID:'.$storeTicket->ticket_id,
-                            'body' => 'as a Supervisor of Employee ID:'.$employeeId->employee_id.', Ticket with ID:'.$storeTicket->ticket_id.' need to be Approve 1/AP1.'
-                          ]
                         ],
                       ];
                       
