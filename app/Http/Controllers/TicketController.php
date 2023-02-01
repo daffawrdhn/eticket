@@ -315,25 +315,8 @@ class TicketController extends BaseController
 
             if ($storeTicket instanceof Ticket) {
 
-                try {
-                    $spvId = Employee::where('employee_id',$employeeId->supervisor_id)->first();
-                
-                    $params = [
-                        'recipients' => [
-                          [
-                            'email' => $employeeId->employee_email,
-                            'subject' => 'Ticket Created ID:'.$storeTicket->ticket_id,
-                            'body' => 'Ticket with ID:'.$storeTicket->ticket_id.' succesfully created, waiting for Approval 1/AP1.'
-                          ],
-                        ],
-                      ];
-                      
-                    
-                    $this->sendNotifEmail($params);
-                    return $this->sendResponse($storeTicket, 'Ticket Created!');
-                } catch (Exception $e) {
-                    return $this->sendError('Error creating ticket', ['error' => $e->getMessage()]);
-                }
+                return $this->sendResponse($storeTicket, 'Ticket Created!');
+            
             } else {
                 return $this->sendError('Error creating ticket', ['error' => $storeTicket]);
             }
@@ -399,7 +382,8 @@ public function updateStatus(Request $request, $ticketId)
                 }
                 // End of added code
 
-                $statusHistory['supervisor'] = Employee::where('employee_id',$auth->supervisor_id)->first();
+                $sId = Employee::where('employee_id',$ticket->employee_id)->first();
+                $statusHistory['supervisor'] = Employee::where('employee_id',$sId->supervisor_id)->first();
 
                 if ($ticket->ticket_status_id == 6){
 
@@ -420,6 +404,49 @@ public function updateStatus(Request $request, $ticketId)
                           
                         $this->sendNotifEmail($params);
                         return $this->sendResponse($statusHistory, 'Ticket Success rejected!');    
+                    } catch (Exception $e) {
+                        return $this->sendError('Error updating ticket history', ['error' => $e->getMessage()]);
+                    }
+
+                } elseif ($ticket->ticket_status_id == 1){
+                    
+                    try {
+                        $spvId = Employee::where('employee_id',$ticket->supervisor_id)->first();
+                        $eId = Employee::where('employee_id',$ticket->employee_id)->first();
+
+                        $statusNow = TicketStatus::where('ticket_status_id', $statusHistory->status_before)->first();
+                        $statusNext = TicketStatus::where('ticket_status_id', $statusHistory->status_after)->first();
+                    
+                        if ($ticket->ticket_status_id == 5) {
+                            $params = [
+                                'recipients' => [
+                                  [
+                                    'email' => $eId->employee_email,
+                                    'subject' => 'Ticket ID:'.$statusHistory->ticket_id.'Updated -'.$statusNow->ticket_status_name,
+                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Completed',
+                                  ]
+                                ],
+                              ];
+                        } else {
+                            $params = [
+                                'recipients' => [
+                                  [
+                                    'email' => $eId->employee_email,
+                                    'subject' => 'Ticket ID:'.$statusHistory->ticket_id.'Created',
+                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Success created. Current status: '.$statusNow->ticket_status_name.', now is '.$statusNow->ticket_status_next,
+                                  ],
+                                  [
+                                    'email' => $spvId->employee_email,
+                                    'subject' => 'Request approval on ticket ID:'.$statusHistory->ticket_id,
+                                    'body' => 'As a '.$statusNext->ticket_Status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
+                                  ]
+                                ],
+                              ];
+                        }
+        
+                        
+                        $this->sendNotifEmail($params);
+                        return $this->sendResponse($statusHistory, 'Ticket Status Updated!');
                     } catch (Exception $e) {
                         return $this->sendError('Error updating ticket history', ['error' => $e->getMessage()]);
                     }
