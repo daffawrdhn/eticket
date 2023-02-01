@@ -89,14 +89,14 @@ class EmployeeController extends BaseController
     
             // generate Password
     
-            $password = $this->randomPassword(8);
+            $employeePassword = $this->randomPassword(8);
     
             // send mail
     
             $testMailData = [
                 'title' => 'Eticket Mobile Password',
                 'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks',
-                'password' => $password,
+                'password' => $employeePassword,
                 'nik' => $employeeId,
             ];
     
@@ -110,7 +110,7 @@ class EmployeeController extends BaseController
 
             // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
-            $inputPassword['password'] = bcrypt($password);
+            $inputPassword['password'] = bcrypt($employeePassword);
             $inputPassword['non_active_date'] = Carbon::now()->addDays(90);
     
             if ($user) {
@@ -140,7 +140,7 @@ class EmployeeController extends BaseController
                   [
                     'email' => $request->employee_email,
                     'subject' => 'Password Eticket Mobile',
-                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. Nik =>'. $user->employee_id .'Password =>'. $password,
+                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $user->employee_id .'\n Password =>'. $employeePassword,
                 
                   ]
                 ],
