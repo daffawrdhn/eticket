@@ -7,9 +7,10 @@ use App\Models\Regional;
 use App\Models\Ticket;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class ExportSummary implements FromCollection, WithHeadings
+class ExportSummary implements FromCollection, WithHeadings, ShouldAutoSize
 {
     
     private $regionalId;
