@@ -554,8 +554,7 @@ public function updateStatus(Request $request, $ticketId)
           Mail::raw($body, function($message) use ($recipient, $subject) {
             $message->to($recipient['email']);
             $message->subject($subject);
-          })->queue();
+          });
         }
     }
-
 }
