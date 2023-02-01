@@ -408,22 +408,27 @@ public function updateStatus(Request $request, $ticketId)
 
                 if ($ticket->ticket_status_id == 6){
 
-                    $statusNow = TicketStatus::where('ticket_status_id',$ticket->ticket_status_id)->first();
-                    $eId = Employee::where('employee_id',$ticket->employee_id)->first();
+                    try {
+                        $statusNow = TicketStatus::where('ticket_status_id',$ticket->ticket_status_id)->first();
+                        $eId = Employee::where('employee_id',$ticket->employee_id)->first();
+    
+                        $params = [
+                            'recipients' => 
+                            [
+                              [
+                                'email' => $eId->employee_email,
+                                'subject' => 'Ticket ID:'.$statusHistory->ticket_id.', '.$statusNow->ticket_status_name,
+                                'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Rejected',
+                              ]
+                            ],
+                          ];
+                          
+                        $this->sendNotifEmail($params);
+                        return $this->sendResponse($statusHistory, 'Ticket Success rejected!');    
+                    } catch (Exception $e) {
+                        return $this->sendError('Error updating ticket history', ['error' => $e->getMessage()]);
+                    }
 
-                    $params = [
-                        'recipients' => 
-                        [
-                          [
-                            'email' => $eId->employee_email,
-                            'subject' => 'Ticket ID:'.$statusHistory->ticket_id.', '.$statusNow->ticket_status_name,
-                            'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Rejected',
-                          ]
-                        ],
-                      ];
-                      
-                      $this->sendNotifEmail($params);
-                    return $this->sendResponse($statusHistory, 'Ticket Success rejected!');
                 } else {
 
                     try {
