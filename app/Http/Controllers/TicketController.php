@@ -422,7 +422,7 @@ public function updateStatus(Request $request, $ticketId)
                         ],
                       ];
                       
-
+                      $this->sendNotifEmail($params);
                     return $this->sendResponse($statusHistory, 'Ticket Success rejected!');
                 } else {
 
