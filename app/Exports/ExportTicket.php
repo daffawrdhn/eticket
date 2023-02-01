@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\FromCollection as FromCollection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class ExportTicket implements FromCollection, WithHeadings, ShouldAutoSize
 {

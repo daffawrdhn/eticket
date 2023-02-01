@@ -258,9 +258,9 @@ class EmployeeController extends BaseController
                 $employee = Employee::where('employee_id', $d->supervisor_id)->first();
                 $data = $d;
 
-                $data['employee_id'] = "'".$d->employee_id;
-                $data['employee_ktp'] = "'".$d->employee_ktp;
-                $data['supervisor_id'] = "'".$d->supervisor_id;
+                $data['employee_id'] = $d->employee_id;
+                $data['employee_ktp'] = $d->employee_ktp;
+                $data['supervisor_id'] = $d->supervisor_id;
                 $data['supervisor_name'] = $employee->employee_name;
                 $data['role_name'] = $data->role['role_name'];
                 $data['regional_name'] = $data->regional['regional_name'];
