@@ -108,11 +108,6 @@ class EmployeeController extends BaseController
             $input['api_token'] = null;
             $user = Employee::create($input);
 
-            // Mail::to($request->employee_email)->send(new SendMail($testMailData));
-
-            // if (Mail::failures()) {
-            //     return $this->sendError('Error Mail', ['error' => Mail::failures()]);
-            // }
             // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
             $inputPassword['password'] = bcrypt($password);
@@ -139,6 +134,20 @@ class EmployeeController extends BaseController
             $success['employee_name'] =  $user->employee_name;
             $success['employee_email'] =  $user->employee_email;
             $success['token'] =  $token;
+
+            $params = [
+                'recipients' => [
+                  [
+                    'email' => $request->employee_email,
+                    'subject' => 'Password Eticket Mobile',
+                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. Nik =>'. $user->employee_id .'Password =>'. $password,
+                
+                  ]
+                ],
+              ];
+              
+            
+            $this->sendNotifEmail($params);
     
             
             return $this->sendResponse($success, 'User created successfully.');
@@ -616,4 +625,16 @@ class EmployeeController extends BaseController
             return $this->sendError('Error validation', ['error' => $error]);
         }
     }
+
+    function sendNotifEmail(array $params) {
+        foreach ($params['recipients'] as $recipient) {
+          $subject = $recipient['subject'];
+          $body = $recipient['body'];
+      
+          Mail::raw($body, function($message) use ($recipient, $subject) {
+            $message->to($recipient['email']);
+            $message->subject($subject);
+          });
+        }
+      }
 }
