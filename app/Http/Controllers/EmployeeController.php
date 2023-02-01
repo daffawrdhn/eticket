@@ -89,14 +89,14 @@ class EmployeeController extends BaseController
     
             // generate Password
     
-            $password = $this->randomPassword(8);
+            $employeePassword = $this->randomPassword(8);
     
             // send mail
     
             $testMailData = [
                 'title' => 'Eticket Mobile Password',
                 'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks',
-                'password' => $password,
+                'password' => $employeePassword,
                 'nik' => $employeeId,
             ];
     
@@ -110,7 +110,7 @@ class EmployeeController extends BaseController
 
             // $token = $user->createToken('MyAuthApp')->plainTextToken;
             $inputPassword['employee_id'] = $input['employee_id'];
-            $inputPassword['password'] = bcrypt($password);
+            $inputPassword['password'] = bcrypt($employeePassword);
             $inputPassword['non_active_date'] = Carbon::now()->addDays(90);
     
             if ($user) {
@@ -140,7 +140,7 @@ class EmployeeController extends BaseController
                   [
                     'email' => $request->employee_email,
                     'subject' => 'Password Eticket Mobile',
-                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. Nik =>'. $user->employee_id .'Password =>'. $password,
+                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $user->employee_id .'\n Password =>'. $employeePassword,
                 
                   ]
                 ],
@@ -507,44 +507,53 @@ class EmployeeController extends BaseController
 
     public function resetPassword($id){
         try {
-            $password = 'Admin123!';
+            $employeePassword = 'Admin123!';
 
 
             $input['employee_id'] = $id;
-            $input['password'] = bcrypt($password);
+            $input['password'] = bcrypt($employeePassword);
             $input['non_active_date'] = Carbon::now()->addDays(90);
             $inputPassword = Password::create($input);
-
-            $testMailData = [
-                'title' => 'Eticket Mobile Password',
-                'body' => 'This is your password for mobile eticket aplication. Please Change Your Password And Dont Show this mail for another people. thanks',
-                'password' => $password,
-                'nik' => $id,
-            ];
-
+            
             $isMail = Employee::select('employee_email')->where('employee_id', $id)->first(); 
 
-            if ($inputPassword) {
-                Employee::where('employee_id', $id)
-                    ->update(
-                        [
-                            'password_id' => $inputPassword->password_id,
-                        ]
-                    );
+            $params = [
+                'recipients' => [
+                  [
+                    'email' => $isMail,
+                    'subject' => 'Password Eticket Mobile',
+                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $id .'\n Password =>'. $employeePassword,
                 
-                // $sendMail = Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
-
-                // if ($sendMail) {
+                  ]
+                ],
+              ];
+              
+            
+              
+              
+              if ($inputPassword) {
+                  Employee::where('employee_id', $id)
+                  ->update(
+                      [
+                          'password_id' => $inputPassword->password_id,
+                          ]
+                    );
+                    
+                    // $sendMail = Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
+                    
+                    // if ($sendMail) {
                     $lastThreePasswordIds = Password::where('employee_id', $id)
                     ->orderBy('updated_at', 'desc')
                     ->take(3)
                     ->pluck('password_id');
-
-
+                    
+                    
                     if($lastThreePasswordIds){
                         Password::where('employee_id',$id)
                         ->whereNotIn('password_id', $lastThreePasswordIds)
                         ->delete();
+                        
+                        $this->sendNotifEmail($params);
                     }
 
                     return $this->sendResponse('success', 'success reset password');
