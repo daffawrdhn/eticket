@@ -438,12 +438,11 @@ public function updateStatus(Request $request, $ticketId)
                                   [
                                     'email' => $spvId->employee_email,
                                     'subject' => 'Request approval on ticket ID:'.$statusHistory->ticket_id,
-                                    'body' => 'As a '.$statusNext->ticket_Status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
+                                    'body' => 'As a '.$statusNext->ticket_status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
                                   ]
                                 ],
                               ];
                         }
-        
                         
                         $this->sendNotifEmail($params);
                         return $this->sendResponse($statusHistory, 'Ticket Status Updated!');
@@ -555,7 +554,8 @@ public function updateStatus(Request $request, $ticketId)
           Mail::raw($body, function($message) use ($recipient, $subject) {
             $message->to($recipient['email']);
             $message->subject($subject);
-          });
+          })->queue();
         }
-      }
+    }
+
 }
