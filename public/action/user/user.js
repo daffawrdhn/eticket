@@ -18,6 +18,8 @@ $(document).ready(function () {
                     {data: 'employee_ktp', name: 'employee_ktp'},
                     {data: 'employee_name', name: 'employee_name'},
                     {data: 'employee_email', name: 'employee_email'}, 
+                    {data: 'supervisor_id', name: 'supervisor_id'}, 
+                    {data: 'supervisor_name', name: 'supervisor_name'}, 
                     {data: 'role_name', name: 'role_name'}, 
                     {data: 'organization_name', name: 'organization_name'}, 
                     {data: 'regional_name', name: 'regional_name'}, 
@@ -97,6 +99,65 @@ $(document).ready(function () {
         $('#supervisor_id option:selected').remove();
         
     });
+
+    // export
+    $(document).on('click','#btnExport', function (e) {
+
+        var selectRegional = $("#regional_id").val();
+        var regionalId = $("#regional-select").val();
+        var startDate = $("#start-date").val();
+        var endDate = $("#end-date").val();
+        var data
+
+        if (selectRegional == null && regionalId == null) {
+            var isRegionalId = 0;
+        }else if(selectRegional != null && regionalId == null){
+            var isRegionalId = selectRegional;
+        }else if (selectRegional == null && regionalId != null) {
+            var isRegionalId = regionalId;
+        }
+
+        data = {
+            'regionalId' : isRegionalId,
+            'startDate' : startDate,
+            'endDate' : endDate
+        }
+        console.log(data);
+
+        $.ajax({
+            xhrFields: {
+                responseType: 'blob',
+            },
+            type: 'POST',
+            url: APP_URL + 'api/export-report-employee',
+            data: data,
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+            success: function(result, status, xhr) {
+        
+                var disposition = xhr.getResponseHeader('content-disposition');
+                var matches = /"([^"]*)"/.exec(disposition);
+                var filename = (matches != null && matches[1] ? matches[1] : 'employee.xlsx');
+        
+                // The actual download
+                var blob = new Blob([result], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+        
+                document.body.appendChild(link);
+        
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+        
+
+    });
+
 
 
     
@@ -555,5 +616,6 @@ $(document).ready(function () {
         
         
     });
+
 
 });

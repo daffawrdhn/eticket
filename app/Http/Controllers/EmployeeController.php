@@ -160,7 +160,7 @@ class EmployeeController extends BaseController
                             ->limit(5)
                             ->get();
         }else{
-            $number = "/^[1-9][0-9]*$/";
+            $number = "/^[0-9]*$/";
             if (preg_match($number, $request->search)) {
                 $employees = Employee::orderby('employee_name','asc')->where('employee_id', 'ILIKE', "%".$request->search."%")->limit(5)->get();
 
@@ -246,9 +246,13 @@ class EmployeeController extends BaseController
 
             $dataEmployee = [];
             foreach($datas as $d){
-                
+                $employee = Employee::where('employee_id', $d->supervisor_id)->first();
                 $data = $d;
 
+                $data['employee_id'] = "'".$d->employee_id;
+                $data['employee_ktp'] = "'".$d->employee_ktp;
+                $data['supervisor_id'] = "'".$d->supervisor_id;
+                $data['supervisor_name'] = $employee->employee_name;
                 $data['role_name'] = $data->role['role_name'];
                 $data['regional_name'] = $data->regional['regional_name'];
                 $data['organization_name'] = $data->organization['organization_name'];
@@ -273,7 +277,7 @@ class EmployeeController extends BaseController
                             </button>
                             <ul class="dropdown-menu">
                             <li><a class="dropdown-item" id="reset-pass" href="#" data-id="'. $row->employee_id .'">reset Pass</a></li>
-                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Update</a></li>
+                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Edit</a></li>
                             <li><a class="dropdown-item" id="delete-user" data-id="'. $row->employee_id .'" href="#">Delete</a></li>
                             </ul>
                         </div>

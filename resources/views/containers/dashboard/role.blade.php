@@ -30,8 +30,10 @@
                             
                             </table>
                         </div>
-
-                        <button class="btn btn-dark rounded-circle shadow fs-4 roleAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                        <div class="tooltipButtonAdd">
+                            <button class="btn btn-dark rounded-circle shadow fs-4 roleAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                            <p class="tooltiptext">Add Role</p>
+                        </div>
                     </div>
                 </div>
             </main>

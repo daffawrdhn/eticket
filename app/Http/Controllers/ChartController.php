@@ -18,7 +18,10 @@ class ChartController extends BaseController
             $regionals = Regional::all();
            
             $datas = [];
-            $totalApprove = 0;
+            $totalApproved = 0;
+            $totalApprove1 = 0;
+            $totalApprove2 = 0;
+            $totalApprove3 = 0;
             $totalOpen = 0;
             $totalReject = 0;
             $totalTicket = 0;
@@ -31,26 +34,38 @@ class ChartController extends BaseController
                 $tickets = Ticket::whereDate('created_at', Carbon::today())->whereIn('employee_id', $employees)->get();
                 $open = 0;
                 $reject = 0;
-                $approve = 0;
+                $approved = 0;
+                $approve1 = 0;
+                $approve2 = 0;
+                $approve3 = 0;
                 foreach($tickets as $ticket){
                     if ($ticket->ticket_status_id == 5) {
-                        $approve += 1;
+                        $approved += 1;
                     }else if ($ticket->ticket_status_id == 6) {
                         $reject += 1;
-                    }else{
+                    }else if ($ticket->ticket_status_id == 1) {
                         $open += 1;
-                     } 
+                    }else if($ticket->ticket_status_id == 2){
+                        $approve1 += 1;
+                    }else if($ticket->ticket_status_id == 3){
+                        $approve2 += 1;
+                    }else if($ticket->ticket_status_id == 4){
+                        $approve3 += 1;
+                    }  
                 }
                 
-                $totalApprove += $approve;
+                $totalApproved += $approved;
+                $totalApprove1 += $approve1;
+                $totalApprove2 += $approve2;
+                $totalApprove3 += $approve3;
                 $totalOpen += $open;
                 $totalReject += $reject;
                 $totalTicket += $total_ticket->total_ticket;
                 
             }
 
-            $datas['labels'] = ['Process', 'Reject', 'Approve'];
-            $datas['data'] = [$totalOpen, $totalReject, $totalApprove];
+            $datas['labels'] = ['Open', 'Reject', 'Approve 1', 'Approve 2', 'Approve 3', 'Approved'];
+            $datas['data'] = [$totalOpen, $totalReject,$totalApprove1,$totalApprove2,$totalApprove3, $totalApproved];
 
             return $this->sendResponse($datas, 'success');
 

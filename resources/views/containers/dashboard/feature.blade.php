@@ -30,7 +30,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button class="btn btn-dark rounded-circle shadow fs-4 featureAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                        <div class="tooltipButtonAdd">
+                            <button class="btn btn-dark rounded-circle shadow fs-4 featureAdd" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i></button>
+                            <p class="tooltiptext">Add Jenis Ticket</p>
+                        </div>
                     </div>
                 </div>
             </main>

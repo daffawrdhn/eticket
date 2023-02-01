@@ -1,6 +1,10 @@
 $(document).ready(function () {
     var token = $('#token').val()
 
+    setInterval(()=>{
+        
+    },1000)
+
     // total ticket
     
     $.ajax({
@@ -28,7 +32,7 @@ $(document).ready(function () {
             data: {
                 labels: response.data.regional,
                 datasets: [{
-                label: "Revenue",
+                label: "Ticket",
                 backgroundColor: "rgba(2,117,216,1)",
                 borderColor: "rgba(2,117,216,1)",
                 data: response.data.total_ticket,
@@ -64,6 +68,7 @@ $(document).ready(function () {
             }
             });
     }
+    
     var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
     $('#timeBar').html('updated at '+time)
     $('#timePie').html('updated at '+time)
@@ -82,7 +87,7 @@ $(document).ready(function () {
                 labels: response.data.labels,
                 datasets: [{
                 data: response.data.data,
-                backgroundColor: ['#ffc107', '#dc3545', '#28a745'],
+                backgroundColor: ['blue', 'grey', 'yellow', 'orange', 'red', 'green'],
                 }],
             },
             });

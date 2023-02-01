@@ -230,8 +230,16 @@ class SubFeatureController extends BaseController
                 return DataTables::of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
-                            <button id="edit-sub_feature" value="'. $row->sub_feature_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
-                            <button id="delete-sub_feature" value="'. $row->sub_feature_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                            <div class="d-flex">
+                                <div class="tooltipButtonEdit">
+                                    <button id="edit-sub_feature" value="'. $row->sub_feature_id .'"  class="btn btn-sm btn-success me-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pencil-fill"></i></button>
+                                    <p class="tooltiptext">Edit Sub Feature</p>
+                                </div>
+                                <div class="tooltipButtonDelete">
+                                    <button id="delete-sub_feature" value="'. $row->sub_feature_id .'" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></button>
+                                    <p class="tooltiptext">Delete Sub Feature</p>
+                                </div>
+                            </div>
                         ';
                         return $action;
                     })->toJson();
