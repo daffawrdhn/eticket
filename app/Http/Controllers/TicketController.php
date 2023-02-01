@@ -8,6 +8,7 @@ use App\Models\Feature;
 use App\Models\Helpdesk;
 use App\Models\RegionalPIC;
 use App\Models\Ticket;
+use App\Models\TicketStatus;
 use App\Models\TicketStatusHistory;
 use Exception;
 use Illuminate\Http\Request;
@@ -407,7 +408,7 @@ public function updateStatus(Request $request, $ticketId)
 
                 if ($ticket->ticket_status_id == 6){
 
-                    $statusNow = TicketStatusHistory::where('ticket_status_id',$ticket->ticket_status_id)->first();
+                    $statusNow = TicketStatus::where('ticket_status_id',$ticket->ticket_status_id)->first();
                     $eId = Employee::where('employee_id',$ticket->employee_id)->first();
 
                     $params = [
@@ -420,6 +421,7 @@ public function updateStatus(Request $request, $ticketId)
                           ]
                         ],
                       ];
+                      
 
                     return $this->sendResponse($statusHistory, 'Ticket Success rejected!');
                 } else {
@@ -428,8 +430,8 @@ public function updateStatus(Request $request, $ticketId)
                         $spvId = Employee::where('employee_id',$ticket->supervisor_id)->first();
                         $eId = Employee::where('employee_id',$ticket->employee_id)->first();
 
-                        $statusNow = TicketStatusHistory::where('ticket_status_id',$ticket->ticket_status_id)->first();
-                        $statusNext = TicketStatusHistory::where('ticket_status_id',$request->ticket_status_id)->first();
+                        $statusNow = TicketStatus::where('ticket_status_id',$ticket->ticket_status_id)->first();
+                        $statusNext = TicketStatus::where('ticket_status_id',$request->ticket_status_id)->first();
                     
                         if ($ticket->ticket_status_id == 5) {
                             $params = [
