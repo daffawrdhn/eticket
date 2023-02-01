@@ -314,26 +314,30 @@ class TicketController extends BaseController
 
             if ($storeTicket instanceof Ticket) {
 
-                $spvId = Employee::where('employee_id',$employeeId->supervisor_id)->first();
-
-                $params = [
-                    'recipients' => [
-                      [
-                        'email' => $employeeId->employee_email,
-                        'subject' => 'Ticket Created ID:'+$storeTicket->ticket_id,
-                        'body' => 'Ticket with ID:'+$storeTicket->ticket_id+' succesfully created, waiting for Approval 1/AP1.'
-                      ],
-                      [
-                        'email' => $spvId->employee_email,
-                        'subject' => 'Approval 1/AP1 on ticket ID:'+$storeTicket->ticket_id,
-                        'body' => 'as a Supervisor of Employee ID:'+$employeeId->employee_id+', Ticket with ID:'+$storeTicket->ticket_id+' need to be Approve 1/AP1.'
-                      ]
-                    ],
-                  ];
-                  
+                try {
+                    $spvId = Employee::where('employee_id',$employeeId->supervisor_id)->first();
                 
-                $this->sendNotifEmail($params);
-                return $this->sendResponse($storeTicket, 'Ticket Created!');
+                    $params = [
+                        'recipients' => [
+                          [
+                            'email' => $employeeId->employee_email,
+                            'subject' => 'Ticket Created ID:'.$storeTicket->ticket_id,
+                            'body' => 'Ticket with ID:'.$storeTicket->ticket_id.' succesfully created, waiting for Approval 1/AP1.'
+                          ],
+                          [
+                            'email' => $spvId->employee_email,
+                            'subject' => 'Approval 1/AP1 on ticket ID:'.$storeTicket->ticket_id,
+                            'body' => 'as a Supervisor of Employee ID:'.$employeeId->employee_id.', Ticket with ID:'.$storeTicket->ticket_id.' need to be Approve 1/AP1.'
+                          ]
+                        ],
+                      ];
+                      
+                    
+                    $this->sendNotifEmail($params);
+                    return $this->sendResponse($storeTicket, 'Ticket Created!');
+                } catch (Exception $e) {
+                    return $this->sendError('Error creating ticket', ['error' => $e->getMessage()]);
+                }
             } else {
                 return $this->sendError('Error creating ticket', ['error' => $storeTicket]);
             }
