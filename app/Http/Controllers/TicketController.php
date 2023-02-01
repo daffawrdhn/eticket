@@ -398,13 +398,13 @@ public function updateStatus(Request $request, $ticketId)
                             'recipients' => [
                                 [
                                 'email' => $eId->employee_email,
-                                'subject' => 'Ticket ID:'.$statusHistory->ticket_id.'Created',
+                                'subject' => 'Ticket ID:'.$statusHistory->ticket_id.' Created',
                                 'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Success created. Current status: '.$statusNow->ticket_status_name.', now is '.$statusNow->ticket_status_next,
                               ],
                               [
                                 'email' => $spvId->employee_email,
                                 'subject' => 'Request approval on ticket ID:'.$statusHistory->ticket_id,
-                                'body' => 'As a '.$statusNext->ticket_status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
+                                'body' => 'From:'.$eId->employee_id.' - '.$eId->employee_name.'| Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
                               ]
                             ],
                           ];
@@ -415,7 +415,7 @@ public function updateStatus(Request $request, $ticketId)
                                 'recipients' => [
                                   [
                                     'email' => $eId->employee_email,
-                                    'subject' => 'Ticket ID:'.$statusHistory->ticket_id.'Updated -'.$statusNext->ticket_status_name,
+                                    'subject' => 'Ticket ID:'.$statusHistory->ticket_id.' Updated -'.$statusNext->ticket_status_name,
                                     'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Completed',
                                   ]
                                 ],
@@ -518,6 +518,7 @@ public function updateStatus(Request $request, $ticketId)
           $subject = $recipient['subject'];
           $body = $recipient['body'];
       
+          
           Mail::raw($body, function($message) use ($recipient, $subject) {
             $message->to($recipient['email']);
             $message->subject($subject);
