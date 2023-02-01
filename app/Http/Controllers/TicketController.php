@@ -314,12 +314,25 @@ class TicketController extends BaseController
 
             if ($storeTicket instanceof Ticket) {
 
-                Mail::raw('Test email from Laravel and SendGrid', function ($message) {
-                    $au = Auth::user();
-                    $message->to($au->employee_email);
-                    $message->subject('Test Email');
-                });
+                $spvId = Employee::where('employee_id',$employeeId->supervisor_id)->first();
 
+                $params = [
+                    'recipients' => [
+                      [
+                        'email' => $employeeId->employee_email,
+                        'subject' => 'Ticket Created ID:'+$storeTicket->ticket_id,
+                        'body' => 'Ticket with ID:'+$storeTicket->ticket_id+' succesfully created, waiting for Approval 1/AP1.'
+                      ],
+                      [
+                        'email' => $spvId->employee_email,
+                        'subject' => 'Approval 1/AP1 on ticket ID:'+$storeTicket->ticket_id,
+                        'body' => 'as a Supervisor of Employee ID:'+$employeeId->employee_id+', Ticket with ID:'+$storeTicket->ticket_id+' need to be Approve 1/AP1.'
+                      ]
+                    ],
+                  ];
+                  
+                
+                $this->sendNotifEmail($params);
                 return $this->sendResponse($storeTicket, 'Ticket Created!');
             } else {
                 return $this->sendError('Error creating ticket', ['error' => $storeTicket]);
@@ -445,4 +458,16 @@ public function updateStatus(Request $request, $ticketId)
     {
         //
     }
+
+    function sendNotifEmail(array $params) {
+        foreach ($params['recipients'] as $recipient) {
+          $subject = $recipient['subject'];
+          $body = $recipient['body'];
+      
+          Mail::raw($body, function($message) use ($recipient, $subject) {
+            $message->to($recipient['email']);
+            $message->subject($subject);
+          });
+        }
+      }
 }
