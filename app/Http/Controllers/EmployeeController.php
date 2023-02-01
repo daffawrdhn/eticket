@@ -548,7 +548,7 @@ class EmployeeController extends BaseController
                         
                     }
 
-                    return $this->sendResponse($params, 'success reset password');
+                    // return $this->sendResponse($params, 'success reset password');
                     
                     $this->sendNotifEmail($params);
 
