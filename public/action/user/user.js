@@ -335,8 +335,6 @@ $(document).ready(function () {
     $(document).on('click', '#reset-pass', function(e){
         e.preventDefault();
         
-        console.log('ok');
-        
         var token = $('#token').val()
         var id = $(this).attr('data-id')
 

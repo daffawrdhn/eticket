@@ -93,13 +93,6 @@ class EmployeeController extends BaseController
     
             // send mail
     
-            $testMailData = [
-                'title' => 'Eticket Mobile Password',
-                'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks',
-                'password' => $employeePassword,
-                'nik' => $employeeId,
-            ];
-    
             $input = $request->all();
     
             $input['employee_id'] = $employeeId;
@@ -519,27 +512,27 @@ class EmployeeController extends BaseController
 
             $params = [
                 'recipients' => [
-                  [
-                    'email' => $isMail,
-                    'subject' => 'Password Eticket Mobile',
-                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $id .'\n Password =>'. $employeePassword,
+                    [
+                        'email' => $isMail->employee_email,
+                        'subject' => 'Reset Password Eticket Mobile',
+                        'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $id .'\n Password =>'. $employeePassword
+                        
+                        ]
+                    ],
+                ];
                 
-                  ]
-                ],
-              ];
-              
-            
+                
               
               
-              if ($inputPassword) {
+            if ($inputPassword) {
                   Employee::where('employee_id', $id)
                   ->update(
-                      [
+                        [
                           'password_id' => $inputPassword->password_id,
-                          ]
+                        ]
                     );
                     
-                    // $sendMail = Mail::to($isMail->employee_email)->send(new SendMail($testMailData));
+                    
                     
                     // if ($sendMail) {
                     $lastThreePasswordIds = Password::where('employee_id', $id)
@@ -553,13 +546,14 @@ class EmployeeController extends BaseController
                         ->whereNotIn('password_id', $lastThreePasswordIds)
                         ->delete();
                         
-                        $this->sendNotifEmail($params);
                     }
 
+                    return $this->sendResponse($params, 'success reset password');
+                    
+                    $this->sendNotifEmail($params);
+
                     return $this->sendResponse('success', 'success reset password');
-                // }else{
-                //     return $this->sendError('Error validation', ['error' => 'gagal kirim email']);
-                // }
+               
                 
             }else{
                 return $this->sendError('Error validation', ['error' => $inputPassword]);
