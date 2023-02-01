@@ -382,8 +382,7 @@ public function updateStatus(Request $request, $ticketId)
                 }
                 // End of added code
 
-                $sId = Employee::where('employee_id',$ticket->employee_id)->first();
-                $statusHistory['supervisor'] = Employee::where('employee_id',$sId->supervisor_id)->first();
+                $statusHistory['supervisor'] = Employee::where('employee_id',$ticket->supervisor_id)->first();
 
                 if ($ticket->ticket_status_id == 6){
 
