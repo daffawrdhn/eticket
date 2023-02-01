@@ -316,7 +316,7 @@ class TicketController extends BaseController
 
                 Mail::raw('Test email from Laravel and SendGrid', function ($message) {
                     $au = Auth::user();
-                    $message->to($au->employee_ktp);
+                    $message->to($au->employee_email);
                     $message->subject('Test Email');
                 });
 
