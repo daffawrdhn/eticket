@@ -6,7 +6,8 @@ $(document).ready(function () {
 
 
     setInterval(()=>{
-        table.draw()
+        $('#regionalTable').DataTable().destroy()
+        tableReport()
     },300000)
 
     $('#select-regional').on('select2:select', function (e) {
@@ -14,32 +15,88 @@ $(document).ready(function () {
         var url = 'api/get-report-regional/'+data
         $('#regionalTable').DataTable().destroy()
         tableReport(url)
+        $('#select-regionalId option:selected').remove();
+        $("#start-date").val('');
+        $("#end-date").val('');
 
     });
 
+    
     $(document).on('click','#select-all', function (e) {
         var url = 'api/get-report-regional/0'
         $('#regionalTable').DataTable().destroy()
         tableReport(url)
-
+        $('#select-regional option:selected').remove();
+        $('#select-regionalId option:selected').remove();
+        $("#start-date").val('');
+        $("#end-date").val('');
     });
+
+    $(document).on('click','#closeSearch', function (e) {
+        $('#select-regionalId option:selected').remove();
+        $("#start-date").val('');
+        $("#end-date").val('');
+    });
+    
+    $(document).on('click','#searchLaporan', function (e) {
+        $('#select-regional option:selected').remove();
+    });
+    
 
     $(document).on('click','#btnExport', function (e) {
 
-        // var data_type = 'data:application/vnd.ms-excel';
-        // var table_div = document.getElementById('regionalTable');
-        // var table_html = table_div.outerHTML.replace(/ /g, '%20');
+        var selectRegional = $("#regional_id").val();
+        var regionalId = $("#regional-select").val();
+        var startDate = $("#start-date").val();
+        var endDate = $("#end-date").val();
+        var data
 
-        // var a = document.createElement('a');
-        // a.href = data_type + ', ' + table_html;
-        // a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
-        // a.click();
+        if (selectRegional == null && regionalId == null) {
+            var isRegionalId = 0;
+        }else if(selectRegional != null && regionalId == null){
+            var isRegionalId = selectRegional;
+        }else if (selectRegional == null && regionalId != null) {
+            var isRegionalId = regionalId;
+        }
 
-        fnExcelReport()
+        data = {
+            'regionalId' : isRegionalId,
+            'startDate' : startDate,
+            'endDate' : endDate
+        }
+        console.log(data);
 
-        // // $("#regionalTable").table2excel({
-        // //     filename: "Table.xls"
-        // // });
+        $.ajax({
+            xhrFields: {
+                responseType: 'blob',
+            },
+            type: 'POST',
+            url: APP_URL + 'api/export-report-regional',
+            data: data,
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+            success: function(result, status, xhr) {
+        
+                var disposition = xhr.getResponseHeader('content-disposition');
+                var matches = /"([^"]*)"/.exec(disposition);
+                var filename = (matches != null && matches[1] ? matches[1] : 'salary.xlsx');
+        
+                // The actual download
+                var blob = new Blob([result], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+        
+                document.body.appendChild(link);
+        
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+        
 
     });
 

@@ -100,6 +100,65 @@ $(document).ready(function () {
         
     });
 
+    // export
+    $(document).on('click','#btnExport', function (e) {
+
+        var selectRegional = $("#regional_id").val();
+        var regionalId = $("#regional-select").val();
+        var startDate = $("#start-date").val();
+        var endDate = $("#end-date").val();
+        var data
+
+        if (selectRegional == null && regionalId == null) {
+            var isRegionalId = 0;
+        }else if(selectRegional != null && regionalId == null){
+            var isRegionalId = selectRegional;
+        }else if (selectRegional == null && regionalId != null) {
+            var isRegionalId = regionalId;
+        }
+
+        data = {
+            'regionalId' : isRegionalId,
+            'startDate' : startDate,
+            'endDate' : endDate
+        }
+        console.log(data);
+
+        $.ajax({
+            xhrFields: {
+                responseType: 'blob',
+            },
+            type: 'POST',
+            url: APP_URL + 'api/export-report-employee',
+            data: data,
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+            success: function(result, status, xhr) {
+        
+                var disposition = xhr.getResponseHeader('content-disposition');
+                var matches = /"([^"]*)"/.exec(disposition);
+                var filename = (matches != null && matches[1] ? matches[1] : 'employee.xlsx');
+        
+                // The actual download
+                var blob = new Blob([result], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+        
+                document.body.appendChild(link);
+        
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+        
+
+    });
+
+
 
     
 
@@ -557,53 +616,6 @@ $(document).ready(function () {
         
         
     });
-
-
-    $(document).on('click','#btnExport', function (e) {
-
-        fnExcelReport()
-
-        // $("#summaryTable").table2excel({
-        //     exclude:".noExl",
-        //     filename: "ticketSummary.xls"
-        // });
-
-    });
-
-    function fnExcelReport()
-    {
-        var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
-        var textRange; 
-        var j=0;
-        tab = document.getElementById('employeeTable'); // id of table
-        console.log(tab);
-        for(j = 0 ; j < tab.rows.length ; j++) 
-        {     
-            tab_text=tab_text+tab.rows[j].innerHTML+"hallo</tr>";
-            //tab_text=tab_text+"</tr>";
-        }
-    
-        tab_text=tab_text+"</table>";
-        tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-        tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-        tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
-    
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf("MSIE "); 
-    
-        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-        {
-            txtArea1.document.open("txt/html","replace");
-            txtArea1.document.write(tab_text);
-            txtArea1.document.close();
-            txtArea1.focus(); 
-            sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
-        }  
-        else                 //other browser not tested on IE 11
-            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
-    
-        return (sa);
-    }
 
 
 });

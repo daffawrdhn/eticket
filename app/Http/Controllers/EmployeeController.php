@@ -160,7 +160,7 @@ class EmployeeController extends BaseController
                             ->limit(5)
                             ->get();
         }else{
-            $number = "/^[1-9][0-9]*$/";
+            $number = "/^[0-9]*$/";
             if (preg_match($number, $request->search)) {
                 $employees = Employee::orderby('employee_name','asc')->where('employee_id', 'ILIKE', "%".$request->search."%")->limit(5)->get();
 

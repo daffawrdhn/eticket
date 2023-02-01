@@ -4,39 +4,47 @@ $(document).ready(function () {
     tableReport();
 
     setInterval(()=>{
-        table.draw()
+        $('#select-regionalId option:selected').remove();
+        $("#start-date").val('');
+        $("#end-date").val('');
+        $('#summaryTable').DataTable().destroy()
+        tableReport()
     },300000)
 
-    $('#select-regional').on('select2:select', function (e) {
-        var data = e.params.data.id;
-        var url = 'api/get-report-summary/'+data
-        $('#summaryTable').DataTable().destroy()
-        tableReport(url)
-
-    });
-
     $(document).on('click','#select-all', function (e) {
-        var url = 'api/get-report-summary/0'
+        $('#select-regionalId option:selected').remove();
+        $("#start-date").val('');
+        $("#end-date").val('');
         $('#summaryTable').DataTable().destroy()
-        tableReport(url)
+        tableReport()
 
     });
-
-
-    $(document).on('click','#btnExport', function (e) {
-
-        fnExcelReport()
-
-        // $("#summaryTable").table2excel({
-        //     exclude:".noExl",
-        //     filename: "ticketSummary.xls"
-        // });
-
-    });
-
         // search
 
-    $( "#end_date" ).focusin(function() {
+    $( "#start-date" ).focusin(function() {
+        var endDate = $("#end-date").val();
+
+        if (endDate != null) {
+
+            $(this).attr('max', endDate)
+
+        }
+        
+    })
+
+    $( "#start-date" ).focusout(function(startDate, endDate) {
+        var endDate = $("#end-date").val();
+        var startDate = $(this).val();
+        if (startDate > endDate) {
+            $('#start-date').addClass('is-invalid');
+            $('#start-dateFeedback').html('Please Enter the start date < end date')
+        }else{
+            $('#start-date').removeClass('is-invalid');
+        }
+    })
+    
+
+    $( "#end-date" ).focusin(function() {
         var startDate = $("#start-date").val();
 
         if (startDate != null) {
@@ -47,14 +55,15 @@ $(document).ready(function () {
         
     })
 
-    $( "#end_date" ).focusout(function(endDate, startDate) {
+    $( "#end-date" ).focusout(function(endDate, startDate) {
         var startDate = $("#start-date").val();
         var endDate = $(this).val();
         if (endDate < startDate) {
-            $('#end_date').addClass('is-invalid');
-            $('#end_dateFeedback').html('Please Enter the quit date > date now')
+            $('#end-date').addClass('is-invalid');
+            $('#end-dateFeedback').html('Please Enter the end date > start date')
         }else{
-            $('#end_date').removeClass('is-invalid');
+            $('#start-date').removeClass('is-invalid');
+            $('#end-date').removeClass('is-invalid');
         }
     })
     
@@ -62,8 +71,8 @@ $(document).ready(function () {
         $("#alert").hide();
         e.preventDefault();
         var regional = $("#regional-select").val();
-        var startDate = $("#start_date").val();
-        var endDate = $("#end_date").val();
+        var startDate = $("#start-date").val();
+        var endDate = $("#end-date").val();
         var url = 'api/get-report-summary/0'
 
         var data = {
@@ -72,12 +81,21 @@ $(document).ready(function () {
             'end_date' : endDate
         }
 
-        if (regional == null || endDate == '' || startDate == '') {
+        if (regional == null && endDate == '' && startDate == '') {
             $("#isLoading").show();
             setTimeout(() => {
                 $("#isLoading").hide();
                 $("#alert").show()
             },1000)
+        }else if(startDate != '' && endDate == ""){
+            $('#end-date').addClass('is-invalid');
+            $('#end-dateFeedback').html('please fill out this field')
+        }else if(startDate == '' && endDate != ""){
+            $('#start-date').addClass('is-invalid');
+            $('#start-dateFeedback').html('please fill out this field')
+        }else if(startDate > endDate){
+            $('#end-date').addClass('is-invalid');
+            $('#end-dateFeedback').html('Please Enter the end date > start date')
         }else{
             $("#isLoading").show();
             setTimeout(() => {
@@ -86,24 +104,43 @@ $(document).ready(function () {
             },1000)
             
             $('#summaryTable').DataTable().destroy()
-            tableReport(url, data);
+            tableReport(data);
         }
         
     })
 
-    function tableReport(url, data = null) { 
+    $(document).on('click','#closeSearch', function (e) {
+        $('#select-regionalId option:selected').remove();
+        $('#start-date').removeClass('is-invalid');
+        $('#end-date').removeClass('is-invalid');
+        $("#start-date").val('');
+        $("#end-date").val('');
+        $("#alert").hide()
+    });
 
-        if (url == null) {
-            url = 'api/get-report-summary/0'
-            
+    function tableReport(data = null) { 
+            var regionalId
+            var startDate
+            var endDate 
+        if (data == null) {
+            regionalId = 0;
+            startDate = "";
+            endDate = "";
+        }else if(data.regional_id == null){
+            regionalId = 0
+            startDate = data.start_date
+            endDate = data.end_date
+        }else{
+            regionalId = data.regional_id
+            startDate = data.start_date
+            endDate = data.end_date
         }
 
-        if ( data == null) {
-            data = {
-                'regional_id' : 0   
-            }
+        var datas = {
+            "regionalId" : regionalId,
+            "startDate" : startDate,
+            "endDate" : endDate
         }
-
 
         var token = $('#token').val()
         var table = $('#summaryTable').DataTable({
@@ -112,9 +149,9 @@ $(document).ready(function () {
             processing: true,
             serverSide: true,
             ajax: { 
-                url: APP_URL + url,
+                url: APP_URL + "api/get-report-summary",
                 type: "POST",
-                data: data,
+                data: datas,
                 dataType: 'json',
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
@@ -133,42 +170,6 @@ $(document).ready(function () {
      }
 
     //getdata
-    
-    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    var token = $('#token').val()
-    var selectRegional =   $('#regional_id').select2({
-                            placeholder : "Select Regional",
-                            ajax: { 
-                                url: APP_URL + "api/select-regional",
-                                type: "post",
-                                dataType: 'json',
-                                delay: 250,
-                                beforeSend: function(xhr, settings) { 
-                                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                                },
-                                data: function (params) {
-                                return {
-                                    _token: CSRF_TOKEN,
-                                    search: params.term // search term
-                                };
-                                },
-                                processResults: function (response) {
-                                return {
-                                    results: $.map(response.data, function (item) {
-                                        
-                                        return{
-                                            text : item.regional_name,
-                                            id: item.regional_id
-                                        }
-                                    })
-                                };
-                                },
-                                cache: true
-                            }
-                        })
-
-    selectRegional.data('select2').$selection.css('height', '40px')
-    selectRegional.data('select2').$selection.css('padding-top', '5px')
 
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var token = $('#token').val()
@@ -207,6 +208,62 @@ $(document).ready(function () {
                     selectRegional.data('select2').$selection.css('height', '40px')
                     selectRegional.data('select2').$selection.css('padding-top', '5px')
 
+    //export data
+    $(document).on('click','#btnExport', function (e) {
+
+        var selectRegional = $("#regional_id").val();
+        var regionalId = $("#regional-select").val();
+        var startDate = $("#start-date").val();
+        var endDate = $("#end-date").val();
+        var data
+
+        if (selectRegional == null && regionalId == null) {
+            var isRegionalId = 0;
+        }else if(selectRegional != null && regionalId == null){
+            var isRegionalId = selectRegional;
+        }else if (selectRegional == null && regionalId != null) {
+            var isRegionalId = regionalId;
+        }
+
+        data = {
+            'regionalId' : isRegionalId,
+            'startDate' : startDate,
+            'endDate' : endDate
+        }
+
+        $.ajax({
+            xhrFields: {
+                responseType: 'blob',
+            },
+            type: 'POST',
+            url: APP_URL + 'api/export-report-summary',
+            data: data,
+            beforeSend: function(xhr, settings) { 
+                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+            },
+            success: function(result, status, xhr) {
+        
+                var disposition = xhr.getResponseHeader('content-disposition');
+                var matches = /"([^"]*)"/.exec(disposition);
+                var filename = (matches != null && matches[1] ? matches[1] : 'salary.xlsx');
+        
+                // The actual download
+                var blob = new Blob([result], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+        
+                document.body.appendChild(link);
+        
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+        
+
+    });
 
     function fnExcelReport()
     {

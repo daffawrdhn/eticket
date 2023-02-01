@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\DeptheadController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HelpdeskController;
 use App\Http\Controllers\OrganizationController;
@@ -142,7 +143,7 @@ Route::middleware('auth:api')->group( function () {
 
     // ////report
     Route::post('get-report-regional/{id}', [ReportRegionalController::class, 'getReport'])->name('auth.getReport');
-    Route::post('get-report-summary/{id}', [ReportSummaryController::class, 'getDataSumary'])->name('auth.getDataSumary');
+    Route::post('get-report-summary', [ReportSummaryController::class, 'getDataSumary'])->name('auth.getDataSumary');
     
     //chart
     Route::get('get-pie-chart', [ChartController::class,'pieChart'])->name('auth.pieChart');
@@ -151,4 +152,9 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('data', [AuthController::class, 'data'])->name('auth.data');
 
+
+    // export Excel
+    Route::post('export-report-regional', [ExportController::class, 'exportRegional']);
+    Route::post('export-report-summary', [ExportController::class, 'exportSummary']);
+    Route::post('export-report-employee', [ExportController::class, 'exportEmployee']);
 });

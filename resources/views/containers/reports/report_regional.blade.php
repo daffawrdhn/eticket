@@ -28,7 +28,7 @@
                                         <button class="btn btn-primary" id="select-all">all data</button>
                                     </div>
                                     <div class="col-4">
-                                        <button class="btn btn-light border" data-bs-toggle="modal" data-bs-target="#search">Search<i class="bi bi-search"></i></button>
+                                        <button class="btn btn-light border" data-bs-toggle="modal" id="searchLaporan" data-bs-target="#search">Search<i class="bi bi-search"></i></button>
                                     </div>
                                 </div>
                                 <div class="tooltipButtonEdit">
@@ -65,13 +65,12 @@
             </main>
         </div>
     </div>
-
-    <div class="modal fade" id="search" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
+    <div class="modal fade" id="search" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" id="dialog-modal">
+            <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Searc Report</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Search Report Regional</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeSearch" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger" id="alert" role="alert">
@@ -80,8 +79,8 @@
                 <div class="spinner-border container-fluid text-center" id="isLoading" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                <div id="select-regional" class="form-group border-danger">
-                    <label class="label-form" for="employee_id">Select Regional</label>
+                <div id="select-regionalId" class="form-group border-danger">
+                    <label class="label-form" for="regional">Select Regional</label>
                     <select class="" style="width: 100%" id="regional-select" name="regional_id" aria-label="Default select example"></select>
                     <div id="regional_idFeedback" class="invalid-feedback"></div>
                 </div>
@@ -106,14 +105,13 @@
                     required>
                     <div id="end-dateFeedback" class="invalid-feedback"></div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="searchReport">Save</button>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="searchReport">search</button>
-            </div>
-          </div>
         </div>
     </div>
+
 
     <script src="{{ asset('action/report/report_regional.js') }}"></script>
 @endsection
