@@ -6,7 +6,7 @@ use App\Models\Employee;
 use App\Models\Regional;
 use App\Models\Ticket;
 use Maatwebsite\Excel\Concerns\FromCollection as FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ExportTicket implements FromCollection, WithHeadings
@@ -95,5 +95,16 @@ class ExportTicket implements FromCollection, WithHeadings
     {
         return ["No", "NIK", "Employee Name", "Supervisor NIK", "Supervisor Name", "Regional", "jenis Ticket", "Sub-Feature",
                 "Ticket Title", "Ticket Description", "Ticket Status", "Date"];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class    => function(AfterSheet $event) {
+                $cellRange = 'A1:M1'; // All headers
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+            },
+
+        ];
     }
 }

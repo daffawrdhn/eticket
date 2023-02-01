@@ -7,6 +7,7 @@ use App\Models\Regional;
 use App\Models\Ticket;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Events\AfterSheet;
 
 class ExportSummary implements FromCollection, WithHeadings
 {
@@ -233,5 +234,16 @@ class ExportSummary implements FromCollection, WithHeadings
     public function headings(): array
     {
         return ["Regional", "Ticket Proccess", "Ticket Approval", "Ticket Reject", "Total Ticket"];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class    => function(AfterSheet $event) {
+                $cellRange = 'A1:M1'; // All headers
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+            },
+
+        ];
     }
 }
