@@ -435,8 +435,8 @@ public function updateStatus(Request $request, $ticketId)
                         $spvId = Employee::where('employee_id',$ticket->supervisor_id)->first();
                         $eId = Employee::where('employee_id',$ticket->employee_id)->first();
 
-                        $statusNow = TicketStatus::where('ticket_status_id',$ticket->ticket_status_id)->first();
-                        $statusNext = TicketStatus::where('ticket_status_id',$request->ticket_status_id)->first();
+                        $statusNow = TicketStatus::where('ticket_status_id', $statusHistory->status_before)->first();
+                        $statusNext = TicketStatus::where('ticket_status_id', $statusHistory->status_after)->first();
                     
                         if ($ticket->ticket_status_id == 5) {
                             $params = [
