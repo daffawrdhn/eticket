@@ -19,16 +19,12 @@ class DashboardController extends Controller
 
     public function pull()
     {
-        exec("echo 8%J98ShcMG9%Lr | sudo -S git pull 2>&1", $pullOutput);
-        exec("echo 8%J98ShcMG9%Lr | sudo -S git log -p -n 5 2>&1", $logOutput);
+        exec('cd /var/www/eticket && git pull', $output);
 
         return view('pull', [
-            'pullOutput' => $pullOutput,
-            'logOutput' => $logOutput,
+            'output' => $output,
         ]);
     }
-
-    
 
     /**
      * Show the form for creating a new resource.
