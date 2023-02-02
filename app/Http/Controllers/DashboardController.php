@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     public function pull()
     {
-        exec('cd /var/www/eticket && git pull 2>&1', $output);
+        exec('cd /var/www/eticket && sudo git pull 2>&1', $output);
 
         return view('pull', [
             'output' => $output,
