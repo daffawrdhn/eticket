@@ -410,7 +410,7 @@ public function updateStatus(Request $request, $ticketId)
                               [
                                 'email' => $spvId->employee_email,
                                 'subject' => 'Request approval on ticket ID:'.$statusHistory->ticket_id,
-                                'body' => 'From:'.$eId->employee_id.' - '.$eId->employee_name.'| Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
+                                'body' => 'From: '.$eId->employee_id.' - '.$eId->employee_name.'| Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
                               ]
                             ],
                           ];
@@ -422,7 +422,7 @@ public function updateStatus(Request $request, $ticketId)
                                   [
                                     'email' => $eId->employee_email,
                                     'subject' => 'Ticket ID:'.$statusHistory->ticket_id.' Updated -'.$statusNext->ticket_status_name,
-                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Completed',
+                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.', now Completed',
                                   ]
                                 ],
                               ];
@@ -435,7 +435,7 @@ public function updateStatus(Request $request, $ticketId)
                                   [
                                     'email' => $eId->employee_email,
                                     'subject' => 'Ticket ID:'.$statusHistory->ticket_id.', '.$statusNow->ticket_status_name,
-                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' Rejected',
+                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.', is Rejected',
                                   ]
                                 ],
                               ];
@@ -452,7 +452,7 @@ public function updateStatus(Request $request, $ticketId)
                                   [
                                     'email' => $spvId->employee_email,
                                     'subject' => 'Request approval on ticket ID:'.$statusHistory->ticket_id,
-                                    'body' => 'From:'.$eId->employee_id.' - '.$eId->employee_name.'| As a '.$statusNext->ticket_status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
+                                    'body' => 'From: '.$eId->employee_id.' - '.$eId->employee_name.'| As a '.$statusNext->ticket_status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
                                   ]
                                 ],
                               ];
