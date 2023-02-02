@@ -54,5 +54,6 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/report-data-sumary', [ReportSummaryController::class, 'index']);
     Route::get('/report-regional', [ReportRegionalController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
+    Route::get('/pull', [DashboardController::class, 'pull']);
 
 });

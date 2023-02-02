@@ -17,6 +17,15 @@ class DashboardController extends Controller
         return view('containers.dashboard.dashboard');
     }
 
+    public function pull()
+    {
+        exec('sudo git pull 2>&1', $output);
+
+        return view('pull', [
+            'output' => $output,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
