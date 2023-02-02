@@ -446,7 +446,7 @@ public function updateStatus(Request $request, $ticketId)
                                   [
                                     'email' => $spvId->employee_email,
                                     'subject' => 'Request approval on ticket ID:'.$statusHistory->ticket_id,
-                                    'body' => 'From:'.$eId->employee_id.' - '.$eId->employee_name.'| As a '.$statusNext->ticket_Status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
+                                    'body' => 'From:'.$eId->employee_id.' - '.$eId->employee_name.'| As a '.$statusNext->ticket_status_name.' of Ticket with ID:'.$statusHistory->ticket_id.' need to be Approved.'
                                   ]
                                 ],
                               ];
