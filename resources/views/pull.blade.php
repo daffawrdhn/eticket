@@ -16,6 +16,6 @@
         {{ implode("\n", $logOutput) }}
     </pre>
 
-    <a href="{{ route('git-pull') }}" class="btn btn-primary">Git Pull</a>
+    <a href="{{ route('pull') }}" class="btn btn-primary">Git Pull</a>
 </body>
 </html>
