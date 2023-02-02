@@ -7,7 +7,7 @@
     <h1>Git Pull Output</h1>
 
     <pre>
-        {{ implode("\n", $output) }}
+        {{ implode("\n", $pullOutput) }}
     </pre>
 
     <h1>Git Log Output</h1>
@@ -16,6 +16,6 @@
         {{ implode("\n", $logOutput) }}
     </pre>
 
-    <a href="{{ route('pull') }}" class="btn btn-primary">Git Pull</a>
+    <a href="{{ route('git-pull') }}" class="btn btn-primary">Git Pull</a>
 </body>
 </html>
