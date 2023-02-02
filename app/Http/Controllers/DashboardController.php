@@ -16,15 +16,18 @@ class DashboardController extends Controller
     {
         return view('containers.dashboard.dashboard');
     }
-
+    
     public function pull()
     {
-        exec('sudo git pull 2>&1', $output);
-
+        exec('sudo git pull 2>&1', $pullOutput);
+        exec('sudo git log -p 2>&1', $logOutput);
+    
         return view('pull', [
-            'output' => $output,
+            'pullOutput' => $pullOutput,
+            'logOutput' => $logOutput,
         ]);
     }
+    
 
     /**
      * Show the form for creating a new resource.

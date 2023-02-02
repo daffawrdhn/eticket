@@ -10,6 +10,12 @@
         {{ implode("\n", $output) }}
     </pre>
 
+    <h1>Git Log Output</h1>
+
+    <pre>
+        {{ implode("\n", $logOutput) }}
+    </pre>
+
     <a href="{{ route('pull') }}" class="btn btn-primary">Git Pull</a>
 </body>
 </html>
