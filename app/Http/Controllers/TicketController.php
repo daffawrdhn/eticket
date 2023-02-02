@@ -128,6 +128,7 @@ class TicketController extends BaseController
                 $spv = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$employee->supervisor_id)->first();
+                $ticket->currentapproval = Employee::select('employee_name')->where('employee_id',$ticket->supervisor_id)->first();
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
                 $ticket->history = $ticketHistory;
                 
@@ -168,6 +169,7 @@ class TicketController extends BaseController
                 $spv = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$employee->supervisor_id)->first();
+                $ticket->currentapproval = Employee::select('employee_name')->where('employee_id',$ticket->supervisor_id)->first();
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
                 $ticket->history = $ticketHistory;
                 
@@ -205,6 +207,7 @@ class TicketController extends BaseController
                 $spv = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
                 $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$employee->supervisor_id)->first();
+                $ticket->currentapproval = Employee::select('employee_name')->where('employee_id',$ticket->supervisor_id)->first();
                 $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
                 $ticket->history = $ticketHistory;
                 
@@ -221,7 +224,7 @@ class TicketController extends BaseController
             return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
         }
     }
-    
+
     public function features()
     {
         try
