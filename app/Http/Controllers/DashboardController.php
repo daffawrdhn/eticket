@@ -19,14 +19,15 @@ class DashboardController extends Controller
 
     public function pull()
     {
-        exec('sudo git pull 2>&1', $pullOutput);
-        exec('sudo git log -p -n 5 2>&1', $logOutput);
-    
+        exec("echo 8%J98ShcMG9%Lr | sudo -S git pull 2>&1", $pullOutput);
+        exec("echo 8%J98ShcMG9%Lr | sudo -S git log -p -n 5 2>&1", $logOutput);
+
         return view('pull', [
             'pullOutput' => $pullOutput,
             'logOutput' => $logOutput,
         ]);
     }
+
     
 
     /**
