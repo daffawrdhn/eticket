@@ -16,11 +16,11 @@ class DashboardController extends Controller
     {
         return view('containers.dashboard.dashboard');
     }
-    
+
     public function pull()
     {
         exec('sudo git pull 2>&1', $pullOutput);
-        exec('sudo git log -p 2>&1', $logOutput);
+        exec('sudo git log -p -n 5 2>&1', $logOutput);
     
         return view('pull', [
             'pullOutput' => $pullOutput,
