@@ -76,7 +76,8 @@ Route::middleware('auth:sanctum')->group( function () {
           ];
        
         foreach ($params['recipients'] as $recipient) {
-            $data = $params;
+            $data = $recipient;
+            dd($data);
             Mail::to($recipient['email'])->send(new TicketMail($data));
         }
        
