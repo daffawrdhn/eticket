@@ -12,21 +12,21 @@ use Illuminate\Queue\SerializesModels;
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $testMailData;
+
+    public $details;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($testMailData)
+    public function __construct($details)
     {
-        $this->testMailData = $testMailData;
+        $this->details = $details;
     }
 
-    
     public function build()
     {
-        return $this->subject('Password Eticket')
+        return $this->subject($this->details['subject'])
                     ->view('components.email');
     }
 }

@@ -14,7 +14,6 @@ use App\Models\RegionalPIC;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\Ticket as TicketMail;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends BaseController
@@ -523,8 +522,8 @@ class EmployeeController extends BaseController
                 'recipients' => [
                     [
                         'email' => $isMail->employee_email,
-                        'subject' => 'Password Eticket Mobile',
-                        'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. ',
+                        'subject' => 'Reset Password Eticket Mobile',
+                        'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. Your Password =>'.$employeePassword,
                         'nik' =>  $id,
                         'password' => $employeePassword
                         ]
@@ -560,7 +559,7 @@ class EmployeeController extends BaseController
 
                     // return $this->sendResponse($params, 'success reset password');
                     
-                    // $this->sendNotifEmail($params);
+                    $this->sendNotifEmail($params);
 
                     return $this->sendResponse('success', 'success reset password');
                
@@ -642,7 +641,7 @@ class EmployeeController extends BaseController
     function sendNotifEmail(array $params) {
         foreach ($params['recipients'] as $recipient) {
           $data = $recipient;
-          Mail::to($recipient['email'])->send(new TicketMail($data));
+          Mail::to($recipient['email'])->send(new SendMail($data));
         }
     }
 }

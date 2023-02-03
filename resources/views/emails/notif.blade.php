@@ -18,7 +18,6 @@
     <h3>{{ $details['subject'] }}</h3>
     <p>{{ $details['body'] }}</p>
 
-
     <hr style="border-top: 1px solid #ccc;">
 
     <p style="font-size: 12px;">

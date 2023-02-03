@@ -63,7 +63,7 @@ Route::middleware('auth:sanctum')->group( function () {
         $params = [
             'recipients' => [
               [
-                'email' => 'wardhanadty@gmail.com',
+                'email' => 'rudinp38@gmail.com',
                 'subject' => 'Test Email',
                 'body' => 'if receive this email, program should work properly :)',
               ]
