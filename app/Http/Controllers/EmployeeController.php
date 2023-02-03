@@ -130,7 +130,8 @@ class EmployeeController extends BaseController
             $success['token'] =  $token;
 
             $params = [
-                'recipients' => [
+                'recipients' => 
+                [
                   [
                     'email' => $request->employee_email,
                     'subject' => 'Password Eticket Mobile',
@@ -140,10 +141,13 @@ class EmployeeController extends BaseController
                   ]
                 ],
               ];
+
               
             
-            $this->sendNotifEmail($params);
-    
+            // $email = $this->sendNotifEmail($params);
+              
+            
+
             
             return $this->sendResponse($success, 'User created successfully.');
 
@@ -505,7 +509,7 @@ class EmployeeController extends BaseController
 
     public function resetPassword($id){
         try {
-            $employeePassword = 'Admin123!';
+            $employeePassword = $this->randomPassword(9);
 
 
             $input['employee_id'] = $id;
@@ -556,7 +560,7 @@ class EmployeeController extends BaseController
 
                     // return $this->sendResponse($params, 'success reset password');
                     
-                    $this->sendNotifEmail($params);
+                    // $this->sendNotifEmail($params);
 
                     return $this->sendResponse('success', 'success reset password');
                

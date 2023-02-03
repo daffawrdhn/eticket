@@ -17,16 +17,7 @@
 
     <h3>{{ $details['subject'] }}</h3>
     <p>{{ $details['body'] }}</p>
-    <?php
 
-        if ($details['NIK'] != null) {
-    ?>
-            <p>NIK = <b>{{ $details['nik'] }}</b></p>
-            <p>Password = <b>{{ $details['password'] }}</b></p>
-    <?php
-        }
-    
-    ?>
 
     <hr style="border-top: 1px solid #ccc;">
 
