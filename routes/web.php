@@ -21,6 +21,8 @@ use App\Models\Depthead;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Ticket as TicketMail;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,5 +57,30 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/report-regional', [ReportRegionalController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
     Route::get('/pull', [DashboardController::class, 'pull'])->name('pull');
+
+    Route::get('/test-mail', function () {
+   
+        $params = [
+            'recipients' => [
+              [
+                'email' => 'wardhanadty@gmail.com',
+                'subject' => 'test1',
+                'body' => 'test1',
+              ],
+              [
+                'email' => 'wardhanadty@gmail.com',
+                'subject' => 'test2',
+                'body' => 'test2',
+              ]
+            ],
+          ];
+       
+        foreach ($params['recipients'] as $recipient) {
+            $data = $params;
+            Mail::to($recipient['email'])->send(new TicketMail($data));
+        }
+       
+        dd("Email is Sent.");
+    });
 
 });
