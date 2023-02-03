@@ -10,7 +10,7 @@ $(document).ready(function () {
         tableReport()
     },300000)
 
-    $('#select-regional').on('select2:select', function (e) {
+        $('#select-regional').on('select2:select', function (e) {
         var data = e.params.data.id;
         var url = 'api/get-report-regional/'+data
         $('#regionalTable').DataTable().destroy()
@@ -33,6 +33,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click','#closeSearch', function (e) {
+        $("#alert").hide()
         $('#select-regionalId option:selected').remove();
         $("#start-date").val('');
         $("#end-date").val('');
@@ -126,6 +127,7 @@ $(document).ready(function () {
         }
     })
 
+
     $(document).on('click', '#searchReport', (e) => {
         $("#alert").hide();
         e.preventDefault();
@@ -140,7 +142,7 @@ $(document).ready(function () {
             'end_date' : endDate
         }
 
-        if (regional == null || endDate == '' || startDate == '') {
+        if (endDate == '' || startDate == '') {
             $("#isLoading").show();
             setTimeout(() => {
                 $("#isLoading").hide();
@@ -170,7 +172,17 @@ $(document).ready(function () {
             data = {
                 'regional_id' : 0,
             }
+        }else{
+            if (data.regional_id == null) {
+                data = {
+                    'regional_id' : 0,
+                    'start_date' : data.start_date,
+                    'end_date' : data.end_date  
+                }
+            }
         }
+
+
         //getdata
         var token = $('#token').val()
         var table = $('#regionalTable').DataTable({

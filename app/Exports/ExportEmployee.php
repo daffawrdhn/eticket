@@ -24,11 +24,11 @@ class ExportEmployee implements FromCollection, WithHeadings, ShouldAutoSize
         foreach($datas as $d){
             $employee = Employee::where('employee_id', $d->supervisor_id)->first();
             $data['no'] = $no;
-            $data['employee_id'] = "'".$d->employee_id;
-            $data['employee_ktp'] = "'".$d->employee_ktp;
-            $data['employee_name'] = "'".$d->employee_name;
-            $data['employee_email'] = "'".$d->employee_email;
-            $data['supervisor_id'] = "'".$d->supervisor_id;
+            $data['employee_id'] = $d->employee_id;
+            $data['employee_ktp'] = $d->employee_ktp;
+            $data['employee_name'] = $d->employee_name;
+            $data['employee_email'] = $d->employee_email;
+            $data['supervisor_id'] = $d->supervisor_id;
             $data['supervisor_name'] = $employee->employee_name;
             $data['role_name'] = $d->role['role_name'];
             $data['regional_name'] = $d->regional['regional_name'];

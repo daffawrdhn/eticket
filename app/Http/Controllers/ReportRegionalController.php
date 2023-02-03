@@ -23,8 +23,15 @@ class ReportRegionalController extends BaseController
             if ($id == 0) {
 
                 if ($request->regional_id == 0) {
-                    # code...
-                    $datas = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+
+                    if ($request->start_date != '') {
+                        $datas = Ticket::whereBetween('created_at', [$request->start_date, $request->end_date])        
+                        ->with('feature', 'subFeature', 'ticketStatus')    
+                        ->get();
+                    }else{
+                        
+                        $datas = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+                    }
                 }else{
                     $employees = Employee::where('regional_id', $request->regional_id)->get();
                 

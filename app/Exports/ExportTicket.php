@@ -70,9 +70,9 @@ class ExportTicket implements FromCollection, WithHeadings, ShouldAutoSize
             $getSupervisor = Employee::where('employee_id', $t->supervisor_id)->first();
 
             $data['no'] = $no;
-            $data['employee_id'] = "'".$t->employee_id;
+            $data['employee_id'] = $t->employee_id;
             $data['employee_name'] = $getEmployee->employee_name;
-            $data['supervisor_id'] = "'".$t->supervisor_id;
+            $data['supervisor_id'] = $t->supervisor_id;
             $data['supervisor_name'] = $getSupervisor->employee_name;
             $data['regional'] = $getEmployee->regional->regional_name;
             $data['jenis_ticket'] = $t->feature['feature_name'];
