@@ -273,15 +273,18 @@ class EmployeeController extends BaseController
                 return DataTables::of($customers)
                     ->addColumn('action', function ($row) {
                         $action = '
-                        <div class="btn-group">
-                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-gear-fill"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="reset-pass" href="#" data-id="'. $row->employee_id .'">reset Pass</a></li>
-                            <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Edit</a></li>
-                            <li><a class="dropdown-item" id="delete-user" data-id="'. $row->employee_id .'" href="#">Delete</a></li>
-                            </ul>
+                        <div class="tooltipButtonEdit">
+                            <div class="btn-group">
+                                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-gear-fill"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" id="reset-pass" href="#" data-id="'. $row->employee_id .'">reset Pass</a></li>
+                                <li><a class="dropdown-item" id="edit-user" href="#" data-id="'. $row->employee_id .'" data-bs-toggle="modal" data-bs-target="#modalAddUser">Edit</a></li>
+                                <li><a class="dropdown-item" id="delete-user" data-id="'. $row->employee_id .'" href="#">Delete</a></li>
+                                </ul>
+                            </div>
+                            <p class="tooltiptext">Setting</p>
                         </div>
                         ';
                         return $action;
