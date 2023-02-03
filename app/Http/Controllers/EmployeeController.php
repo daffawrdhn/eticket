@@ -143,7 +143,7 @@ class EmployeeController extends BaseController
 
               
             
-            // $email = $this->sendNotifEmail($params);
+            $this->sendNotifEmail($params);
               
             
 
