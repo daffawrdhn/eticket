@@ -476,7 +476,7 @@ public function updateStatus(Request $request, $ticketId)
 
     function sendNotifEmail(array $params) {
         foreach ($params['recipients'] as $recipient) {
-          $data = $params;
+          $data = $recipient;
           Mail::to($recipient['email'])->send(new TicketMail($data));
         }
     }

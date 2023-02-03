@@ -64,20 +64,14 @@ Route::middleware('auth:sanctum')->group( function () {
             'recipients' => [
               [
                 'email' => 'wardhanadty@gmail.com',
-                'subject' => 'test1',
-                'body' => 'test1',
-              ],
-              [
-                'email' => 'wardhanadty@gmail.com',
-                'subject' => 'test2',
-                'body' => 'test2',
+                'subject' => 'Test Email',
+                'body' => 'if receive this email, program should work properly :)',
               ]
             ],
           ];
        
         foreach ($params['recipients'] as $recipient) {
             $data = $recipient;
-            // dd($data);
             Mail::to($recipient['email'])->send(new TicketMail($data));
         }
        
