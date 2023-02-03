@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\Ticket as TicketMail;
 
 
 class TicketController extends BaseController
@@ -473,61 +474,10 @@ public function updateStatus(Request $request, $ticketId)
     }
 }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Ticket $ticket)
-    {
-        //
-    }
-
     function sendNotifEmail(array $params) {
         foreach ($params['recipients'] as $recipient) {
-          $subject = $recipient['subject'];
           $data = $params;
-      
-          Mail::send('emails.notif', ['data' => $data], function($message) use ($recipient, $subject) {
-            $message->to($recipient['email']);
-            $message->subject($subject);
-          });
+          Mail::to($recipient['email'])->send(new TicketMail($data));
         }
     }
 

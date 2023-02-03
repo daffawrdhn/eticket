@@ -1,24 +1,12 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>{{ $data->subject }}</title>
-  </head>
-  <body>
-    <table style="width:100%;">
-      <tr>
-        <td style="padding: 10px;">
-          <h1 style="color: #1c75bb;">{{ $data->subject }}</h1>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 10px;">
-          {{ $data->body }}
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 10px;">
-          <p style="font-size: 12px;">This is an automated email, please do not reply.</p>
-        </td>
-      </tr>
-    </table>
-  </body>
+<head>
+    <title>E-ticket - Email Notification</title>
+</head>
+<body>
+    <h1>{{ $details['subject'] }}</h1>
+    <p>{{ $details['body'] }}</p>
+   
+    <p>Thank you</p>
+</body>
 </html>
