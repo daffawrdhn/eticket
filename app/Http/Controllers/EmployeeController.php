@@ -14,6 +14,7 @@ use App\Models\RegionalPIC;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\Ticket as TicketMail;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends BaseController
@@ -133,8 +134,9 @@ class EmployeeController extends BaseController
                   [
                     'email' => $request->employee_email,
                     'subject' => 'Password Eticket Mobile',
-                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $user->employee_id .'\n Password =>'. $employeePassword,
-                
+                    'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. ',
+                    'nik' =>  $user->employee_id,
+                    'password' => $employeePassword
                   ]
                 ],
               ];
@@ -517,9 +519,10 @@ class EmployeeController extends BaseController
                 'recipients' => [
                     [
                         'email' => $isMail->employee_email,
-                        'subject' => 'Reset Password Eticket Mobile',
-                        'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. \n Nik =>'. $id .'\n Password =>'. $employeePassword
-                        
+                        'subject' => 'Password Eticket Mobile',
+                        'body' => 'This is your password for mobile eticket aplication. Please Change Your  Password And Dont Show this mail for another people. thanks. ',
+                        'nik' =>  $id,
+                        'password' => $employeePassword
                         ]
                     ],
                 ];
@@ -634,13 +637,8 @@ class EmployeeController extends BaseController
 
     function sendNotifEmail(array $params) {
         foreach ($params['recipients'] as $recipient) {
-          $subject = $recipient['subject'];
-          $body = $recipient['body'];
-      
-          Mail::raw($body, function($message) use ($recipient, $subject) {
-            $message->to($recipient['email']);
-            $message->subject($subject);
-          });
+          $data = $recipient;
+          Mail::to($recipient['email'])->send(new TicketMail($data));
         }
-      }
+    }
 }
