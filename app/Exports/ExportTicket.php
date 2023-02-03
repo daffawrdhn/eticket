@@ -29,7 +29,17 @@ class ExportTicket implements FromCollection, WithHeadings, ShouldAutoSize
     {
 
         if ($this->regionalId == 0) {
-            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+            
+            if ($this->startDate != "") {
+                
+                $tickets = Ticket::whereBetween('created_at', [$this->startDate, $this->endDate])        
+                ->with('feature', 'subFeature', 'ticketStatus')    
+                ->get();
+                
+            }else{
+                
+                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+            }
         }else{
 
             if ($this->startDate != "") {

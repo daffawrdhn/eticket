@@ -20,6 +20,12 @@ class ExportController extends BaseController
         
         if ($regionalId == 0) {
             $fileName = "report eticket";
+
+            if ($startDate != "") {
+                $fileName = "report eticket (".$startDate." to ".$endDate.")";
+            }else{
+                $fileName = "report eticket";
+            }
         }else{
             $regionalName = Regional::where('regional_id', $regionalId)->first();
 
@@ -43,7 +49,7 @@ class ExportController extends BaseController
         if ($regionalId == 0) {
 
             if ($startDate != "") {
-                $fileName = "report eticket summary Regional (".$startDate." to ".$endDate.")";
+                $fileName = "report eticket summary (".$startDate." to ".$endDate.")";
             }else{
                 $fileName = "report eticket summary";
             }
