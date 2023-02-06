@@ -3,9 +3,13 @@ $(document).ready(function () {
     $("#alert").hide()
     $("#isLoading").hide()
     tableReport();
+    select();
 
 
     setInterval(()=>{
+        $("#regional-select").val(null).trigger("change"); 
+        $("#start-date").val('');
+        $("#end-date").val('');
         $('#regionalTable').DataTable().destroy()
         tableReport()
     },300000)
@@ -16,8 +20,7 @@ $(document).ready(function () {
         $(this).attr("data-id", 0);
         $('#regionalTable').DataTable().destroy()
         tableReport()
-        $('#select-regional option:selected').remove();
-        $('#select-regionalId option:selected').remove();
+        $("#regional-select").val(null).trigger("change"); 
         $("#start-date").val('');
         $("#end-date").val('');
 
@@ -26,14 +29,11 @@ $(document).ready(function () {
 
     $(document).on('click','#closeSearch', function (e) {
         $("#alert").hide()
-        $('#select-regionalId option:selected').remove();
+        $("#regional-select").val(null).trigger("change"); 
         $("#start-date").val('');
         $("#end-date").val('');
     });
     
-    $(document).on('click','#searchLaporan', function (e) {
-        $('#select-regional option:selected').remove();
-    });
     
 
     $(document).on('click','#btnExport', function (e) {
@@ -230,45 +230,51 @@ $(document).ready(function () {
      }
 
 
+    function select(){
 
-    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    var token = $('#token').val()
-    var selectRegional =   $('#regional-select').select2({
-                            placeholder : "Select Regional",
-                            dropdownParent: $("#search"),
-                            ajax: { 
-                                url: APP_URL + "api/select-regional",
-                                type: "post",
-                                dataType: 'json',
-                                delay: 250,
-                                beforeSend: function(xhr, settings) { 
-                                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                                },
-                                data: function (params) {
-                                return {
-                                    _token: CSRF_TOKEN,
-                                    search: params.term // search term
-                                };
-                                },
-                                processResults: function (response) {
-                                return {
-                                    results: $.map(response.data, function (item) {
-                                        
-                                        return{
-                                            text : item.regional_name,
-                                            id: item.regional_id
-                                        }
-                                    })
-                                };
-                                },
-                                cache: true
-                            }
-                        })
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        var token = $('#token').val()
+        var selectRegional =   $('#regional-select').select2({
+                                placeholder : "Select Regional",
+                                dropdownParent: $("#search"),
+                                ajax: { 
+                                    url: APP_URL + "api/select-regional",
+                                    type: "post",
+                                    dataType: 'json',
+                                    delay: 250,
+                                    beforeSend: function(xhr, settings) { 
+                                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                                    },
+                                    data: function (params) {
+                                    return {
+                                        _token: CSRF_TOKEN,
+                                        search: params.term // search term
+                                    };
+                                    },
+                                    processResults: function (response) {
+                                    return {
+                                        results: $.map(response.data, function (item) {
+                                            
+                                            return{
+                                                text : item.regional_name,
+                                                id: item.regional_id
+                                            }
+                                        })
+                                    };
+                                    },
+                                    cache: true
+                                }
+                            })
+    
+                        selectRegional.data('select2').$selection.css('height', '40px')
+                        selectRegional.data('select2').$selection.css('padding-top', '5px')
+                            
+        
+        return selectRegional
+                    
+    }
 
-                    selectRegional.data('select2').$selection.css('height', '40px')
-                    selectRegional.data('select2').$selection.css('padding-top', '5px')
 
-                
 
     function fnExcelReport()
     {

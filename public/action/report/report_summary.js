@@ -4,7 +4,7 @@ $(document).ready(function () {
     tableReport();
 
     setInterval(()=>{
-        $('#select-regionalId option:selected').remove();
+        $("#regional-select").val(null).trigger("change"); 
         $("#start-date").val('');
         $("#end-date").val('');
         $('#summaryTable').DataTable().destroy()
@@ -12,7 +12,7 @@ $(document).ready(function () {
     },300000)
 
     $(document).on('click','#select-all', function (e) {
-        $('#select-regionalId option:selected').remove();
+        $("#regional-select").val(null).trigger("change"); 
         $("#start-date").val('');
         $("#end-date").val('');
         $('#summaryTable').DataTable().destroy()
@@ -110,7 +110,7 @@ $(document).ready(function () {
     })
 
     $(document).on('click','#closeSearch', function (e) {
-        $('#select-regionalId option:selected').remove();
+        $("#regional-select").val(null).trigger("change"); 
         $('#start-date').removeClass('is-invalid');
         $('#end-date').removeClass('is-invalid');
         $("#start-date").val('');
