@@ -19,7 +19,7 @@
                                 <div class="card-body d-flex justify-content-between">
                                     <div>
                                         <div class="p-2 fs-3"><i class="bi bi-ticket-fill"></i></div>
-                                        <div>Ticket Approve</div>
+                                        <div>Ticket All</div>
                                     </div>
                                     <div class="fs-1" id="ticketTotal"></div>
                                 </div>
