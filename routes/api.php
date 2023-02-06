@@ -142,7 +142,7 @@ Route::middleware('auth:api')->group( function () {
 
 
     // ////report
-    Route::post('get-report-regional/{id}', [ReportRegionalController::class, 'getReport'])->name('auth.getReport');
+    Route::post('get-report-regional', [ReportRegionalController::class, 'getReport'])->name('auth.getReport');
     Route::post('get-report-summary', [ReportSummaryController::class, 'getDataSumary'])->name('auth.getDataSumary');
     
     //chart

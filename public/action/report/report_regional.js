@@ -10,26 +10,18 @@ $(document).ready(function () {
         tableReport()
     },300000)
 
-        $('#select-regional').on('select2:select', function (e) {
-        var data = e.params.data.id;
-        var url = 'api/get-report-regional/'+data
-        $('#regionalTable').DataTable().destroy()
-        tableReport(url)
-        $('#select-regionalId option:selected').remove();
-        $("#start-date").val('');
-        $("#end-date").val('');
-
-    });
-
+    console.log($('#select-all').attr("data-id"));
     
     $(document).on('click','#select-all', function (e) {
-        var url = 'api/get-report-regional/0'
+        $(this).attr("data-id", 0);
         $('#regionalTable').DataTable().destroy()
-        tableReport(url)
+        tableReport()
         $('#select-regional option:selected').remove();
         $('#select-regionalId option:selected').remove();
         $("#start-date").val('');
         $("#end-date").val('');
+
+        console.log($(this).attr('data-id'));
     });
 
     $(document).on('click','#closeSearch', function (e) {
@@ -65,8 +57,8 @@ $(document).ready(function () {
             'startDate' : startDate,
             'endDate' : endDate
         }
-        console.log(data);
 
+        console.log(data);
         $.ajax({
             xhrFields: {
                 responseType: 'blob',
@@ -134,7 +126,6 @@ $(document).ready(function () {
         var regional = $("#regional-select").val();
         var startDate = $("#start-date").val();
         var endDate = $("#end-date").val();
-        var url = 'api/get-report-regional/0'
 
         var data = {
             'regional_id' : regional,
@@ -142,12 +133,22 @@ $(document).ready(function () {
             'end_date' : endDate
         }
 
-        if (endDate == '' || startDate == '') {
+
+        if (regional == null && endDate == '' && startDate == '') {
             $("#isLoading").show();
             setTimeout(() => {
                 $("#isLoading").hide();
                 $("#alert").show()
             },1000)
+        }else if(startDate != '' && endDate == ""){
+            $('#end-date').addClass('is-invalid');
+            $('#end-dateFeedback').html('please fill Add End Date')
+        }else if(startDate == '' && endDate != ""){
+            $('#start-date').addClass('is-invalid');
+            $('#start-dateFeedback').html('please fill Add Start Date')
+        }else if(startDate > endDate){
+            $('#end-date').addClass('is-invalid');
+            $('#end-dateFeedback').html('Please Enter the end date > start date')
         }else{
             $("#isLoading").show();
             setTimeout(() => {
@@ -156,32 +157,36 @@ $(document).ready(function () {
             },1000)
             
             $('#regionalTable').DataTable().destroy()
-            tableReport(url, data);
+            tableReport(data);
         }
-        
     })
 
-    function tableReport(url, data = null) { 
+    function tableReport(data = null) { 
 
-        if (url == null) {
-            url = 'api/get-report-regional/0'
-            
-        }
+        var regionalId
+        var startDate
+        var endDate 
 
-        if ( data == null) {
-            data = {
-                'regional_id' : 0,
-            }
-        }else{
-            if (data.regional_id == null) {
-                data = {
-                    'regional_id' : 0,
-                    'start_date' : data.start_date,
-                    'end_date' : data.end_date  
-                }
-            }
-        }
 
+    if (data == null) {
+        regionalId = 0;
+        startDate = "";
+        endDate = "";
+    }else if(data.regional_id == null){
+        regionalId = 0
+        startDate = data.start_date
+        endDate = data.end_date
+    }else{
+        regionalId = data.regional_id
+        startDate = data.start_date
+        endDate = data.end_date
+    }
+
+    var datas = {
+        "regionalId" : regionalId,
+        "startDate" : startDate,
+        "endDate" : endDate
+    }
 
         //getdata
         var token = $('#token').val()
@@ -196,9 +201,9 @@ $(document).ready(function () {
                 }
             },
             ajax: { 
-                url: APP_URL + url,
+                url: APP_URL + "api/get-report-regional",
                 type: "POST",
-                data : data,
+                data : datas,
                 dataType: 'json',
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
@@ -224,43 +229,7 @@ $(document).ready(function () {
         return table;
      }
 
-    
 
-    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    var token = $('#token').val()
-    var selectRegional =   $('#regional_id').select2({
-                            placeholder : "Select Regional",
-                            ajax: { 
-                                url: APP_URL + "api/select-regional",
-                                type: "post",
-                                dataType: 'json',
-                                delay: 250,
-                                beforeSend: function(xhr, settings) { 
-                                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                                },
-                                data: function (params) {
-                                return {
-                                    _token: CSRF_TOKEN,
-                                    search: params.term // search term
-                                };
-                                },
-                                processResults: function (response) {
-                                return {
-                                    results: $.map(response.data, function (item) {
-                                        
-                                        return{
-                                            text : item.regional_name,
-                                            id: item.regional_id
-                                        }
-                                    })
-                                };
-                                },
-                                cache: true
-                            }
-                        })
-
-    selectRegional.data('select2').$selection.css('height', '40px')
-    selectRegional.data('select2').$selection.css('padding-top', '5px')
 
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var token = $('#token').val()

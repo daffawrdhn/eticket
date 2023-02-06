@@ -17,15 +17,10 @@
                     <div class="container-fluid p-4 rounded shadow position-relative">
                         <div class="container-fluid" id="overflow">
                             <div class="container-fluid d-flex flex-row justify-content-between">
-                                <div class="col-md-5 col-sm-12 d-flex flex-row">
-                                    <div class="col-6 ">
-                                        <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
-                                        <div id="select-regional" class="form-group border-danger">
-                                            <select class="" style="width: 100%"  id="regional_id" name="regional_id" aria-label="Default select example"></select>
-                                        </div>
-                                    </div>
+                                <div class="col-md-5 col-sm-12 d-flex flex-row mb-4">
                                     <div class="col-4">
-                                        <button class="btn btn-primary" id="select-all">all data</button>
+                                        <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
+                                        <button class="btn btn-primary" id="select-all" data-id="">all data</button>
                                     </div>
                                     <div class="col-4">
                                         <button class="btn btn-light border" data-bs-toggle="modal" id="searchLaporan" data-bs-target="#search">Search<i class="bi bi-search"></i></button>
