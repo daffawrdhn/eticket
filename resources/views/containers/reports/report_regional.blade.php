@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                                 <div class="tooltipButtonEdit">
-                                    <button type="button" id="btnExport" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
+                                    <button type="button" id="btnExport" regional-id="0" start-date="" end-date="" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
                                     <p class="tooltiptext">Export to Excel</p>
                                     <iframe id="txtArea1" style="display:none"></iframe>
                                 </div>

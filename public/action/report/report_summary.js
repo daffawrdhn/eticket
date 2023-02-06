@@ -12,7 +12,12 @@ $(document).ready(function () {
     },300000)
 
     $(document).on('click','#select-all', function (e) {
+        $('#btnExport').attr('regional-id', "0");
+        $('#btnExport').attr('start-date', "");
+        $('#btnExport').attr('end-date', "");
+
         $("#regional-select").val(null).trigger("change"); 
+
         $("#start-date").val('');
         $("#end-date").val('');
         $('#summaryTable').DataTable().destroy()
@@ -102,6 +107,16 @@ $(document).ready(function () {
                 $("#isLoading").hide();
                 $("#search").modal('hide')
             },1000)
+
+            if (regional == null) {
+                var regionalId = 0
+            }else{
+                regionalId = regional
+            }
+
+            $('#btnExport').attr('regional-id', regionalId);
+            $('#btnExport').attr('start-date', startDate);
+            $('#btnExport').attr('end-date', endDate);
             
             $('#summaryTable').DataTable().destroy()
             tableReport(data);
@@ -211,22 +226,13 @@ $(document).ready(function () {
     //export data
     $(document).on('click','#btnExport', function (e) {
 
-        var selectRegional = $("#regional_id").val();
-        var regionalId = $("#regional-select").val();
-        var startDate = $("#start-date").val();
-        var endDate = $("#end-date").val();
+        var regionalId = $(this).attr('regional-id');
+        var startDate = $(this).attr('start-date');
+        var endDate = $(this).attr('end-date');
         var data
 
-        if (selectRegional == null && regionalId == null) {
-            var isRegionalId = 0;
-        }else if(selectRegional != null && regionalId == null){
-            var isRegionalId = selectRegional;
-        }else if (selectRegional == null && regionalId != null) {
-            var isRegionalId = regionalId;
-        }
-
         data = {
-            'regionalId' : isRegionalId,
+            'regionalId' : regionalId,
             'startDate' : startDate,
             'endDate' : endDate
         }
