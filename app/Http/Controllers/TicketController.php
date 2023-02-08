@@ -448,7 +448,7 @@ public function updateStatus(Request $request, $ticketId)
                                   [
                                     'email' => $eId->employee_email,
                                     'subject' => 'Ticket ID:'.$statusHistory->ticket_id.' Updated -'.$statusNext->ticket_status_name,
-                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' updated to, '.$statusNow->ticket_status_name.', now '.$statusNow->ticket_status_next,
+                                    'body' => 'Ticket with ID:'.$statusHistory->ticket_id.' status updated to '.$statusNext->ticket_status_name.', now '.$statusNext->ticket_status_next,
                                   ],
                                   [
                                     'email' => $spvId->employee_email,
