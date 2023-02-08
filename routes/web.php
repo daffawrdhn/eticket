@@ -17,6 +17,7 @@ use App\Http\Controllers\ReportRegionalController;
 use App\Http\Controllers\ReportSummaryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
+use App\Mail\SendMail;
 use App\Models\Depthead;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
@@ -62,17 +63,20 @@ Route::middleware('auth:sanctum')->group( function () {
    
         $params = [
             'recipients' => [
+             
               [
-                'email' => 'wardhanadty@gmail.com',
+                'email' => 'rudinp38@gmail.com',
                 'subject' => 'Test Email',
                 'body' => 'if receive this email, program should work properly :)',
+                'nik' => '00001',
+                'password' => 'plmnko123!'
               ]
             ],
           ];
        
         foreach ($params['recipients'] as $recipient) {
             $data = $recipient;
-            Mail::to($recipient['email'])->send(new TicketMail($data));
+            Mail::to($recipient['email'])->send(new SendMail($data));
         }
        
         dd("Email is Sent.");

@@ -17,7 +17,7 @@ $(document).ready(function () {
                 let timerInterval
                 Swal.fire({
                 title: 'Loading!',
-                timer: 2000,
+                timer: 1000,
                 timerProgressBar: true,
                 didOpen: () => {
                     Swal.showLoading()
