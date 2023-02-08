@@ -27,7 +27,6 @@ class Ticket extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->subject($this->details['subject'])
-                    ->view('emails.notif');
+        return $this->subject($this->details['subject'])->view('emails.notif');
     }
 }
