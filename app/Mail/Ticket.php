@@ -9,7 +9,8 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Ticket extends Mailable
+class Ticket extends Mailable implements ShouldQueue
+
 {
     use Queueable, SerializesModels;
 
