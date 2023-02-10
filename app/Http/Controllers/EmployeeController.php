@@ -247,8 +247,11 @@ class EmployeeController extends BaseController
 
     public function getEmployee(Request $request){
         try {
-            
-            $datas = Employee::orderBy('created_at', 'asc')->with('Role', 'Organization', 'Regional')->get();
+            if($request->regionalId == 0){
+                $datas = Employee::orderBy('created_at', 'asc')->with('Role', 'Organization', 'Regional')->get();
+            }else{
+                $datas = Employee::orderBy('created_at', 'asc')->where('regional_id', $request->regionalId)->with('Role', 'Organization', 'Regional')->get();
+            }
             $isNow = Carbon::now();
 
             $dataEmployee = [];

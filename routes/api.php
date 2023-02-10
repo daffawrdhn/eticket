@@ -103,7 +103,7 @@ Route::middleware('auth:api')->group( function () {
 
     // User
     Route::post('add-user', [EmployeeController::class, 'store'])->name('auth.addUser');
-    Route::get('get-user', [EmployeeController::class, 'getEmployee'])->name('auth.getUser');
+    Route::post('get-user', [EmployeeController::class, 'getEmployee'])->name('auth.getUser');
     Route::get('get-user/{id}', [EmployeeController::class, 'show'])->name('auth.getUserById');
     Route::put('update-user/{id}', [EmployeeController::class, 'update'])->name('auth.updateUser');
     Route::post('reset-user-password/{id}', [EmployeeController::class, 'resetPassword'])->name('auth.resetPassword');

@@ -24,3 +24,31 @@ function modalError(text) {
         text : text,
     })
 }
+
+
+
+function modalUserSuccess(title, table) {
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: title,
+        showConfirmButton: false,
+        timer: 2000,
+        willClose: () => {
+            table
+        }
+    }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+            table
+        }
+    })
+}
+
+function modalUserError(text) {
+    Swal.fire({
+        icon : 'warning',
+        confirmButtonText: 'Ok',
+        title : 'Warning!',
+        text : text,
+    })
+}

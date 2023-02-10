@@ -11,12 +11,18 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class ExportEmployee implements FromCollection, WithHeadings, ShouldAutoSize
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    private $regionalId;
+
+    public function __construct($regionalId){
+        $this->regionalId = $regionalId;
+    }
     public function collection()
     {
-        $datas = Employee::orderBy('created_at', 'asc')->with('Role', 'Organization', 'Regional')->get();
+        if($this->regionalId == 0){
+            $datas = Employee::orderBy('created_at', 'asc')->with('Role', 'Organization', 'Regional')->get();
+        }else{
+            $datas = Employee::orderBy('created_at', 'asc')->where('regional_id', $this->regionalId)->with('Role', 'Organization', 'Regional')->get();
+        }
         $isNow = Carbon::now();
 
         $no = 1;

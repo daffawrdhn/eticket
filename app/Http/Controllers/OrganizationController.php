@@ -212,8 +212,8 @@ class OrganizationController extends BaseController
             $response = array();
             foreach($organizations as $organization){
                 $response[] = array(
-                    "organization_id"=>$organization->organization_id,
-                    "organization_name"=>$organization->organization_name
+                    "id"=>$organization->organization_id,
+                    "text"=>$organization->organization_name
                 );
             }
             return $this->sendResponse($response, 'success'); 

@@ -1,44 +1,82 @@
 $(document).ready(function () {
     var token = $('#token').val()
-    var table = $('#employeeTable').DataTable({
-                responsive: true,
-                processing: true,
-                autoWidth : false,
-                serverSide: true,
-                ajax: { 
-                    url: APP_URL + "api/get-user",
-                    type: "GET",
-                    dataType: 'json',
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    },
-                },
-                columns: [
-                    {data: 'employee_id', name: 'employee_id'},
-                    {data: 'employee_ktp', name: 'employee_ktp'},
-                    {data: 'employee_name', name: 'employee_name'},
-                    {data: 'employee_email', name: 'employee_email'}, 
-                    {data: 'supervisor_id', name: 'supervisor_id'}, 
-                    {data: 'supervisor_name', name: 'supervisor_name'}, 
-                    {data: 'role_name', name: 'role_name'}, 
-                    {data: 'organization_name', name: 'organization_name'}, 
-                    {data: 'regional_name', name: 'regional_name'}, 
-                    {
-                        data: 'status', 
-                        name: 'status',
-                        orderable: true, 
-                        searchable: true,
-                    },
-                    {
-                        data: 'action', 
-                        name: 'action', 
-                        orderable: true, 
-                        searchable: true,
-                    },
-                    
-                ]   
+
+    tableUser()
+
+
+    // select regional
+
+    $('#regional-select').on("select2:select", function(e) { 
+        var regionalId = e.params.data.id
+        $('#btnExport').attr('regional-id', regionalId);
+        $('#employeeTable').DataTable().destroy()
+        tableUser(regionalId)
     });
 
+    // select all
+
+    $(document).on('click','#select-all', function (e) {
+        $('#btnExport').attr('regional-id', "0");
+
+
+        $('#employeeTable').DataTable().destroy()
+        tableUser()
+        
+        $("#regional-select").val(null).trigger("change"); 
+        $("#start-date").val('');
+        $("#end-date").val('');
+
+    });
+
+    function tableUser(data = null) {
+        var regionalId = data == null ? 0 : data
+
+        var datas = {
+            'regionalId' : regionalId
+        }
+
+        var table = $('#employeeTable').DataTable({
+            responsive: true,
+            processing: true,
+            autoWidth : false,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-user",
+                type: "POST",
+                data: datas,
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+            },
+            columns: [
+                {data: 'employee_id', name: 'employee_id'},
+                {data: 'employee_ktp', name: 'employee_ktp'},
+                {data: 'employee_name', name: 'employee_name'},
+                {data: 'employee_email', name: 'employee_email'}, 
+                {data: 'supervisor_id', name: 'supervisor_id'}, 
+                {data: 'supervisor_name', name: 'supervisor_name'}, 
+                {data: 'role_name', name: 'role_name'}, 
+                {data: 'organization_name', name: 'organization_name'}, 
+                {data: 'regional_name', name: 'regional_name'}, 
+                {
+                    data: 'status', 
+                    name: 'status',
+                    orderable: true, 
+                    searchable: true,
+                },
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        });
+    
+        return table
+    }
 
     function IsEmail(email) { 
         var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -103,26 +141,11 @@ $(document).ready(function () {
     // export
     $(document).on('click','#btnExport', function (e) {
 
-        var selectRegional = $("#regional_id").val();
-        var regionalId = $("#regional-select").val();
-        var startDate = $("#start-date").val();
-        var endDate = $("#end-date").val();
-        var data
-
-        if (selectRegional == null && regionalId == null) {
-            var isRegionalId = 0;
-        }else if(selectRegional != null && regionalId == null){
-            var isRegionalId = selectRegional;
-        }else if (selectRegional == null && regionalId != null) {
-            var isRegionalId = regionalId;
-        }
+        var regionalId = $(this).attr('regional-id')
 
         data = {
-            'regionalId' : isRegionalId,
-            'startDate' : startDate,
-            'endDate' : endDate
+            'regionalId' : regionalId,
         }
-        console.log(data);
 
         $.ajax({
             xhrFields: {
@@ -210,7 +233,8 @@ $(document).ready(function () {
         
                         setTimeout(()=>{
                             $("#loading").modal('hide')
-                            modalSuccess(response.message, table)
+                            $('#employeeTable').DataTable().destroy()
+                            modalSuccess(response.message, tableUser())
                         },1000)
                         
                     },
@@ -292,7 +316,8 @@ $(document).ready(function () {
                     $("#modalAddUser").modal('hide');
                     setTimeout(()=>{
                         $("#loading").modal('hide') 
-                            modalSuccess(response.message, table)
+                        $('#employeeTable').DataTable().destroy()
+                        modalSuccess(response.message, tableUser())
                         
                     },1000)
                     
@@ -360,7 +385,8 @@ $(document).ready(function () {
                         $("#modalAddUser").modal('hide');
                         setTimeout(() => { 
                             $("#loading").modal('hide') 
-                            modalSuccess(response.message, table)
+                            $('#employeeTable').DataTable().destroy()
+                            modalSuccess(response.message, tableUser())
                          },1000)
                     },
                     error:function(response){
@@ -419,8 +445,8 @@ $(document).ready(function () {
                             setTimeout(()=>{
 
                                 $("#loading").modal('hide') 
-
-                                modalSuccess(response.message, table)
+                                $('#employeeTable').DataTable().destroy()
+                                modalSuccess(response.message, tableUser())
                             },1000)
                         
                     },error:function(response){
@@ -491,7 +517,8 @@ $(document).ready(function () {
                             
                             setTimeout(()=>{
                                 $("#loading").modal('hide') 
-                                modalSuccess(response.message, table)
+                                $('#employeeTable').DataTable().destroy()
+                                modalSuccess(response.message, tableUser())
                             },1000)
             
                         }
@@ -595,7 +622,8 @@ $(document).ready(function () {
 
                     setTimeout(()=>{
                         $("#loading").modal('hide') 
-                        modalSuccess(response.message, table)
+                        $('#employeeTable').DataTable().destroy()
+                        modalSuccess(response.message, tableUser())
                     },1000)
                     
                 },

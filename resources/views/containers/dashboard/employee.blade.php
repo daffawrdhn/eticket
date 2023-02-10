@@ -15,9 +15,15 @@
                     </ol>
 
                     <div class="container-fluid p-4 rounded shadow">
-                        <div class="d-flex justify-content-end mb-5" style="">
+                        <div class="d-flex justify-content-between mb-5" style="">
+                            <div class="col-5 d-flex">
+                                <button class="btn btn-primary" id="select-all">all data</button>
+                                <div class="col-8">
+                                    <select class="form-select  mt-4" id="regional-select" name="regional-select" aria-label="Default select example" style="width: 100%"  style="height: 50px"></select>
+                                </div>
+                            </div>
                             <div class="tooltipButtonEdit" style="width: 50px">
-                                <button type="button" id="btnExport" class="btn btn-success"><i class="bi bi-file-earmark-excel-fill"></i></button>
+                                <button type="button" id="btnExport" class="btn btn-success fs-5" regional-id="0"><i class="bi bi-file-earmark-excel-fill"></i></button>
                                 <p class="tooltiptext">Export to Excel</p>
                                 <iframe id="txtArea1" style="display:none"></iframe>
                             </div>
@@ -145,7 +151,7 @@
                         <select class="form-select  mt-4" id="organization_id" name="organization_id" style="width: 100%" aria-label="Default select example"></select>
                         </div>
                     <div class="form-group mt-4">
-                    <label class="label-form" for="organization_id">Select Regional</label>
+                        <label class="label-form" for="organization_id">Select Regional</label>
                         <select class="form-select  mt-4" id="regional_id" name="regional_id" aria-label="Default select example" style="width: 100%"  style="height: 50px"></select>
                     </div>
                 

@@ -213,8 +213,8 @@ class RoleController extends BaseController
             $response = array();
             foreach($roles as $role){
                 $response[] = array(
-                    "role_id"=>$role->role_id,
-                    "role_name"=>$role->role_name
+                    "id"=>$role->role_id,
+                    "text"=>$role->role_name
                 );
             }
             return $this->sendResponse($response, 'success'); 

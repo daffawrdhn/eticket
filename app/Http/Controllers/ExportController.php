@@ -70,7 +70,14 @@ class ExportController extends BaseController
 
     public function exportEmployee(Request $request){
 
-        return Excel::download(new ExportEmployee, 'employee.xlsx');
+        if($request->regionalId == 0){
+            $fileName = 'report employee';
+        }else{
+            $regionalName = Regional::where('regional_id', $request->regionalId)->first();
+            $fileName = 'report employee by regional '.$regionalName->regional_name;
+        }
+
+        return Excel::download(new ExportEmployee($request->regionalId), $fileName.'.xlsx');
     }
      
 }
