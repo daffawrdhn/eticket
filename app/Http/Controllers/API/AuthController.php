@@ -57,7 +57,7 @@ class AuthController extends BaseController
                         $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
                         
                         $success = $authUser;
-                        $success->Spv = Employee::where('employee_id', Auth::user()->supervisor_id)->first();
+                        $success['Spv'] = Employee::where('employee_id', Auth::user()->supervisor_id)->first();
 
                         $authUser->api_token = $tokens;
                         $authUser->remember_token = $tokens;
