@@ -54,7 +54,7 @@ class AuthController extends BaseController
                         Auth::loginUsingId($request->employee_id);
 
                         $authUser = Employee::with('role', 'organization', 'regional')->find(Auth::user()->employee_id);
-                        $authUser['spv'] = Employee::with('role', 'organization', 'regional')->find(Auth::user()->supervisor_id);
+                        $authUser['spv'] = Employee::where('employee_id', Auth::user()->employee_id)->first();
                         $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
                         
                         $success = $authUser;
