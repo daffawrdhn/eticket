@@ -56,7 +56,7 @@ class AuthController extends BaseController
                         $authUser = Employee::with('role', 'organization', 'regional')->find(Auth::user()->employee_id);
 
                         foreach ($authUser as $auth) {
-                            $auth['Spv'] = Employee::with('role', 'organization', 'regional')->find(Auth::user()->supervisor_id);
+                            $auth['Spv'] = Employee::where('employee_id', Auth::user()->supervisor_id)->first();
                         }
                         $tokens = $authUser->createToken('MyAuthApp')->plainTextToken;
                         
