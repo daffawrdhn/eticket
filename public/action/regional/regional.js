@@ -189,7 +189,7 @@ $(document).ready(function () {
                     },
                     success: function(response){
                         
-                            modalSuccess(response.message)
+                            modalSuccess(response.message, table)
         
                     },error:function(response){
                         if (!response.success) {

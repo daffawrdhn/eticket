@@ -281,10 +281,8 @@ $(document).ready(function () {
                                         title : 'Deleted!',
                                         text : 'Your file has been deleted.',
                                         
-                                        
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            $("#master-check").prop('checked', false); 
                                             getDataOrganization();
                                         } 
                                     })
