@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="text" name="" id="token" value="{{ Auth::user()->api_token }}">
+                <input type="hidden" name="" id="token" value="{{ Auth::user()->api_token }}">
                 <div class="container-fluid p-4">
                     <div class="row">
                         <div class="col-lg-6">
