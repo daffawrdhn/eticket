@@ -55,7 +55,7 @@
                             </div>
                               
                             <div class="form-group">
-                                <button type="submit" id="button-forgot" class="form-control btn btn-primary rounded submit px-3">S U B M I T</button>
+                                <button type="submit" id="button-forgot" class="form-control btn btn-primary rounded submit px-3 mb-2">S U B M I T</button>
                                 <a href="/" class="form-control btn btn-primary rounded submit px-3">B A C K</a>
                             </div>
                         </form>
