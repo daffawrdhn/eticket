@@ -15,6 +15,12 @@
   min-height: 50vh;
 }
 
+#sideBarOverflow{
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+
 #summaryTable tbody tr:last-child {
   font-weight: bold !important;
 }

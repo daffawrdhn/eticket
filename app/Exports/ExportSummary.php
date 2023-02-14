@@ -222,9 +222,9 @@ class ExportSummary implements FromCollection, WithHeadings, ShouldAutoSize
 
         $datas[] = [
             'regional_name' => 'Total Jumlah',
+            'open' => $totalOpen.' tickets',
             'approve' => $totalApprove.' tickets',
             'reject' => $totalReject.' tickets',
-            'open' => $totalOpen.' tickets',
             'total_ticket' => $totalTicket.' tickets'
         ];
 
