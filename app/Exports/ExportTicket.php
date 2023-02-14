@@ -32,13 +32,13 @@ class ExportTicket implements FromCollection, WithHeadings, ShouldAutoSize
             
             if ($this->startDate != "") {
                 
-                $tickets = Ticket::whereBetween('created_at', [$this->startDate, $this->endDate])        
+                $tickets = Ticket::orderBy('created_at', 'desc')->whereBetween('created_at', [$this->startDate, $this->endDate])        
                 ->with('feature', 'subFeature', 'ticketStatus')    
                 ->get();
                 
             }else{
                 
-                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+                $tickets = Ticket::orderBy('created_at', 'desc')->with('feature', 'subFeature', 'ticketStatus')->get();
             }
         }else{
 
@@ -47,7 +47,7 @@ class ExportTicket implements FromCollection, WithHeadings, ShouldAutoSize
                 
                 $tickets = [];
                 foreach($employees as $employee):
-                    $ticket = Ticket::where('employee_id', $employee->employee_id)
+                    $ticket = Ticket::orderBy('created_at', 'desc')->where('employee_id', $employee->employee_id)
                         ->whereBetween('created_at', [$this->startDate, $this->endDate])        
                         ->with('feature', 'subFeature', 'ticketStatus')    
                         ->get();
@@ -61,7 +61,7 @@ class ExportTicket implements FromCollection, WithHeadings, ShouldAutoSize
                 
                 $tickets = [];
                 foreach($employees as $employee):
-                    $ticket = Ticket::where('employee_id', $employee->employee_id)
+                    $ticket = Ticket::orderBy('created_at', 'desc')->where('employee_id', $employee->employee_id)
                         ->with('feature', 'subFeature', 'ticketStatus')            
                         ->get();
 

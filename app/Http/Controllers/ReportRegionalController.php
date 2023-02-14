@@ -24,11 +24,11 @@ class ReportRegionalController extends BaseController
             if ($request->regionalId == 0) {
 
                 if ($request->startDate != "") {
-                    $datas = Ticket::whereBetween('created_at', [$request->startDate, $request->endDate])        
+                    $datas = Ticket::orderBy('created_at', 'desc')->whereBetween('created_at', [$request->startDate, $request->endDate])        
                     ->with('feature', 'subFeature', 'ticketStatus')    
                     ->get();
                 }else{
-                    $datas = Ticket::with('feature', 'subFeature', 'ticketStatus')->get();
+                    $datas = Ticket::orderBy('created_at', 'desc')->with('feature', 'subFeature', 'ticketStatus')->get();
                 }
 
                 // return $this->sendResponse($datas, 'success');
@@ -40,7 +40,7 @@ class ReportRegionalController extends BaseController
                 
                     $datas = [];
                     foreach($employees as $employee):
-                        $ticket = Ticket::where('employee_id', $employee->employee_id)
+                        $ticket = Ticket::orderBy('created_at', 'desc')->where('employee_id', $employee->employee_id)
                             ->whereBetween('created_at', [$request->startDate, $request->endDate])        
                             ->with('feature', 'subFeature', 'ticketStatus')    
                             ->get();
@@ -55,7 +55,7 @@ class ReportRegionalController extends BaseController
                     
                     $datas = [];
                     foreach($employees as $employee):
-                        $ticket = Ticket::where('employee_id', $employee->employee_id)
+                        $ticket = Ticket::orderBy('created_at', 'desc')->where('employee_id', $employee->employee_id)
                             ->with('feature', 'subFeature', 'ticketStatus')            
                             ->get();
     
