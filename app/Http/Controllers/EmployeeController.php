@@ -511,7 +511,7 @@ class EmployeeController extends BaseController
 
     public function resetPassword($id){
         try {
-            $employeePassword = $this->randomPassword(9);
+            $employeePassword = "Admin123!";
 
 
             $input['employee_id'] = $id;
