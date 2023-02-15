@@ -93,7 +93,7 @@
                     <div id="end-dateFeedback" class="invalid-feedback"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="searchReport">Save</button>
+                    <button type="submit" class="btn btn-primary" id="searchReport">Search</button>
                 </div>
             </div>
         </div>
