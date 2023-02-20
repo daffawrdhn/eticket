@@ -236,7 +236,6 @@ class TicketController extends BaseController
             $ticketHistories = TicketStatusHistory::where('status_after', 5)
                 ->where('supervisor_id', $auth->employee_id)
                 ->orderBy('created_at', 'desc')
-                ->distinct()
                 ->pluck('ticket_id');
 
             dd($ticketHistories);
