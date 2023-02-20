@@ -242,8 +242,9 @@ class TicketController extends BaseController
                 ->distinct()
                 ->pluck('ticket_id');
         
-            $tickets = Ticket::whereIn('ticket_id', $ticketHistory)
+                $tickets = Ticket::whereIn('ticket_id', $ticketHistory)
                 ->where('ticket_status_id', '!=', 6)
+                ->whereBetween('ticket_status_id', [4, 7])
                 ->with(['feature', 'subFeature', 'ticketStatus'])
                 ->get();
 
