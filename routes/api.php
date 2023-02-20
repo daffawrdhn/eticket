@@ -85,7 +85,10 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('get-ticket', [TicketController::class, 'getTicket'])->name('auth.getTicket');
     Route::get('get-approval', [TicketController::class, 'getApproval'])->name('auth.getApproval');
+    Route::get('get-todo', [TicketController::class, 'getTodo'])->name('auth.getTodo');
+
     Route::get('get-ticket/{id}', [TicketController::class, 'show'])->name('auth.getTicketById');
+    
 
     Route::get('get-history', [TicketController::class, 'getHistory'])->name('auth.getHistory');
     Route::get('get-summary', [TicketController::class, 'getSummary'])->name('auth.getSummary');

@@ -226,6 +226,47 @@ class TicketController extends BaseController
         }
     }
 
+    public function getTodo()
+    {
+        try
+        {
+            $auth = Auth::user();
+
+                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                    ->where('supervisor_id', $auth->employee_id)
+                    ->whereBetween('ticket_status_id', [1, 4])
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                //  dd($tickets->ticket_id);
+
+            foreach ($tickets as $ticket) {
+
+                $ticketId = $ticket->ticket_id;
+                $employeeId = $ticket->employee_id;
+                $employee = Employee::where('employee_id',$employeeId)->first();
+                $spv = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$employee->supervisor_id)->first();
+                $ticket->currentapproval = Employee::select('employee_name')->where('employee_id',$ticket->supervisor_id)->first();
+                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+                $ticket->history = $ticketHistory;
+                
+                foreach ($ticketHistory as $spv) {
+                    $spvId = $spv->supervisor_id;
+                    $spvHistory = Employee::where('employee_id',$spvId)->first();
+                    $spv->supervisor = $spvHistory;
+                }      
+            }            
+
+
+            return $this->sendResponse($tickets, 'Tickets collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
+        }
+    }
+
     public function features()
     {
         try
