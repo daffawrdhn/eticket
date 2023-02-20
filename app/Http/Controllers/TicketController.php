@@ -52,16 +52,20 @@ class TicketController extends BaseController
             $ap1 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 2)->count(); // Approve 1
             $ap2 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 3)->count(); // Approve 2
             $ap3 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 4)->count(); // Approve 3
-            $completed = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 5)->count(); // Completed
-            $rejected = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 6)->count(); // Rejected
+            $approved = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 5)->count(); // Completed
+            $rejected = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 6)->count();
+            $onprogress = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 7)->count();
+            $completed = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 8)->count(); // Rejected
             $total = Ticket::where('employee_id', $auth->employee_id)->count(); // Rejected
             $summary = [
                 'open' => $open,
                 'ap1' => $ap1,
                 'ap2' => $ap2,
                 'ap3' => $ap3,
-                'completed' => $completed,
+                'approved' => $approved,
                 'rejected' => $rejected,
+                'onprogress' => $onprogress,
+                'complete' => $completed,
                 'total' => $total
                 ];
                 return $this->sendResponse($summary, 'Summary collected.');
@@ -239,8 +243,7 @@ class TicketController extends BaseController
             $auth = Auth::user();
             $history = TicketStatusHistory::select('ticket_id')
             ->where('supervisor_id', $auth->employee_id)
-            ->whereBetween('status_after', [5, 8])
-            ->where('status_after', '!=', 6)
+            ->whereBetween('status_after', [7, 8])
             ->get();
 
             $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
