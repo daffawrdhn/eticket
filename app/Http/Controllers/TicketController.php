@@ -238,13 +238,14 @@ class TicketController extends BaseController
                 ->orderBy('created_at', 'desc')
                 ->pluck('ticket_id');
         
-            $tickets = Ticket::whereIn('ticket_id', $ticketHistories)
+            $tickets = Ticket::with(['feature', 'subFeature', 'ticketStatus'])
+                        ->whereIn('ticket_id', $ticketHistories)
                         ->whereBetween('ticket_status_id', [5, 7])
                         ->where('ticket_status_id', '!=', 6)
-                        ->with(['feature', 'subFeature', 'ticketStatus'])
                         ->get();
 
-
+                        dd($tickets);
+                        
             foreach ($tickets as $ticket) {
 
                 $ticketId = $ticket->ticket_id;
