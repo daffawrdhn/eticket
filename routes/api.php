@@ -91,6 +91,8 @@ Route::middleware('auth:api')->group( function () {
     
 
     Route::get('get-history', [TicketController::class, 'getHistory'])->name('auth.getHistory');
+    Route::get('get-todo-history', [TicketController::class, 'getTodoHistory'])->name('auth.getTodoHistory');
+
     Route::get('get-summary', [TicketController::class, 'getSummary'])->name('auth.getSummary');
 
     
