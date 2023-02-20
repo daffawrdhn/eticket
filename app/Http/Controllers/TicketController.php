@@ -65,7 +65,7 @@ class TicketController extends BaseController
                 'approved' => $approved,
                 'rejected' => $rejected,
                 'onprogress' => $onprogress,
-                'complete' => $completed,
+                'completed' => $completed,
                 'total' => $total
                 ];
                 return $this->sendResponse($summary, 'Summary collected.');
