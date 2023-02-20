@@ -238,6 +238,8 @@ class TicketController extends BaseController
                 ->orderBy('created_at', 'desc')
                 ->distinct()
                 ->pluck('ticket_id');
+
+            dd($ticketHistories);
         
             $tickets = Ticket::whereIn('ticket_id', $ticketHistories)
                         ->whereBetween('ticket_status_id', [5, 7])
