@@ -233,15 +233,15 @@ class TicketController extends BaseController
         {
             $auth = Auth::user();
 
-            $ticketHistory = TicketStatusHistory::where('status_after', 5)
+            $ticketHistories = TicketStatusHistory::where('status_after', 5)
                 ->where('supervisor_id', $auth->employee_id)
-                ->orderBy('updated_at', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->distinct()
                 ->pluck('ticket_id');
         
-            $tickets = Ticket::whereIn('ticket_id', $ticketHistory)
-                        ->where('ticket_status_id', '!=', 6)
+            $tickets = Ticket::whereIn('ticket_id', $ticketHistories)
                         ->whereBetween('ticket_status_id', [5, 7])
+                        ->where('ticket_status_id', '!=', 6)
                         ->with(['feature', 'subFeature', 'ticketStatus'])
                         ->get();
 
