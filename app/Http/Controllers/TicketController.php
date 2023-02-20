@@ -244,7 +244,7 @@ class TicketController extends BaseController
                         ->where('ticket_status_id', '!=', 6)
                         ->get();
 
-                        dd($tickets);
+                        // dd($tickets);
                         
             foreach ($tickets as $ticket) {
 
