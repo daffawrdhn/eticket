@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Ticket as TicketMail;
+use Illuminate\Support\Facades\DB;
 
 
 class TicketController extends BaseController
@@ -232,13 +233,19 @@ class TicketController extends BaseController
         {
             $auth = Auth::user();
 
-                $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
-                    ->where('supervisor_id', $auth->employee_id)
-                    ->whereBetween('ticket_status_id', [1, 4])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-
-                //  dd($tickets->ticket_id);
+            $ticketHistory = TicketStatusHistory::where(function ($query) {
+                $query->where('status_after', 4)
+                      ->orWhere('status_after', 5);
+            })
+                ->where('supervisor_id', $auth->employee_id)
+                ->orderBy('updated_at', 'desc')
+                ->distinct()
+                ->pluck('ticket_id');
+        
+            $tickets = Ticket::whereIn('ticket_id', $ticketHistory)
+                ->where('ticket_status_id', '!=', 6)
+                ->with(['feature', 'subFeature', 'ticketStatus'])
+                ->get();
 
             foreach ($tickets as $ticket) {
 
@@ -258,8 +265,6 @@ class TicketController extends BaseController
                     $spv->supervisor = $spvHistory;
                 }      
             }            
-
-
             return $this->sendResponse($tickets, 'Tickets collected.'); 
 
         } catch (Exception $error) {
@@ -457,7 +462,7 @@ public function updateStatus(Request $request, $ticketId)
                             ],
                           ];
 
-                    }else if ($ticket->ticket_status_id == 5) {
+                    }else if ($ticket->ticket_status_id == 8) {
                             $message = 'Ticket Completed!';
                             $params = [
                                 'recipients' => [
