@@ -6,8 +6,6 @@ use App\Http\Controllers\API\BaseController;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Carbon\Carbon;
-use DateInterval;
-use DatePeriod;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,7 +22,7 @@ class ReportTicketSlaController extends BaseController
 
             $isTicket = Ticket::with('regional');
 
-            $sla = [];
+            $datas = [];
             foreach($isTicket as $ticket){
                 $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->first();
 
@@ -59,7 +57,7 @@ class ReportTicketSlaController extends BaseController
                 }
 
 
-                $sla[] = [
+                $datas[] = [
                     'ticket_id' => $ticket->ticket_id,
                     'employee_id' => $ticket->employee_id,
                     'regional_name' => $ticket->regional->regional_name,
@@ -76,7 +74,7 @@ class ReportTicketSlaController extends BaseController
             }
 
             if ($request->ajax()) {
-                $costumers = $sla;
+                $costumers = $datas;
                 return DataTables::of($costumers)->toJson();
             }
            
