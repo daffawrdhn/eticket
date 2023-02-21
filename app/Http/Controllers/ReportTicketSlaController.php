@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\API\BaseController;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
+use DateInterval;
+use DatePeriod;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -43,6 +45,47 @@ class ReportTicketSlaController extends BaseController
                 $isInProgress = $inProgress == null ? '-' : date('d F Y', strtotime($inProgress->created_at));
                 $isDone = $done == null ? '-' : date('d F Y', strtotime($done->created_at));
 
+
+                if ($done != null) {
+                    $isSla = dateInterval($submited->created_at, $done->created_at);
+                }else{
+                    if ($reject != null) {
+                        $isSla = dateInterval($submited->created_at, $reject->created_at);
+                    }else{
+                        $isSla = '-';
+                    }
+                }
+
+
+                function dateInterval($startDate, $endDate)
+                {
+
+                    $diff = $startDate->diff($endDate);
+
+                    $days = 0;
+                    $interval = new DateInterval('P1D');
+                    $period = new DatePeriod($startDate, $interval, $endDate);
+
+                    foreach ($period as $date) {
+                        if ($date->format('N') <= 5) { 
+                            $days++;
+                        }
+                    }
+
+                    $hours = ($days * 8) + ($diff->h - 1); 
+                    $total_seconds = ($hours * 3600) + ($diff->i * 60) + $diff->s; 
+                    $days = floor($total_seconds / (24 * 60 * 60)); 
+                    $total_seconds %= (24 * 60 * 60); 
+                    $hours = floor($total_seconds / 3600);
+                    $total_seconds %= 3600;
+                    $minutes = floor($total_seconds / 60);
+                    $seconds = $total_seconds % 60; 
+
+                    $isSlaTime = $days . 'day' . $hours . ':' . $minutes .':'.$seconds;
+
+                    return $isSlaTime;
+                }
+
                 $sla[] = [
                     'ticket_id' => $ticket->ticket_id,
                     'submited_date' => $isSubmited,
@@ -53,6 +96,7 @@ class ReportTicketSlaController extends BaseController
                     'reject_date' => $isReject,
                     'in_progress' => $isInProgress,
                     'is_done' => $isDone,
+                    'sla_total' => $isSla
                 ];
             }
 
