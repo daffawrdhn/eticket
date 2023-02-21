@@ -54,7 +54,7 @@ class ReportTicketSlaController extends BaseController
                     if ($reject != null) {
                         $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
                     }else{
-                        $isSla = '-';
+                        $isSla = 'in process';
                     }
                 }
 
