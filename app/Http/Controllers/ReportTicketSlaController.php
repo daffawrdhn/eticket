@@ -23,7 +23,6 @@ class ReportTicketSlaController extends BaseController
             $datas = [];
             foreach($isTicket as $ticket){
                 $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->get();
-                $data = [];
                 foreach($isStatusTicket as $status){
 
                     if ($status->status_after == 1) {
@@ -68,20 +67,17 @@ class ReportTicketSlaController extends BaseController
                         $onProcess = 0;
                     }
                     
-                    $data[] = [
-                        'submited' => $submited,
-                        'approval1' => $approval1,
-                        'approval2' => $approval2,
-                        'approval3' => $approval3,
-                        'finalApprov' => $finalApprov,
-                        'onProcess' => $onProcess,
-                    ];
                 
                 }
 
                 $datas[] = [
                     'ticket_id' => $ticket->ticket_id,
-                    'status' => $data
+                    'submited' => $submited,
+                    'approval1' => $approval1,
+                    'approval2' => $approval2,
+                    'approval3' => $approval3,
+                    'finalApprov' => $finalApprov,
+                    'onProcess' => $onProcess,
                 ];
             }
 
