@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ExportEmployee;
 use App\Exports\ExportSummary;
 use App\Exports\ExportTicket;
+use App\Exports\ReportSlaExport;
 use App\Http\Controllers\API\BaseController;
 use App\Models\Regional;
 use Illuminate\Http\Request;
@@ -78,6 +79,18 @@ class ExportController extends BaseController
         }
 
         return Excel::download(new ExportEmployee($request->regionalId), $fileName.'.xlsx');
+    }
+
+    public function exportReportSla(Request $request){
+
+        if($request->regionalId == 0){
+            $fileName = 'report Ticket SLA';
+        }else{
+            $regionalName = Regional::where('regional_id', $request->regionalId)->first();
+            $fileName = 'report Ticket SLA by regional '.$regionalName->regional_name;
+        }
+
+        return Excel::download(new ReportSlaExport($request->regionalId), $fileName.'.xlsx');
     }
      
 }

@@ -17,23 +17,20 @@ $(document).ready(function () {
     
     $(document).on('click','#select-all', function (e) {
         $('#btnExport').attr('regional-id', "0");
-        $('#btnExport').attr('start-date', "");
-        $('#btnExport').attr('end-date', "");
 
 
         $('#reportSlaTable').DataTable().destroy()
         tableReport()
         
         $("#regional-select").val(null).trigger("change"); 
-        $("#start-date").val('');
-        $("#end-date").val('');
-
     });
 
 
     $('#regional-select').on("select2:select", function(e) { 
         e.preventDefault();
         var value = e.params.data.id;
+
+        $('#btnExport').attr('regional-id', value);
         $('#reportSlaTable').DataTable().destroy()
         tableReport(value)
      });
@@ -43,15 +40,11 @@ $(document).ready(function () {
     $(document).on('click','#btnExport', function (e) {
 
         var regionalId = $(this).attr('regional-id');
-        var startDate = $(this).attr('start-date');
-        var endDate = $(this).attr('end-date');
         var data
 
 
         data = {
             'regionalId' : regionalId,
-            'startDate' : startDate,
-            'endDate' : endDate
         }
 
 
@@ -60,7 +53,7 @@ $(document).ready(function () {
                 responseType: 'blob',
             },
             type: 'POST',
-            url: APP_URL + 'api/export-report-regional',
+            url: APP_URL + 'api/export-report-sla',
             data: data,
             beforeSend: function(xhr, settings) { 
                 xhr.setRequestHeader('Authorization','Bearer ' + token ); 
