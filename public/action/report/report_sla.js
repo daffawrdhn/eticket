@@ -12,7 +12,7 @@ $(document).ready(function () {
         $("#end-date").val('');
         $('#reportSlaTable').DataTable().destroy()
         tableReport()
-    },15000)
+    },300000)
 
     
     $(document).on('click','#select-all', function (e) {
