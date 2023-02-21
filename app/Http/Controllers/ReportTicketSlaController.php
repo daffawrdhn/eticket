@@ -23,11 +23,11 @@ class ReportTicketSlaController extends BaseController
 
             if ($request->regionalId == 0) {
                 
-                $isTicket = Ticket::all();
+                $isTicket = Ticket::orderBy('created_at', 'DESC')->get();
             }else{
                 $isEmployees = Employee::select('employee_id')->where('regional_id', $request->regionalId)->get();
 
-                $isTicket = Ticket::whereIn('employee_id', $isEmployees)->get();
+                $isTicket = Ticket::orderBy('created_at', 'DESC')->whereIn('employee_id', $isEmployees)->get();
             }
 
 
