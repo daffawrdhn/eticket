@@ -35,7 +35,7 @@ $(document).ready(function () {
         e.preventDefault();
         var value = e.params.data.id;
         $('#reportSlaTable').DataTable().destroy()
-        tableReport(data)
+        tableReport(value)
      });
     
     
@@ -101,7 +101,7 @@ $(document).ready(function () {
             'regionalId' : regionalId
         }
 
-        console.log(data);
+        console.log(datas);
         //getdata
         var token = $('#token').val()
         var table = $('#reportSlaTable').DataTable({
