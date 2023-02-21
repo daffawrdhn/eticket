@@ -6,8 +6,6 @@ use App\Http\Controllers\API\BaseController;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Carbon\Carbon;
-use DateInterval;
-use DatePeriod;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -83,15 +81,22 @@ class ReportTicketSlaController extends BaseController
     public function dateInterval($startDate, $endDate)
     {
 
-        $diff = $startDate->diffInHoursFiltered(function (Carbon $date) {
-            return $date->isWeekday() && $date->between('9:00', '17:00');
+        // Jam kerja per hari
+        $workingHours = 8;
+
+        // Menghitung selisih tanggal berdasarkan jam kerja
+        $diff = $startDate->diffInHoursFiltered(function(Carbon $date) use ($workingHours) {
+            return !$date->isWeekend() && !$date->isHoliday();
         }, $endDate);
-        
-        // hitung selisih waktu dalam format hari:jam:menit:detik
-        $diff_formatted = Carbon::createFromTimestamp($diff * 3600)->diffForHumans(['parts' => 4]);
-        
-        // output selisih waktu
-        return $diff_formatted;
+
+
+        return $startDate->diffForHumans($endDate);
+
+        // Output selisih tanggal berdasarkan jam kerja
+        // echo "Selisih tanggal berdasarkan jam kerja: " . $diff . " jam" . PHP_EOL;
+
+        // Output selisih tanggal dalam format yang lebih mudah dibaca
+        // echo "Selisih tanggal: " . $start->diffForHumans($end) . PHP_EOL;
     }
 }
 
