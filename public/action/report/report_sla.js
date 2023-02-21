@@ -168,31 +168,6 @@ $(document).ready(function () {
 
     function tableReport(data = null) { 
 
-        var regionalId
-        var startDate
-        var endDate 
-
-
-        if (data == null) {
-            regionalId = 0;
-            startDate = "";
-            endDate = "";
-        }else if(data.regional_id == null){
-            regionalId = 0
-            startDate = data.start_date
-            endDate = data.end_date
-        }else{
-            regionalId = data.regional_id
-            startDate = data.start_date
-            endDate = data.end_date
-        }
-
-        var datas = {
-            "regionalId" : regionalId,
-            "startDate" : startDate,
-            "endDate" : endDate
-        }
-
         //getdata
         var token = $('#token').val()
         var table = $('#reportSlaTable').DataTable({
@@ -208,7 +183,6 @@ $(document).ready(function () {
             ajax: { 
                 url: APP_URL + "api/get-report-sla",
                 type: "POST",
-                data : datas,
                 dataType: 'json',
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
