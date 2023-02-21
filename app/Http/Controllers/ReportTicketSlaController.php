@@ -6,6 +6,8 @@ use App\Http\Controllers\API\BaseController;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -81,22 +83,31 @@ class ReportTicketSlaController extends BaseController
     public function dateInterval($startDate, $endDate)
     {
 
-        // Jam kerja per hari
-        $workingHours = 8;
+        // hitung selisih waktu dalam jam
+        $diff = $startDate->diff($endDate);
 
-        // Menghitung selisih tanggal berdasarkan jam kerja
-        $diff = $startDate->diffInHoursFiltered(function(Carbon $date) use ($workingHours) {
-            return !$date->isWeekend() && !$date->isHoliday();
-        }, $endDate);
+        // hitung jumlah hari kerja antara dua tanggal
+        $days = 0;
+        $interval = new DateInterval('P1D'); // interval 1 hari
+        $period = new DatePeriod($startDate, $interval, $endDate);
 
+        foreach ($period as $date) {
+        if ($date->format('N') <= 5) { // hitung hari kerja Senin hingga Jumat
+            $days++;
+        }
+        }
 
-        return $startDate->diffForHumans($endDate);
+        $hours = ($days * 8) + ($diff->h - 1); // asumsi 1 jam istirahat per hari
+        $total_seconds = ($hours * 3600) + ($diff->i * 60) + $diff->s; // total detik
+        $days = floor($total_seconds / (24 * 60 * 60)); // hitung jumlah hari
+        $total_seconds %= (24 * 60 * 60); // sisa detik setelah hari dihitung
+        $hours = floor($total_seconds / 3600); // hitung jumlah jam
+        $total_seconds %= 3600; // sisa detik setelah jam dihitung
+        $minutes = floor($total_seconds / 60); // hitung jumlah menit
+        $seconds = $total_seconds % 60; // hitung sisa detik
 
-        // Output selisih tanggal berdasarkan jam kerja
-        // echo "Selisih tanggal berdasarkan jam kerja: " . $diff . " jam" . PHP_EOL;
-
-        // Output selisih tanggal dalam format yang lebih mudah dibaca
-        // echo "Selisih tanggal: " . $start->diffForHumans($end) . PHP_EOL;
+        // output selisih waktu dalam format hari:jam:menit:detik
+        return $days . ':' . $hours . ':' . $minutes .':'.$seconds;
     }
 }
 
