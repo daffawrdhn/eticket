@@ -5,7 +5,6 @@ use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\DeptheadController;
-use App\Http\Controllers\ReportTicketSLaController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HelpdeskController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\RegionalPicController;
 use App\Http\Controllers\ReportRegionalController;
 use App\Http\Controllers\ReportSummaryController;
+use App\Http\Controllers\ReportTicketSlaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Mail\SendMail;
@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/setting-depthead', [DeptheadController::class, 'index']);
     Route::get('/report-data-sumary', [ReportSummaryController::class, 'index']);
     Route::get('/report-regional', [ReportRegionalController::class, 'index']);
-    Route::get('/report-sla', [ReportTicketSLaController::class, 'index']);
+    Route::get('/report-sla', [ReportTicketSlaController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
     Route::get('/pull', [DashboardController::class, 'pull'])->name('pull');
 
