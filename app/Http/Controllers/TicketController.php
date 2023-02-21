@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Ticket as TicketMail;
+use Illuminate\Support\Facades\DB;
 
 
 class TicketController extends BaseController
@@ -51,16 +52,20 @@ class TicketController extends BaseController
             $ap1 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 2)->count(); // Approve 1
             $ap2 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 3)->count(); // Approve 2
             $ap3 = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 4)->count(); // Approve 3
-            $completed = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 5)->count(); // Completed
-            $rejected = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 6)->count(); // Rejected
+            $approved = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 5)->count(); // Completed
+            $rejected = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 6)->count();
+            $onprogress = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 7)->count();
+            $completed = Ticket::where('employee_id', $auth->employee_id)->where('ticket_status_id', 8)->count(); // Rejected
             $total = Ticket::where('employee_id', $auth->employee_id)->count(); // Rejected
             $summary = [
                 'open' => $open,
                 'ap1' => $ap1,
                 'ap2' => $ap2,
                 'ap3' => $ap3,
-                'completed' => $completed,
+                'approved' => $approved,
                 'rejected' => $rejected,
+                'onprogress' => $onprogress,
+                'completed' => $completed,
                 'total' => $total
                 ];
                 return $this->sendResponse($summary, 'Summary collected.');
@@ -194,7 +199,12 @@ class TicketController extends BaseController
         try
         {
             $auth = Auth::user();
-            $history = TicketStatusHistory::select('ticket_id')->where('supervisor_id', $auth->employee_id)->get();
+            $history = TicketStatusHistory::select('ticket_id')
+            ->where('supervisor_id', $auth->employee_id)
+            ->whereBetween('status_after', [2, 6])
+            ->where('status_after', '!=', 5)
+            ->get();
+
             $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
                 ->whereIn('ticket_id', $history->pluck('ticket_id'))
                 ->orderBy('created_at', 'desc')
@@ -219,6 +229,91 @@ class TicketController extends BaseController
                 }      
             }            
 
+            return $this->sendResponse($tickets, 'Tickets collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
+        }
+    }
+
+    public function getTodoHistory()
+    {
+        try
+        {
+            $auth = Auth::user();
+            $history = TicketStatusHistory::select('ticket_id')
+            ->where('supervisor_id', $auth->employee_id)
+            ->whereBetween('status_after', [7, 8])
+            ->get();
+
+            $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
+                ->whereIn('ticket_id', $history->pluck('ticket_id'))
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            foreach ($tickets as $ticket) {
+
+                $ticketId = $ticket->ticket_id;
+                $employeeId = $ticket->employee_id;
+                $employee = Employee::where('employee_id',$employeeId)->first();
+                $spv = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$employee->supervisor_id)->first();
+                $ticket->currentapproval = Employee::select('employee_name')->where('employee_id',$ticket->supervisor_id)->first();
+                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+                $ticket->history = $ticketHistory;
+                
+                foreach ($ticketHistory as $spv) {
+                    $spvId = $spv->supervisor_id;
+                    $spvHistory = Employee::where('employee_id', $spvId)->first();
+                    $spv['supervisor'] = $spvHistory;
+                }      
+            }            
+
+            return $this->sendResponse($tickets, 'Tickets collected.'); 
+
+        } catch (Exception $error) {
+            return $this->sendError('Error get tickets', ['error' => $error->getMessage()]);
+        }
+    }
+
+    public function getTodo()
+    {
+        try
+        {
+            $auth = Auth::user();
+
+            $ticketHistories = TicketStatusHistory::where('status_after', 5)
+                ->where('supervisor_id', $auth->employee_id)
+                ->orderBy('created_at', 'desc')
+                ->pluck('ticket_id');
+        
+            $tickets = Ticket::with(['feature', 'subFeature', 'ticketStatus'])
+                        ->whereIn('ticket_id', $ticketHistories)
+                        ->whereBetween('ticket_status_id', [5, 7])
+                        ->where('ticket_status_id', '!=', 6)
+                        ->get();
+
+                        // dd($tickets);
+                        
+            foreach ($tickets as $ticket) {
+
+                $ticketId = $ticket->ticket_id;
+                $employeeId = $ticket->employee_id;
+                $employee = Employee::where('employee_id',$employeeId)->first();
+                $spv = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->Employee = Employee::with('organization', 'regional')->find($employeeId);
+                $ticket->supervisor = Employee::with('organization', 'regional')->where('employee_id',$employee->supervisor_id)->first();
+                $ticket->currentapproval = Employee::select('employee_name')->where('employee_id',$ticket->supervisor_id)->first();
+                $ticketHistory = TicketStatusHistory::where('ticket_id', $ticketId)->get();
+                $ticket->history = $ticketHistory;
+                
+                foreach ($ticketHistory as $spv) {
+                    $spvId = $spv->supervisor_id;
+                    $spvHistory = Employee::where('employee_id',$spvId)->first();
+                    $spv->supervisor = $spvHistory;
+                }      
+            }            
             return $this->sendResponse($tickets, 'Tickets collected.'); 
 
         } catch (Exception $error) {
@@ -416,7 +511,7 @@ public function updateStatus(Request $request, $ticketId)
                             ],
                           ];
 
-                    }else if ($ticket->ticket_status_id == 5) {
+                    }else if ($ticket->ticket_status_id == 8) {
                             $message = 'Ticket Completed!';
                             $params = [
                                 'recipients' => [
