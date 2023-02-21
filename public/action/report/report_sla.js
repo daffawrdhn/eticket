@@ -32,7 +32,8 @@ $(document).ready(function () {
 
 
     $('#regional-select').on("select2:selecting", function(e) { 
-        console.log('ok');
+        var value = e.params.data.id;
+        console.log(value);
      });
     
     
@@ -87,7 +88,11 @@ $(document).ready(function () {
     });
 
     function tableReport(data = null) { 
+        regionalId = data == null ? 0 : data
 
+        datas = {
+            'regionalId' : regionalId
+        }
         //getdata
         var token = $('#token').val()
         var table = $('#reportSlaTable').DataTable({
@@ -103,6 +108,7 @@ $(document).ready(function () {
             ajax: { 
                 url: APP_URL + "api/get-report-sla",
                 type: "POST",
+                data : datas,
                 dataType: 'json',
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
