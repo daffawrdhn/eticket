@@ -29,6 +29,11 @@ $(document).ready(function () {
         $("#end-date").val('');
 
     });
+
+
+    $('#regional-select').on("select2:selecting", function(e) { 
+        console.log('ok');
+     });
     
     
 
