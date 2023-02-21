@@ -61,14 +61,15 @@ class ReportTicketSlaController extends BaseController
                 function dateInterval($startDate, $endDate)
                 {
 
-                    $workingHours = 8;
-                    $diff = $startDate->diffInHoursFiltered(function(Carbon $date) use ($workingHours) {
-                        return !$date->isWeekend() && !$date->isHoliday();
+                    $diff = $startDate->diffInHoursFiltered(function (Carbon $date) {
+                        return $date->isWeekday() && $date->between('9:00', '17:00');
                     }, $endDate);
-
-                    $isSlaTime = $startDate->diffForHumans($endDate).PHP_EOL;
-
-                    return $isSlaTime;
+                    
+                    // hitung selisih waktu dalam format hari:jam:menit:detik
+                    $diff_formatted = Carbon::createFromTimestamp($diff * 3600)->diffForHumans(['parts' => 4]);
+                    
+                    // output selisih waktu
+                    echo $diff_formatted;
                 }
 
                 $sla[] = [
