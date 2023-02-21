@@ -15,7 +15,7 @@ class ReportTicketSlaController extends BaseController
         return view('containers.reports.report_sla');
     }
 
-    public function getReportSLA(Request $request){
+    public function getDataSLA(Request $request){
         try {
 
             $isTicket = Ticket::all();

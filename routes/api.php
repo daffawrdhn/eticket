@@ -17,6 +17,7 @@ use App\Http\Controllers\RegionalPicController;
 use App\Http\Controllers\ReportRegionalController;
 use App\Http\Controllers\ReportSummaryController;
 use App\Http\Controllers\ReportTicketSLA;
+use App\Http\Controllers\ReportTicketSlaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubFeatureController;
 use App\Http\Controllers\TicketController;
@@ -150,7 +151,7 @@ Route::middleware('auth:api')->group( function () {
     // ////report
     Route::post('get-report-regional', [ReportRegionalController::class, 'getReport'])->name('auth.getReport');
     Route::post('get-report-summary', [ReportSummaryController::class, 'getDataSumary'])->name('auth.getDataSumary');
-    Route::post('get-report-sla', [ReportTicketSLA::class, 'getDataSLA'])->name('auth.getDataSLA');
+    Route::post('get-report-sla', [ReportTicketSlaController::class, 'getDataSLA'])->name('auth.getDataSLA');
     
     //chart
     Route::get('get-pie-chart', [ChartController::class,'pieChart'])->name('auth.pieChart');
