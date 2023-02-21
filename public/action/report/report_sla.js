@@ -32,7 +32,8 @@ $(document).ready(function () {
 
 
     $('#regional-select').on("select2:selecting", function(e) { 
-        var value = e.params.data;
+        e.preventDefault();
+        var value = e.params.id;
         console.log(value);
      });
     
