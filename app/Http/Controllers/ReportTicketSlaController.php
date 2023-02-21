@@ -25,7 +25,7 @@ class ReportTicketSlaController extends BaseController
                 
                 $isTicket = Ticket::all();
             }else{
-                $isEmployees = Employee::select('employee_id')->where('regional_id', $request->regional_id)->get();
+                $isEmployees = Employee::select('employee_id')->where('regional_id', $request->regionalId)->get();
 
                 $isTicket = Ticket::whereIn('employee_id', $isEmployees)->get();
             }
