@@ -35,14 +35,15 @@
                             <table class="table" id="reportSlaTable">
                                 <thead>
                                     <tr>
-                                    <th scope="col" data-type="text">no</th>
                                     <th scope="col" data-type="text">No Ticket</th>
                                     <th scope="col" data-type="text">Employee Id</th>
                                     <th scope="col" data-type="text">Regional</th>
                                     <th scope="col" data-type="text">Submit Date</th>
                                     <th scope="col" data-type="text">Approval 1 Date</th>
                                     <th scope="col" data-type="text">Approval 2 Date</th>
-                                    <th scope="col" data-type="text">Final Approval</th>
+                                    <th scope="col" data-type="text">Approval 3 Date</th>
+                                    <th scope="col" data-type="text">Final Approval Date</th>
+                                    <th scope="col" data-type="text">Reject Date</th>
                                     <th scope="col" data-type="text">On Progress Date</th>
                                     <th scope="col" data-type="text">Finish Date</th>
                                     <th scope="col" data-type="text">Total SLA</th>

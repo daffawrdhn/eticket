@@ -197,7 +197,7 @@ $(document).ready(function () {
                 {data: 'approve2_date', name: 'approve2_date'},
                 {data: 'approve3_date', name: 'approve3_date'},
                 {data: 'final_approve_date', name: 'final_approve_date'},
-                {data: 'riject_date', name: 'riject_date'},
+                {data: 'reject_date', name: 'riject_date'},
                 {data: 'in_progres', name: 'in_progres'},
                 {data: 'is_done', name: 'is_done'},
                 {data: 'sla_total', name: 'sla_total'},
