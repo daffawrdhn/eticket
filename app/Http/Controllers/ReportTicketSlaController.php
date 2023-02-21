@@ -91,7 +91,7 @@ class ReportTicketSlaController extends BaseController
         $diff_formatted = Carbon::createFromTimestamp($diff * 3600)->diffForHumans(['parts' => 4]);
         
         // output selisih waktu
-        echo $diff_formatted;
+        return $diff_formatted;
     }
 }
 
