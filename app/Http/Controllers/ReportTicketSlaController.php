@@ -84,7 +84,7 @@ class ReportTicketSlaController extends BaseController
     {
 
         $diffInDays = $startDate->diffInDaysFiltered(function (Carbon $date) {
-            return $date->isWeekday();
+            return !$date->isWeekday() && !$date->isHoliday();
         }, $endDate);
         
         // Menghitung selisih waktu
