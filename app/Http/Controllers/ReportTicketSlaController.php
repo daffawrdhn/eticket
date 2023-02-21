@@ -83,9 +83,13 @@ class ReportTicketSlaController extends BaseController
     public function dateInterval($startDate, $endDate)
     {
 
-        $diffInDays = $startDate->diffInDaysFiltered(function (Carbon $date) {
-            return $date->isWeekday();
-        }, $endDate);
+        if ($startDate->eq($endDate)) {
+            $diffInDays = 0;
+        } else {
+            $diffInDays = $startDate->diffInDaysFiltered(function (Carbon $date) {
+                return $date->isWeekday();
+           },$endDate);
+        }
         
         // Menghitung selisih waktu
         $diffInHours = $startDate->diffInHours($endDate) % 24;
