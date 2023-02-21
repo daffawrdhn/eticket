@@ -20,23 +20,20 @@ class ReportTicketSlaController extends BaseController
 
             $isTicket = Ticket::all();
 
-            $datas = [];
+            $sla = [];
             foreach($isTicket as $ticket){
-                $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->get();
-                $data = [];
-                foreach($isStatusTicket as $status){
-                   
-                    $data[] = $status->created_at;
-                
-                }
+                $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->first();
 
-                $datas[] = [
+                $submited = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 1)->first();
+
+
+                $sla[] = [
                     'ticket_id' => $ticket->ticket_id,
-                    'status' => $data
+                    'time' => $submited->created_at
                 ];
             }
 
-            return $this->sendResponse($datas, 'success');
+            return $this->sendResponse($sla, 'success');
            
         } catch (Exception $error) {
             return $this->sendError('Error Exception', ['error' => $error]);
