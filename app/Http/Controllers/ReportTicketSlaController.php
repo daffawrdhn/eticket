@@ -25,7 +25,6 @@ class ReportTicketSlaController extends BaseController
                 $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->get();
                 $data = [];
                 foreach($isStatusTicket as $status){
-                    $data[] = $status->status_after;
 
                     if ($status->status_after == 1) {
                         $submited = date('d F Y', strtotime($status->created_at));
