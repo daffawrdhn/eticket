@@ -20,7 +20,7 @@ class ReportTicketSlaController extends BaseController
     public function getDataSLA(Request $request){
         try {
 
-            $isTicket = Ticket::with('regional');
+            $isTicket = Ticket::with('regional')->get();
 
             $datas = [];
             foreach($isTicket as $ticket){
