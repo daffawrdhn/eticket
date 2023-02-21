@@ -25,6 +25,8 @@ class ChartController extends BaseController
             $totalOpen = 0;
             $totalReject = 0;
             $totalTicket = 0;
+            $totalInProgres = 0;
+            $totalDone = 0;
             foreach ($regionals as $regional) {
                 $employees = Employee::select('employee_id')->where('regional_id', $regional->regional_id)->get();
                 $total_ticket = Ticket::whereIn('employee_id', $employees)
@@ -38,6 +40,8 @@ class ChartController extends BaseController
                 $approve1 = 0;
                 $approve2 = 0;
                 $approve3 = 0;
+                $inProgress = 0;
+                $isDone = 0;
                 foreach($tickets as $ticket){
                     if ($ticket->ticket_status_id == 5) {
                         $approved += 1;
@@ -51,6 +55,10 @@ class ChartController extends BaseController
                         $approve2 += 1;
                     }else if($ticket->ticket_status_id == 4){
                         $approve3 += 1;
+                    }else if($ticket->ticket_status_id == 7){
+                        $inProgress += 1;
+                    }else if($ticket->ticket_status_id == 8){
+                        $isDone += 1;
                     }  
                 }
                 
@@ -61,11 +69,13 @@ class ChartController extends BaseController
                 $totalOpen += $open;
                 $totalReject += $reject;
                 $totalTicket += $total_ticket->total_ticket;
+                $totalInProgres += $inProgress;
+                $totalDone += $isDone;
                 
             }
 
-            $datas['labels'] = ['Open', 'Reject', 'Approve 1', 'Approve 2', 'Approve 3', 'Approved'];
-            $datas['data'] = [$totalOpen, $totalReject,$totalApprove1,$totalApprove2,$totalApprove3, $totalApproved];
+            $datas['labels'] = ['Open',  'Approve 1', 'Approve 2', 'Approve 3', 'Approved', 'Reject', 'in Progress', 'Done'];
+            $datas['data'] = [$totalOpen, $totalApprove1,$totalApprove2,$totalApprove3, $totalApproved, $totalReject, $totalInProgres, $totalDone];
 
             return $this->sendResponse($datas, 'success');
 

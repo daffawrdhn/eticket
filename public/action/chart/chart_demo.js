@@ -87,7 +87,7 @@ $(document).ready(function () {
                 labels: response.data.labels,
                 datasets: [{
                 data: response.data.data,
-                backgroundColor: ['blue', 'grey', 'yellow', 'orange', 'red', 'green'],
+                backgroundColor: ['#b3e5fc', '#4fc3f7', '#1e88e5', ' #fff59d', '#fdd835', '#9e9e9e', '#a5d6a7', '#43a047'],
                 }],
             },
             });
@@ -98,6 +98,7 @@ $(document).ready(function () {
             }
         }
     });
+
 
     // barchart
     
