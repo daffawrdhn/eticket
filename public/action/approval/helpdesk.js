@@ -1,37 +1,42 @@
 $(document).ready(function () {
 
-    
+    tableHelpdesk()
+
+    function tableHelpdesk()
+    {
+        var token = $('#token').val()
+        return $('#approvalTable').DataTable({
+            responsive: true,
+            autoWidth : false,
+            processing: true,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-helpdesk",
+                type: "GET",
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+            },
+            columns: [
+                {data: 'no', name: 'no'},
+                {data: 'regional_name', name: 'regional_name'},
+                {data: 'employee_id', name: 'employee_id'},
+                {data: 'employee_name', name: 'employee_name'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        });
+    }
     
 
     //getdata
-    var token = $('#token').val()
-    var table = $('#approvalTable').DataTable({
-        responsive: true,
-        autoWidth : false,
-        processing: true,
-        serverSide: true,
-        ajax: { 
-            url: APP_URL + "api/get-helpdesk",
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-        },
-        columns: [
-            {data: 'no', name: 'no'},
-            {data: 'regional_name', name: 'regional_name'},
-            {data: 'employee_id', name: 'employee_id'},
-            {data: 'employee_name', name: 'employee_name'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true,
-            },
-            
-        ]   
-});
+    
 
 
     
@@ -93,55 +98,8 @@ $(document).ready(function () {
                     $('#regional_idFeedback').hide()
                     $('#employee_idFeedback').hide()
 
-                    $.ajax({
-                        type : "POST",
-                        url : APP_URL + "api/add-helpdesk",
-                        data : data,
-                        dataType : "json",
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                        },
-                        success : function(response){
-                            $("#staticBackdrop").modal('hide');
-        
-                            setTimeout(()=>{
-                                    
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    willClose: () => {
-                                        table.draw()
-                                    }
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        
-                                        table.draw()
-                                        
-                    
-                                    }
-                                })
-                            },1000)  
-                        },
-                        error:function(response){
-                            if (!response.success) {
-                                setTimeout(() => {
-                                    $("#loading").modal('hide');
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                    })
-                                },500)
-                                
-                                
-                            }
-                        }
-                    })
-                                
+                    $('#approvalTable').DataTable().destroy()
+                    ajaxFunction("api/add-helpdesk", "POST", data, token, tableHelpdesk(), "#staticBackdrop")         
                 }
             }
         }
@@ -161,9 +119,6 @@ $(document).ready(function () {
         $('#employee_idFeedback').hide()
         
         var id = $(this).val();
-        
-
-        var token = $('#token').val()
 
         
         $.ajax({
@@ -209,50 +164,9 @@ $(document).on('click', '.update-approval', function(e){
         'regional_id' : $('#regional_id').val()
     }
 
+    $('#approvalTable').DataTable().destroy()
+    ajaxFunction("api/update-helpdesk/"+ id, "POST", data, token, tableHelpdesk(), "#staticBackdrop")
 
-    $.ajax({
-        type : "POST",
-        url : APP_URL + "api/update-helpdesk/"+ id,
-        data : data,
-        dataType : "json",
-        beforeSend: function(xhr, settings) { 
-            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-        },
-        success : function(response){
-            
-            $("#staticBackdrop").modal('hide');
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: response.message,
-                showConfirmButton: false,
-                timer: 2000,
-                willClose: () => {
-                    table.draw()
-                }
-            }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-                    
-                    table.draw()
-                    
-
-                }
-            })
-            
-        },
-        error:function(response){
-            if (!response.success) {
-                Swal.fire({
-                    icon : 'warning',
-                    confirmButtonText: 'Ok',
-                    title : 'Warning!',
-                    text : response.responseJSON.data.error,
-                })
-                
-            }
-        }
-    })
 
 });
 
@@ -276,60 +190,9 @@ $(document).on('click', '#delete-approval', function(e){
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
-                type: "DELETE",
-                url: APP_URL + "api/delete-helpdesk/" + id,
-                dataType: "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success: function(response){
-                    
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        willClose: () => {
-                            table.draw()
-                        }
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            
-                            table.draw()
-                            
-        
-                        }
-                    })
-    
-                },error:function(response){
-                    if (!response.success) {
-                            console.log(response.responseJSON.data.error);
-
-                            if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : 'This data already has a relationship with the ticket table',
-                                })
-                            }else{
-
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : response.responseJSON.data.error,
-                                    
-                                    
-                                })
-                            }
-                        
-                        
-                    }
-                }
-            });
+            
+            $('#approvalTable').DataTable().destroy()
+            ajaxFunction("api/delete-helpdesk/" + id, "DELETE", false, token, tableHelpdesk(), "#staticBackdrop")
           
         }
       })

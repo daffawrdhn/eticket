@@ -1,34 +1,37 @@
 $(document).ready(function () {
         
-    
-
-    //getdata
     var token = $('#token').val()
-    var table = $('#roleTable').DataTable({
-        responsive: true,
-        autoWidth : false,
-        processing: true,
-        serverSide: true,
-        ajax: { 
-            url: APP_URL + "api/get-role-datatable",
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+    tableRole()
+
+    function tableRole() { 
+        var token = $('#token').val()
+        return $('#roleTable').DataTable({
+            responsive: true,
+            autoWidth : false,
+            processing: true,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-role-datatable",
+                type: "GET",
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
             },
-        },
-        columns: [
-            {data: 'no', name: 'no'},
-            {data: 'role_name', name: 'role_name'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true,
-            },
-            
-        ]   
-    });
+            columns: [
+                {data: 'no', name: 'no'},
+                {data: 'role_name', name: 'role_name'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        });
+    }
+    //getdata
 
     // get role by id
     $(document).on('click', '#edit-role', function(e){
@@ -95,26 +98,9 @@ $(document).ready(function () {
         }else{
             $('#role_name').removeClass('is-invalid');
 
-            $.ajax({
-                type : "POST",
-                url : APP_URL + "api/add-role",
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-                    $("#staticBackdrop").modal('hide');
-    
-                    modalSuccess(response.message, table)
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                        modalError(response.responseJSON.data.error)
-                    }
-                }
-            })
+            $('#roleTable').DataTable().destroy()
+            ajaxFunction("api/add-role", "POST", data, token, tableRole(), "#staticBackdrop")
+
         }
 
         
@@ -139,26 +125,9 @@ $(document).ready(function () {
         }else{
             $('#role_name').removeClass('is-invalid');
 
-            $.ajax({
-                type : "POST",
-                url : APP_URL + "api/update-role/"+ id,
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-    
-                    $("#staticBackdrop").modal('hide');
-                    modalSuccess(response.message, table)
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                        modalError(response.responseJSON.data.error)
-                    }
-                }
-            })
+            $('#roleTable').DataTable().destroy()
+            ajaxFunction("api/update-role/"+ id, "POST", data, token, tableRole(), "#staticBackdrop")
+            
         }
 
         
@@ -185,34 +154,8 @@ $(document).ready(function () {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    type: "DELETE",
-                    url: APP_URL + "api/delete-role/" + id,
-                    dataType: "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    },
-                    success: function(response){
-                        
-                            modalSuccess(response.message, table)
-        
-                    },error:function(response){
-                        if (!response.success) {
-                                console.log(response.responseJSON.data.error);
-
-                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                    var text = 'This data already has a relationship with the user'
-                                    
-                                    modalError(text)
-                                }else{
-
-                                    modalError(response.responseJSON.data.error)
-                                }
-                            
-                            
-                        }
-                    }
-                });
+                $('#roleTable').DataTable().destroy()
+                ajaxFunction("api/delete-role/" + id, "DELETE", false, token, tableRole(), "#staticBackdrop")
               
             }
           })

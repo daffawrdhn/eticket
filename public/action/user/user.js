@@ -217,50 +217,10 @@ $(document).ready(function () {
         if (IsEmail(data.employee_email) == true || data.employee_email == '') {
 
             if (data.employee_birth < data.join_date && data.quit_date >= formattedDate || data.employee_birth == '') {
-                $.ajax({
-                    type : "POST",
-                    url : APP_URL + "api/add-user",
-                    data : data,
-                    dataType : "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token );
-                        
-                        $("#loading").modal('show')
-                        
-                    },
-                    success : function(response){
-                        $("#modalAddUser").modal('hide');
-        
-                        setTimeout(()=>{
-                            $("#loading").modal('hide')
-                            $('#employeeTable').DataTable().destroy()
-                            modalSuccess(response.message, tableUser())
-                        },1000)
-                        
-                    },
-                    error:function(response){
-                        if (!response.success) {
-                            console.log(response.responseJSON.data.error);
-                            setTimeout(() => {
-                                $("#loading").modal('hide');
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    html : '<ul></ul>',
-                                    didOpen: () => {
-                                        const ul = Swal.getHtmlContainer().querySelector('ul')
-                                        $.each(response.responseJSON.data.error, function (key, value) { 
-                                             $(ul).append('<li>'+ value +'</li>');
-                                        });
-                                      },
-                                })
-                            },500)
-                            
-                            
-                        }
-                    }
-                })
+                
+                $('#employeeTable').DataTable().destroy()
+                ajaxFunction("api/add-user", "POST", data, token, tableUser(), "#modalAddUser")
+
             }
 
         }
@@ -300,54 +260,10 @@ $(document).ready(function () {
             'regional_id' : $('#regional_id').val(),
             'supervisor_id' : $('#supervisor_id').val(),
         }
-    
         
-            $.ajax({
-                type : "PUT",
-                url : APP_URL + "api/update-user/"+ id,
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    $("#loading").modal('show')
-                },
-                success : function(response){
-                    
-                    $("#modalAddUser").modal('hide');
-                    setTimeout(()=>{
-                        $("#loading").modal('hide') 
-                        $('#employeeTable').DataTable().destroy()
-                        modalSuccess(response.message, tableUser())
-                        
-                    },1000)
-                    
-                    
-                    
-                },
-                error:function(response){
-                    
-                    if (!response.success) {
-                    
-                        setTimeout(() => {
-                            $("#loading").modal('hide');
-                            Swal.fire({
-                                icon : 'warning',
-                                confirmButtonText: 'Ok',
-                                title : 'Warning!',
-                                html : '<ul></ul>',
-                                didOpen: () => {
-                                    const ul = Swal.getHtmlContainer().querySelector('ul')
-                                    $.each(response.responseJSON.data.error, function (key, value) { 
-                                         $(ul).append('<li>'+ value +'</li>');
-                                    });
-                                  },
-                            })
-                        },500)
+        $('#employeeTable').DataTable().destroy()
+            ajaxFunction("api/update-user/"+ id, "PUT", data, token, tableUser(), "#modalAddUser")
 
-                        
-                    }
-                }
-            })
         
     
     });
@@ -373,35 +289,8 @@ $(document).ready(function () {
             confirmButtonText: 'Yes, do it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    type : "POST",
-                    url : APP_URL + "api/reset-user-password/"+ id,
-                    dataType : "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token );
-                        $("#loading").modal('show') 
-                    },
-                    success : function(response){
-                        $("#modalAddUser").modal('hide');
-                        setTimeout(() => { 
-                            $("#loading").modal('hide') 
-                            $('#employeeTable').DataTable().destroy()
-                            modalSuccess(response.message, tableUser())
-                         },1000)
-                    },
-                    error:function(response){
-                        if (!response.success) {
-            
-                            setTimeout(() => { 
-                                $("#loading").modal('hide');
-                                modalError(response.responseJSON.data.error)
-                                
-                             },1000)
-                            
-                        }
-                    }
-                })
-
+                $('#employeeTable').DataTable().destroy()
+                ajaxFunction("api/reset-user-password/"+id, "POST", false, token, tableUser())
             }
         })
         
@@ -432,43 +321,8 @@ $(document).ready(function () {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    type: "DELETE",
-                    url: APP_URL + "api/delete-user/"+  id,
-                    dataType: "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token );
-                        $("#loading").modal('show')
-                    },
-                    success: function(response){
-                    
-                            setTimeout(()=>{
-
-                                $("#loading").modal('hide') 
-                                $('#employeeTable').DataTable().destroy()
-                                modalSuccess(response.message, tableUser())
-                            },1000)
-                        
-                    },error:function(response){
-                        if (!response.success) {
-                                if (response.responseJSON.data.error.errorInfo[1]  == null) {
-                                    setTimeout(() =>{
-                                        $("#loading").modal('hide') 
-                                        modalError(response.responseJSON.data.error)
-                                        
-                                    },1000)
-                                }else{
-                                    setTimeout(() =>{
-                                        $("#loading").modal('hide') 
-                                        var text = 'This data already has a relationship with Another Table'
-                                        modalError(text)
-                                    },1000)
-                                }
-                            
-                        }
-                    }
-                });
-              
+                $('#employeeTable').DataTable().destroy()
+                ajaxFunction("api/delete-user/"+  id, "DELETE", false, token, tableUser())
             }
           })
     
@@ -488,7 +342,10 @@ $(document).ready(function () {
         var id = $(this).attr('data-id'); 
         var userStatus = $(this).val(); 
         var token = $('#token').val()
-
+        var data = { 
+            status : userStatus,
+            quit_date : 0,
+        }
         var isStatus = userStatus == 'Active' ? 'Non Active' : 'Active'
         Swal.fire({
             title: 'Are you sure?',
@@ -501,28 +358,8 @@ $(document).ready(function () {
           }).then((result) => {
             if (result.isConfirmed) {
                 if (userStatus == 'Active') {
-                    $.ajax({
-                        type: "POST",
-                        url: APP_URL + "api/set-status-employee/" + id,
-                        data : { 
-                            status : userStatus,
-                            quit_date : 0,
-                        },
-                        dataType: "json",
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                            $("#loading").modal('show') 
-                        },
-                        success: function(response){
-                            
-                            setTimeout(()=>{
-                                $("#loading").modal('hide') 
-                                $('#employeeTable').DataTable().destroy()
-                                modalSuccess(response.message, tableUser())
-                            },1000)
-            
-                        }
-                    });
+                    $('#employeeTable').DataTable().destroy()
+                    ajaxFunction("api/set-status-employee/" + id, "POST", data, token, tableUser())
                 }else{
                     nonActiveUSer(id, userStatus)
                 }
@@ -606,39 +443,10 @@ $(document).ready(function () {
         }
 
         if (data.quit_date > formattedDate || data.quit_date == '') {
-            $.ajax({
-                type : "POST",
-                url : APP_URL + "api/set-status-employee/"+ id,
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    $("#loading").modal('show') 
-                },
-                success : function(response){
-                    
-                    $("#staticBackdrop").modal('hide');
-    
-
-                    setTimeout(()=>{
-                        $("#loading").modal('hide') 
-                        $('#employeeTable').DataTable().destroy()
-                        modalSuccess(response.message, tableUser())
-                    },1000)
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                        setTimeout(()=>{
-                            $("#loading").modal('hide') 
-                            modalError(response.responseJSON.data.error)
-                        },1000)
-                        
-                    }
-                }
-            })
+            $('#employeeTable').DataTable().destroy()
+            
+            ajaxFunction( "api/set-status-employee/"+ id, "POST", data, token, tableUser(), "#staticBackdrop")
         }
-        
         
         
     });

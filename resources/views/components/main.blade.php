@@ -38,7 +38,8 @@
     <script src="{{ asset('style/js/select2.min.js') }}"></script>
     <script src="{{ asset('style/js/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('style/js/script.js') }}"></script>
-    <script src="{{ asset('action/modal/modal.js') }}"></script>
+    <script src="{{ asset('action/components/ajax.js') }}"></script>
+    <script src="{{ asset('action/components/modal.js') }}"></script>
     <script src="{{ asset('action/login/login.js') }}"></script>
     <script src="{{ asset('action/login/password_validate.js') }}"></script>
     <script src="{{ asset('action/login/forgot_password.js') }}"></script>

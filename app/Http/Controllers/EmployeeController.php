@@ -450,7 +450,7 @@ class EmployeeController extends BaseController
             $employeeHelpdesk = Helpdesk::where('employee_id', $id)->first();
             $employeeTicket = Ticket::where('employee_id', $id)->first();
 
-            if ($employeeRegionalPic == null || $employeeHelpdesk == null || $employeeTicket == null) {
+            if ($employeeRegionalPic == null && $employeeHelpdesk == null && $employeeTicket == null) {
                 
                 $delete = Employee::where('employee_id', $id)->delete();
                 
@@ -463,7 +463,7 @@ class EmployeeController extends BaseController
                     return $this->sendError('Error validation', ['error' => $delete]);
                 }
             }else{
-                return $this->sendError('Error validation', ['error' => 'this data is already exists in another table']);
+                return $this->sendError('Error validation', ['error' => ['this data is already exists in another table']]);
             }
 
         } catch (Exception $error) {

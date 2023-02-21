@@ -5,6 +5,7 @@ use App\Http\Controllers\API\CheckDataEmployeeController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\DeptheadController;
+use App\Http\Controllers\ReportTicketSLaController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HelpdeskController;
@@ -56,6 +57,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('/setting-depthead', [DeptheadController::class, 'index']);
     Route::get('/report-data-sumary', [ReportSummaryController::class, 'index']);
     Route::get('/report-regional', [ReportRegionalController::class, 'index']);
+    Route::get('/report-sla', [ReportTicketSLaController::class, 'index']);
     Route::get('/logout', [ LoginController::class, 'logout'])->name('web.logout');
     Route::get('/pull', [DashboardController::class, 'pull'])->name('pull');
 

@@ -58,14 +58,14 @@ class RegionalPicController extends BaseController
                                         ->first();
 
                 if ($checkData != null) {
-                    return $this->sendError('Error validation', ['error' => 'data has already been taken']);
+                    return $this->sendError('Error validation', ['error' => ['data has already been taken']]);
                 }else{
 
 
                     $checkEmployee = Helpdesk::where('employee_id', $request->employee_id)->first();
 
                     if ($checkEmployee != null) {
-                        return $this->sendError('Error validation', ['error' => 'Employee Has Already Exist in Approval Helpdesk ']);
+                        return $this->sendError('Error validation', ['error' => ['Employee Has Already Exist in Approval Helpdesk']]);
                     }else{
                         $input['regional_id'] = $request->regional_id;
                         $input['employee_id'] = $request->employee_id;
@@ -223,7 +223,7 @@ class RegionalPicController extends BaseController
                                         ->first();
 
                 if ($checkData != null) {
-                    return $this->sendError('Error validation', ['error' => 'data already has been taken']);
+                    return $this->sendError('Error validation', ['error' => ['data already has been taken']]);
                 }else{
 
                     $checkEmployee = Helpdesk::where('employee_id', $request->employee_id)->first();
@@ -241,7 +241,7 @@ class RegionalPicController extends BaseController
                             return $this->sendError('Error validation', ['error' => $updatePic]);
                         }
                     }else{
-                        return $this->sendError('Error validation', ['error' => 'Employee Has Already Exist in Approval Helpdesk ']);
+                        return $this->sendError('Error validation', ['error' => ['Employee Has Already Exist in Approval Helpdesk']]);
                     }
                     
                 }

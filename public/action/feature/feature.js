@@ -1,32 +1,37 @@
 $(document).ready(function () {
-
+    tableFeature()
     
     var token = $('#token').val()
-    var table = $('#featureTable').DataTable({
-        responsive: true,
-        autoWidth : false,
-        processing: true,
-        serverSide: true,
-        ajax: { 
-            url: APP_URL + "api/get-feature-table",
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+    function tableFeature() { 
+        var token = $('#token').val()
+        return $('#featureTable').DataTable({
+            responsive: true,
+            autoWidth : false,
+            processing: true,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-feature-table",
+                type: "GET",
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
             },
-        },
-        columns: [
-            {data: 'no', name: 'no'},
-            {data: 'feature_name', name: 'feature_name'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true,
-            },
-            
-        ]   
-    });
+            columns: [
+                {data: 'no', name: 'no'},
+                {data: 'feature_name', name: 'feature_name'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        });
+     }
+
+    
 
 
     // get feature by id
@@ -87,41 +92,15 @@ $(document).ready(function () {
             'feature_name' : $('#feature_name').val()
         }
 
-        console.log(data);
         if (data.feature_name == '') {
             $('#feature_name').addClass('is-invalid');
             $('#feature_nameFeedback').html('please fill out this field')
         }else{
             $('#feature_name').removeClass('is-invalid');
-            $.ajax({
-                    type : "POST",
-                    url : APP_URL + "api/add-feature",
-                    data : data,
-                    dataType : "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    },
-                    success : function(response){
-                        
-    
-                        $("#staticBackdrop").modal('hide');
-                        setTimeout(()=>{
-                                    
-                            modalSuccess(response.message, table)
 
-                        },1000)
-                        
-                    },
-                    error:function(response){
-                        if (!response.success) {
-                            console.log(response.responseJSON.data.error);
-                            setTimeout(() => {
-                                modalError(response.responseJSON.data.error.feature_name)
-                            },500)
-                            
-                        }
-                    }
-            })
+            $('#featureTable').DataTable().destroy()
+            ajaxFunction("api/add-feature", "POST", data, token, tableFeature(), "#staticBackdrop")
+
         }
         
 
@@ -144,32 +123,8 @@ $(document).ready(function () {
             $('#feature_nameFeedback').html('please fill out this field')
         }else{
             $('#feature_name').removeClass('is-invalid');
-            $.ajax({
-                    type : "POST",
-                    url : APP_URL + "api/update-feature/"+ id,
-                    data : data,
-                    dataType : "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    },
-                    success : function(response){
-    
-                        $("#staticBackdrop").modal('hide');
-                        setTimeout(()=>{
-                                    
-                            modalSuccess(response.message, table)
-
-                        },1000)
-                        
-                    },
-                    error:function(response){
-                        if (!response.success) {
-    
-                            modalError(response.responseJSON.data.error)
-                            
-                        }
-                    }
-            })
+            $('#featureTable').DataTable().destroy()
+            ajaxFunction("api/update-feature/"+ id, "POST", data, token, tableFeature(), "#staticBackdrop") 
         }
 
     });
@@ -195,27 +150,8 @@ $(document).ready(function () {
           }).then((result) => {
             if (result.isConfirmed) {
 
-                $.ajax({
-                    type: "DELETE",
-                    url: APP_URL + "api/delete-feature/"+id,
-                    dataType: "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    },
-                    success: function(response){
-                        
-                        setTimeout(()=>{
-                                    
-                            modalSuccess(response.message, table)
-                            
-                        },1000)
-        
-                    },error:function(response){
-                        if (!response.success) {
-                            modalError(response.responseJSON.data.error)
-                        }
-                    }
-                });
+                $('#featureTable').DataTable().destroy()
+                ajaxFunction("api/delete-feature/"+id, "DELETE", false, token, tableFeature(), "#staticBackdrop") 
               
             }
           })

@@ -159,12 +159,18 @@ class RegionalController extends BaseController
     public function destroy($id)
     {
         try {
-            $delete = Regional::where('regional_id', $id)->delete();
+            $checkRegional = Employee::where('regional_id', $id)->first();
 
-            if ($delete) {
-                return $this->sendResponse($delete, 'success delete data');
+            if ($checkRegional == null) {
+                $delete = Regional::where('regional_id', $id)->delete();
+    
+                if ($delete) {
+                    return $this->sendResponse($delete, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $delete]);
+                }
             }else{
-                return $this->sendError('Error validation', ['error' => $delete]);
+                return $this->sendError('Error validation', ['error' => 'this data is already exists in another table']);   
             }
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);

@@ -1,33 +1,38 @@
 $(document).ready(function () {
 
-    
     var token = $('#token').val()
-    var table = $('#subFeatureTable').DataTable({
-        responsive: true,
-        autoWidth : false,
-        processing: true,
-        serverSide: true,
-        ajax: { 
-            url: APP_URL + "api/get-sub-feature-table",
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+    tableSubFeature()
+
+    function tableSubFeature() {
+        var token = $('#token').val()
+        return $('#subFeatureTable').DataTable({
+            responsive: true,
+            autoWidth : false,
+            processing: true,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-sub-feature-table",
+                type: "GET",
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
             },
-        },
-        columns: [
-            {data: 'no', name: 'no'},
-            {data: 'feature_name', name: 'feature_name'},
-            {data: 'sub_feature_name', name: 'sub_feature_name'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true,
-            },
-            
-        ]   
-    });
+            columns: [
+                {data: 'no', name: 'no'},
+                {data: 'feature_name', name: 'feature_name'},
+                {data: 'sub_feature_name', name: 'sub_feature_name'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        });
+    }
+    
 
     // get sub_feature by id
     $(document).on('click', '#edit-sub_feature', function(e){
@@ -37,7 +42,6 @@ $(document).ready(function () {
         $("#input-sub_feature").removeClass('input-sub-feature');
         $("#input-sub_feature").addClass('update-sub-feature');
         
-
         
         var id = $(this).val();
         
@@ -122,36 +126,9 @@ $(document).ready(function () {
                     $('#feature_idFeedback').html('')
                     $('#sub_feature_name').removeClass('is-invalid');
 
-                    $.ajax({
-                        type : "POST",
-                        url : APP_URL + "api/add-sub-feature",
-                        data : data,
-                        dataType : "json",
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                        },
-                        success : function(response){
-                            $("#staticBackdrop").modal('hide');
 
-                            setTimeout(()=>{
-                                    
-                                modalSuccess(response.message, table)
-                            },1000)
-                            
-                        },
-                        error:function(response){
-                            if (!response.success) {
-                                
-                                if (response.responseJSON.data.error.sub_feature_name !== null) {
-                                    var text = response.responseJSON.data.error.sub_feature_name
-                                    modalError(text)
-                                }else{
-                                    modalError(response.responseJSON.data.error)
-                                }
-                                
-                            }
-                        }
-                    })
+                    $('#subFeatureTable').DataTable().destroy()
+                    ajaxFunction("api/add-sub-feature", "POST", data, token, tableSubFeature(), "#staticBackdrop")
                                 
                 }
             }
@@ -170,9 +147,6 @@ $(document).ready(function () {
         $('#sub_feature_name').removeClass('is-invalid');
         
         var id = $(this).val();
-        
-
-        var token = $('#token').val()
 
         
         $.ajax({
@@ -217,31 +191,8 @@ $(document).on('click', '.update-sub-feature', function(e){
         $('#sub_feature_name').addClass('is-invalid');
         $('#sub_feature_nameFeedback').html('please fill out this field')
     }else{
-
-        $.ajax({
-            type : "POST",
-            url : APP_URL + "api/update-sub-feature/"+ id,
-            data : data,
-            dataType : "json",
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-            success : function(response){
-                $('#sub_feature_name').removeClass('is-invalid');
-                $("#staticBackdrop").modal('hide');
-                setTimeout(()=>{
-                                        
-                    modalSuccess(response.message, table)
-
-                },1000)
-                
-            },
-            error:function(response){
-                if (!response.success) {
-                    modalError(response.responseJSON.data.error)
-                }
-            }
-        })
+        $('#subFeatureTable').DataTable().destroy()
+        ajaxFunction("api/update-sub-feature/"+ id, "POST", data, token, tableSubFeature(), "#staticBackdrop")
     }
 
 
@@ -267,64 +218,9 @@ $(document).on('click', '#delete-sub_feature', function(e){
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
-                type: "DELETE",
-                url: APP_URL + "api/delete-sub-feature/" + id,
-                dataType: "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success: function(response){
-                    setTimeout(()=>{
-                                    
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text : 'Your file has been deleted.',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            willClose: () => {
-                                table.draw()
-                            }
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                
-                                table.draw()
-                                
             
-                            }
-                        })
-                    },1000)
-                    
-    
-                },error:function(response){
-                    if (!response.success) {
-                            console.log(response.responseJSON.data.error);
-
-                            if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : 'This data already has a relationship in another table',
-                                })
-                            }else{
-
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : response.responseJSON.data.error,
-                                    
-                                    
-                                })
-                            }
-                        
-                        
-                    }
-                }
-            });
+            $('#subFeatureTable').DataTable().destroy()
+            ajaxFunction("api/delete-sub-feature/" + id, "DELETE", false, token, tableSubFeature(), "#staticBackdrop")
           
         }
       })

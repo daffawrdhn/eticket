@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Ticket;
 use App\Models\SubFeature;
 use Exception;
 use Illuminate\Http\Request;
@@ -165,12 +166,19 @@ class SubFeatureController extends BaseController
     public function destroy($id)
     {
         try {
-            $delete = SubFeature::where('sub_feature_id', $id)->delete();
+            $checkSubFeature = Ticket::where('sub_feature_id', $id)->first();
 
-            if ($delete) {
-                return $this->sendResponse($delete, 'success delete data');
+
+            if ($checkSubFeature == null) {
+                $delete = SubFeature::where('sub_feature_id', $id)->delete();
+    
+                if ($delete) {
+                    return $this->sendResponse($delete, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $delete]);
+                }
             }else{
-                return $this->sendError('Error validation', ['error' => $delete]);
+                return $this->sendError('Error validation', ['error' => 'this data is already exists in another table']);
             }
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);

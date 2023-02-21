@@ -43,6 +43,7 @@
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                         <a class="nav-link" href="/report-data-sumary">Data Sumary</a>
                         <a class="nav-link" href="/report-regional">Regional</a>
+                        <a class="nav-link" href="/report-sla">Ticket SLA</a>
                     </nav>
                 </div>
             </div>

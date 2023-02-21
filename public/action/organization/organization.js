@@ -1,33 +1,37 @@
 $(document).ready(function () {
-    
+    var token = $('#token').val()
+    tableOrganization()
+
+    function tableOrganization() {
+        var token = $('#token').val()
+        return $('#organizationTable').DataTable({
+            responsive: true,
+            autoWidth : false,
+            processing: true,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-organization-datatable",
+                type: "GET",
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+            },
+            columns: [
+                {data: 'no', name: 'no'},
+                {data: 'organization_name', name: 'organization_name'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        })     
+    }
 
    
-    var token = $('#token').val()
-    var table = $('#organizationTable').DataTable({
-        responsive: true,
-        autoWidth : false,
-        processing: true,
-        serverSide: true,
-        ajax: { 
-            url: APP_URL + "api/get-organization-datatable",
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-        },
-        columns: [
-            {data: 'no', name: 'no'},
-            {data: 'organization_name', name: 'organization_name'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true,
-            },
-            
-        ]   
-    });
 
     // get organization by id
     $(document).on('click', '#edit-organization', function(e){
@@ -92,28 +96,8 @@ $(document).ready(function () {
             $('#organization_nameFeedback').html('please fill out this field')
         }else{
             $('#organization_name').removeClass('is-invalid');
-            $.ajax({
-                type : "POST",
-                url : APP_URL + "api/add-organization",
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-
-                    $("#staticBackdrop").modal('hide');
-                    modalSuccess(response.message, table)
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                        modalError(response.responseJSON.data.error)
-
-                        
-                    }
-                }
-            })
+            $('#organizationTable').DataTable().destroy()
+            ajaxFunction("api/add-organization", "POST", data, token, tableOrganization(), "#staticBackdrop")
         }
         
     });
@@ -135,27 +119,9 @@ $(document).ready(function () {
             $('#organization_nameFeedback').html('please fill out this field')
         }else{
             $('#organization_name').removeClass('is-invalid');
-            $.ajax({
-                type : "POST",
-                url : APP_URL + "api/update-organization/"+ id,
-                data : data,
-                dataType : "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success : function(response){
-    
-                    $("#staticBackdrop").modal('hide');
-                    modalSuccess(response.message, table)
-                    
-                },
-                error:function(response){
-                    if (!response.success) {
-                        modalError(response.responseJSON.data.error)
-                        
-                    }
-                }
-            })
+
+            $('#organizationTable').DataTable().destroy()
+            ajaxFunction("api/update-organization/"+ id, "POST", data, token, tableOrganization(), "#staticBackdrop")
         }
 
         
@@ -181,32 +147,8 @@ $(document).ready(function () {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    type: "DELETE",
-                    url: APP_URL + "api/delete-organization/" + id,
-                    dataType: "json",
-                    beforeSend: function(xhr, settings) { 
-                        xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                    },
-                    success: function(response){
-                        
-                        modalSuccess(response.message, table)
-        
-                    },error:function(response){
-                        if (!response.success) {
-
-                                if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                    var text = 'This data already has a relationship with the user'
-                                    modalError(text)
-                                }else{
-
-                                    modalError(response.responseJSON.data.error)
-                                }
-                            
-                            
-                        }
-                    }
-                });
+                $('#organizationTable').DataTable().destroy()
+                ajaxFunction("api/delete-organization/" + id, "DELETE", data, token, tableOrganization(), "#staticBackdrop")
               
             }
           })

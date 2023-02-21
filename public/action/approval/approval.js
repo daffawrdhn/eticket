@@ -1,36 +1,39 @@
 $(document).ready(function () {
-
-    
+    var token = $('#token').val()
+    tableAproval()
+    function tableAproval(){
+        var token = $('#token').val()
+        return $('#approvalTable').DataTable({
+            responsive: true,
+            autoWidth : false,
+            processing: true,
+            serverSide: true,
+            ajax: { 
+                url: APP_URL + "api/get-regional-pic",
+                type: "GET",
+                dataType: 'json',
+                beforeSend: function(xhr, settings) { 
+                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
+                },
+            },
+            columns: [
+                {data: 'no', name: 'no'},
+                {data: 'regional_name', name: 'regional_name'},
+                {data: 'employee_id', name: 'employee_id'},
+                {data: 'employee_name', name: 'employee_name'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: true, 
+                    searchable: true,
+                },
+                
+            ]   
+        });
+    }    
 
     //getdata
-    var token = $('#token').val()
-    var table = $('#approvalTable').DataTable({
-        responsive: true,
-        autoWidth : false,
-        processing: true,
-        serverSide: true,
-        ajax: { 
-            url: APP_URL + "api/get-regional-pic",
-            type: "GET",
-            dataType: 'json',
-            beforeSend: function(xhr, settings) { 
-                xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-            },
-        },
-        columns: [
-            {data: 'no', name: 'no'},
-            {data: 'regional_name', name: 'regional_name'},
-            {data: 'employee_id', name: 'employee_id'},
-            {data: 'employee_name', name: 'employee_name'},
-            {
-                data: 'action', 
-                name: 'action', 
-                orderable: true, 
-                searchable: true,
-            },
-            
-        ]   
-    });
+    
 
 
     
@@ -93,54 +96,8 @@ $(document).ready(function () {
                     $('#regional_idFeedback').hide()
                     $('#employee_idFeedback').hide()
 
-                    $.ajax({
-                        type : "POST",
-                        url : APP_URL + "api/add-regional-pic",
-                        data : data,
-                        dataType : "json",
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                        },
-                        success : function(response){
-                            $("#staticBackdrop").modal('hide');
-        
-                            setTimeout(()=>{
-                                    
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: response.message,
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    willClose: () => {
-                                        table.draw()
-                                    }
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        
-                                        table.draw()
-                                        
-                    
-                                    }
-                                })
-                            },1000)
-                        },
-                        error:function(response){
-                            if (!response.success) {
-                                setTimeout(() => {
-                                    $("#loading").modal('hide');
-                                    Swal.fire({
-                                        icon : 'warning',
-                                        confirmButtonText: 'Ok',
-                                        title : 'Warning!',
-                                        text : response.responseJSON.data.error,
-                                    })
-                                },500)
-                                
-                                
-                            }
-                        }
-                    })
+                    $('#approvalTable').DataTable().destroy()
+                    ajaxFunction("api/add-regional-pic", "POST", data, token, tableAproval(), "#staticBackdrop")
                                 
                 }
             }
@@ -161,8 +118,6 @@ $(document).ready(function () {
         
         var id = $(this).val();
         
-
-        var token = $('#token').val()
 
         
         $.ajax({
@@ -198,9 +153,6 @@ $(document).ready(function () {
 // //update approval
 $(document).on('click', '.update-approval', function(e){
     e.preventDefault();
-    
-    
-    var token = $('#token').val()
     var id = $(this).val();
 
     data = {
@@ -209,49 +161,8 @@ $(document).on('click', '.update-approval', function(e){
     }
 
 
-    $.ajax({
-        type : "POST",
-        url : APP_URL + "api/update-regional-pic/"+ id,
-        data : data,
-        dataType : "json",
-        beforeSend: function(xhr, settings) { 
-            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-        },
-        success : function(response){
-            
-            $("#staticBackdrop").modal('hide');
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: response.message,
-                showConfirmButton: false,
-                timer: 2000,
-                willClose: () => {
-                    table.draw()
-                }
-            }).then((result) => {
-                if (result.dismiss === Swal.DismissReason.timer) {
-                    
-                    table.draw()
-                    
-
-                }
-            })
-            
-        },
-        error:function(response){
-            if (!response.success) {
-                Swal.fire({
-                    icon : 'warning',
-                    confirmButtonText: 'Ok',
-                    title : 'Warning!',
-                    text : response.responseJSON.data.error,
-                })
-                
-            }
-        }
-    })
+    $('#approvalTable').DataTable().destroy()
+    ajaxFunction("api/update-regional-pic/"+ id, "POST", data, token, tableAproval(), "#staticBackdrop")
 
 });
 
@@ -275,60 +186,9 @@ $(document).on('click', '#delete-approval', function(e){
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
-                type: "DELETE",
-                url: APP_URL + "api/delete-regional-pic/" + id,
-                dataType: "json",
-                beforeSend: function(xhr, settings) { 
-                    xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                },
-                success: function(response){
-                    
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: response.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        willClose: () => {
-                            table.draw()
-                        }
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.timer) {
-                            
-                            table.draw()
-                            
-        
-                        }
-                    })
-    
-                },error:function(response){
-                    if (!response.success) {
-                            console.log(response.responseJSON.data.error);
 
-                            if (response.responseJSON.data.error.errorInfo[1]  == 7) {
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : 'This data already has a relationship with the ticket table',
-                                })
-                            }else{
-
-                                Swal.fire({
-                                    icon : 'warning',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Warning!',
-                                    text : response.responseJSON.data.error,
-                                    
-                                    
-                                })
-                            }
-                        
-                        
-                    }
-                }
-            });
+            $('#approvalTable').DataTable().destroy()
+            ajaxFunction("api/delete-regional-pic/" + id, "DELETE", false, token, tableAproval(), "#staticBackdrop")
           
         }
       })
@@ -339,86 +199,6 @@ $(document).on('click', '#delete-approval', function(e){
 
 
 
-
-// // check-box
-
-$(document).on('click', '#master-check', function(e){
-    
-
-    if($(this).is(':checked',true))  
-    {
-        $(".sub-check").prop('checked', true);  
-    } else {  
-        $(".sub-check").prop('checked',false);  
-    } 
-});
-
-
-// // delete-all
-    $('#delete-all').on('click', function(e) {
-
-        var allVals = [];  
-        $(".sub-check:checked").each(function() {  
-            allVals.push($(this).attr('data-id'));
-        });  
-        if(allVals.length <=0)  
-        {  
-            Swal.fire({
-                icon : 'warning',
-                confirmButtonText: 'Ok',
-                title : 'Warning!',
-                text : 'Please select row!!',
-            })
-
-        }  else {  
-        
-            var join_selected_values = allVals.join(","); 
-            var token = $('#token').val()
-            var data = {'ids' : join_selected_values}
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    
-                    $.ajax({
-                        type: "DELETE",
-                        url: APP_URL + "api/delete-all-approval",
-                        dataType: "json",
-                        data : data,
-                        beforeSend: function(xhr, settings) { 
-                            xhr.setRequestHeader('Authorization','Bearer ' + token ); 
-                        },
-                        success: function(response){
-                            
-                                Swal.fire({
-                                    icon : 'success',
-                                    confirmButtonText: 'Ok',
-                                    title : 'Deleted!',
-                                    text : 'Your file has been deleted.',
-                                    
-                                    
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        $("#master-check").prop('checked', false); 
-                                        
-                                    } 
-                                })
-            
-                        }
-                    });
-                  
-                }
-              })
-        
-        }  
-    });
 
     // Select Sub Regional
 

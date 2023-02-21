@@ -51,7 +51,7 @@ class FeatureController extends BaseController
                 ]);
         
                 if ($validator->fails()) {
-                    return $this->sendError('Error validation', ['error' => $validator->errors()]);
+                    return $this->sendError('Error validation', ['error' => $validator->errors()->all()]);
                 }else{
 
                         $feature['feature_name'] = $request->feature_name;
@@ -179,7 +179,7 @@ class FeatureController extends BaseController
             $isFeature = SubFeature::where('feature_id', $id)->first();
             
             if ($isFeature != null) {
-                return $this->sendError('Error validation', ['error' => ['this data is already exists in another table']]);
+                return $this->sendError('Error validation', ['error' => 'this data is already exists in another table']);
 
             }else{
                 $delete = Feature::where('feature_id',$id)->delete();

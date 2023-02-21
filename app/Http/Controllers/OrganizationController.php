@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\Employee;
 use App\Models\Organization;
 use App\Models\Role;
 use Exception;
@@ -161,13 +162,21 @@ class OrganizationController extends BaseController
     public function destroy($id)
     {
         try {
-            $delete = Organization::where('organization_id', $id)->delete();
+            $checkOrganization = Employee::where('organization_id', $id)->first();
 
-            if ($delete) {
-                return $this->sendResponse($delete, 'success delete data');
+
+            if ($checkOrganization == null) {
+                $delete = Organization::where('organization_id', $id)->delete();
+    
+                if ($delete) {
+                    return $this->sendResponse($delete, 'success delete data');
+                }else{
+                    return $this->sendError('Error validation', ['error' => $delete]);
+                }
             }else{
-                return $this->sendError('Error validation', ['error' => $delete]);
+                return $this->sendError('Error validation', ['error' => 'this data is already exists in another table']);
             }
+
         } catch (Exception $error) {
             return $this->sendError('Error validation', ['error' => $error]);
         }
