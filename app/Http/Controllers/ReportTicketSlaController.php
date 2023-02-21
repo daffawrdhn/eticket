@@ -75,7 +75,7 @@ class ReportTicketSlaController extends BaseController
                 ];
             }
 
-            return $this->sendResponse($datas, 'success');
+            // return $this->sendResponse($datas, 'success');
 
             if ($request->ajax()) {
                 $costumers = $datas;
