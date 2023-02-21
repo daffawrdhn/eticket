@@ -32,7 +32,7 @@
                                     <iframe id="txtArea1" style="display:none"></iframe>
                                 </div>
                             </div>  
-                            <table class="table" id="regionalTable">
+                            <table class="table" id="reportSlaTable">
                                 <thead>
                                     <tr>
                                     <th scope="col" data-type="text">no</th>
@@ -49,7 +49,7 @@
                                     <th scope="col" data-type="text">Date</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-group-divider" id="table-regional">
+                                <tbody class="table-group-divider" id="table-sla">
                                     
                                 </tbody>
                                 </table>
@@ -108,7 +108,7 @@
     </div>
 
 
-    <script src="{{ asset('action/report/report_regional.js') }}"></script>
+    <script src="{{ asset('action/report/report_sla.js') }}"></script>
 @endsection
 
 

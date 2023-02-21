@@ -10,6 +10,7 @@ use DateInterval;
 use DatePeriod;
 use Exception;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class ReportTicketSlaController extends BaseController
 {
@@ -21,7 +22,7 @@ class ReportTicketSlaController extends BaseController
     public function getDataSLA(Request $request){
         try {
 
-            $isTicket = Ticket::all();
+            $isTicket = Ticket::with('regional');
 
             $sla = [];
             foreach($isTicket as $ticket){
@@ -60,6 +61,8 @@ class ReportTicketSlaController extends BaseController
 
                 $sla[] = [
                     'ticket_id' => $ticket->ticket_id,
+                    'employee_id' => $ticket->employee_id,
+                    'regional_name' => $ticket->regional->regional_name,
                     'submited_date' => $isSubmited,
                     'approve1_date' => $isApprove1,
                     'approve2_date' => $isApprove2,
@@ -72,7 +75,10 @@ class ReportTicketSlaController extends BaseController
                 ];
             }
 
-            return $this->sendResponse($sla, 'success');
+            if ($request->ajax()) {
+                $costumers = $sla;
+                return DataTables::of($costumers)->toJson();
+            }
            
         } catch (Exception $error) {
             return $this->sendError('Error Exception', ['error' => $error]);
