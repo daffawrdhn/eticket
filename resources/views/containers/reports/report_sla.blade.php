@@ -24,7 +24,6 @@
                                     </div>
                                     <div class="col-4">
                                         <div id="select-regionalId" class="form-group border-danger">
-                                            <label class="label-form" for="regional">Select Regional</label>
                                             <select class="" style="width: 100%" id="regional-select" name="regional_id" aria-label="Default select example"></select>
                                             <div id="regional_idFeedback" class="invalid-feedback"></div>
                                         </div>

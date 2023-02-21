@@ -3,7 +3,6 @@ $(document).ready(function () {
     $("#alert").hide()
     $("#isLoading").hide()
     tableReport();
-    select();
 
 
     setInterval(()=>{
@@ -209,7 +208,7 @@ $(document).ready(function () {
      }
 
 
-    function select(){
+    
 
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var token = $('#token').val()
@@ -249,9 +248,7 @@ $(document).ready(function () {
                         selectRegional.data('select2').$selection.css('padding-top', '5px')
                             
         
-        return selectRegional
-                    
-    }
+    
 
 
 
