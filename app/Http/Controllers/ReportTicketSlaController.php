@@ -22,7 +22,7 @@ class ReportTicketSlaController extends BaseController
 
             $datas = [];
             foreach($isTicket as $ticket){
-                $isStatusTicket = TicketStatusHistory::whereIn('ticket_id', $ticket->ticket_id)->first();
+                $isStatusTicket = TicketStatusHistory::whereIn('ticket_id', $ticket->ticket_id)->get();
                 $data = [];
                 foreach($isStatusTicket as $status){
                     $isData = $status->status_after;
