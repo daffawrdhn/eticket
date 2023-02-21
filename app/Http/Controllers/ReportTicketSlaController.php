@@ -30,7 +30,7 @@ class ReportTicketSlaController extends BaseController
 
                 $sla[] = [
                     'ticket_id' => $ticket->ticket_id,
-                    'time' => $sla
+                    'time' => $data
                 ];
             }
 
