@@ -165,7 +165,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('export-report-regional', [ExportController::class, 'exportRegional']);
     Route::post('export-report-summary', [ExportController::class, 'exportSummary']);
     Route::post('export-report-employee', [ExportController::class, 'exportEmployee']);
-    Route::post('api/export-report-sla', [ExportController::class, 'exportReportSla']);
+    Route::post('export-report-sla', [ExportController::class, 'exportReportSla']);
 
     // here for goodness sake
 });
