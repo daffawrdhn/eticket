@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController;
+use App\Models\Employee;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
 use Carbon\Carbon;
@@ -20,11 +21,12 @@ class ReportTicketSlaController extends BaseController
     public function getDataSLA(Request $request){
         try {
 
-            $isTicket = Ticket::with('regional')->get();
+            $isTicket = Ticket::all();
 
             $datas = [];
             foreach($isTicket as $ticket){
                 $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->first();
+                $isEmployee = Employee::with('regional')->where('employee_id', $ticket->employee_id)->first();
 
                 $submited = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 1)->first();
                 $approve1 = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 2)->first();
@@ -60,7 +62,7 @@ class ReportTicketSlaController extends BaseController
                 $datas[] = [
                     'ticket_id' => $ticket->ticket_id,
                     'employee_id' => $ticket->employee_id,
-                    'regional_name' => $ticket->regional->regional_name,
+                    'regional_name' => $isEmployee->regional->regional_name,
                     'submited_date' => $isSubmited,
                     'approve1_date' => $isApprove1,
                     'approve2_date' => $isApprove2,
