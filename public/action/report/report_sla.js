@@ -32,7 +32,7 @@ $(document).ready(function () {
 
 
     $('#regional-select').on("select2:selecting", function(e) { 
-        var value = e.params.id;
+        var value = e.params.data;
         console.log(value);
      });
     
