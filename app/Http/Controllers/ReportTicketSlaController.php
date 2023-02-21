@@ -73,6 +73,8 @@ class ReportTicketSlaController extends BaseController
                 ];
             }
 
+            return $this->sendResponse($datas, 'success');
+
             if ($request->ajax()) {
                 $costumers = $datas;
                 return DataTables::of($costumers)->toJson();
