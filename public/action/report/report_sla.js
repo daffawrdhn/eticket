@@ -31,9 +31,9 @@ $(document).ready(function () {
     });
 
 
-    $('#regional-select').on("select2:selecting", function(e) { 
+    $('#regional-select').on("select2:select", function(e) { 
         e.preventDefault();
-        var value = e.params.data;
+        var value = e.params.data.id;
         console.log(value);
      });
     
