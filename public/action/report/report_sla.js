@@ -3,6 +3,7 @@ $(document).ready(function () {
     $("#alert").hide()
     $("#isLoading").hide()
     tableReport();
+    select();
 
 
     setInterval(()=>{
@@ -27,13 +28,6 @@ $(document).ready(function () {
         $("#start-date").val('');
         $("#end-date").val('');
 
-    });
-
-    $(document).on('click','#closeSearch', function (e) {
-        $("#alert").hide()
-        $("#regional-select").val(null).trigger("change"); 
-        $("#start-date").val('');
-        $("#end-date").val('');
     });
     
     
@@ -87,84 +81,6 @@ $(document).ready(function () {
 
     });
 
-
-
-    // search
-
-    $( "#end-date" ).focusin(function() {
-        var startDate = $("#start-date").val();
-
-        if (startDate != null) {
-
-            $(this).attr('min', startDate)
-
-        }
-        
-    })
-
-    $( "#end-date" ).focusout(function(endDate, startDate) {
-        var startDate = $("#start-date").val();
-        var endDate = $(this).val();
-        if (endDate < startDate) {
-            $('#end-date').addClass('is-invalid');
-            $('#end-dateFeedback').html('Please Enter the quit date > date now')
-        }else{
-            $('#end-date').removeClass('is-invalid');
-        }
-    })
-
-
-    $(document).on('click', '#searchReport', (e) => {
-        $("#alert").hide();
-        e.preventDefault();
-        var regional = $("#regional-select").val();
-        var startDate = $("#start-date").val();
-        var endDate = $("#end-date").val();
-
-        var data = {
-            'regional_id' : regional,
-            'start_date' : startDate,
-            'end_date' : endDate
-        }
-
-
-        if (regional == null && endDate == '' && startDate == '') {
-            $("#isLoading").show();
-            setTimeout(() => {
-                $("#isLoading").hide();
-                $("#alert").show()
-            },1000)
-        }else if(startDate != '' && endDate == ""){
-            $('#end-date').addClass('is-invalid');
-            $('#end-dateFeedback').html('please fill Add End Date')
-        }else if(startDate == '' && endDate != ""){
-            $('#start-date').addClass('is-invalid');
-            $('#start-dateFeedback').html('please fill Add Start Date')
-        }else if(startDate > endDate){
-            $('#end-date').addClass('is-invalid');
-            $('#end-dateFeedback').html('Please Enter the end date > start date')
-        }else{
-            $("#isLoading").show();
-            setTimeout(() => {
-                $("#isLoading").hide();
-                $("#search").modal('hide')
-            },1000)
-
-            if (regional == null) {
-                var regionalId = 0
-            }else{
-                regionalId = regional
-            }
-
-            $('#btnExport').attr('regional-id', regionalId);
-            $('#btnExport').attr('start-date', startDate);
-            $('#btnExport').attr('end-date', endDate);
-            
-            $('#reportSlaTable').DataTable().destroy()
-            tableReport(data);
-        }
-    })
-
     function tableReport(data = null) { 
 
         //getdata
@@ -208,13 +124,13 @@ $(document).ready(function () {
      }
 
 
-    
+    function select(){
 
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var token = $('#token').val()
         var selectRegional =   $('#regional-select').select2({
                                 placeholder : "Select Regional",
-                                dropdownParent: $("#search"),
+                                dropdownParent: false,
                                 ajax: { 
                                     url: APP_URL + "api/select-regional",
                                     type: "post",
@@ -248,7 +164,9 @@ $(document).ready(function () {
                         selectRegional.data('select2').$selection.css('padding-top', '5px')
                             
         
-    
+        return selectRegional
+                    
+    }
 
 
 
