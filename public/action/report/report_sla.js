@@ -34,7 +34,8 @@ $(document).ready(function () {
     $('#regional-select').on("select2:select", function(e) { 
         e.preventDefault();
         var value = e.params.data.id;
-        console.log(value);
+        $('#reportSlaTable').DataTable().destroy()
+        tableReport(data)
      });
     
     
@@ -94,6 +95,8 @@ $(document).ready(function () {
         datas = {
             'regionalId' : regionalId
         }
+
+        console.log(data);
         //getdata
         var token = $('#token').val()
         var table = $('#reportSlaTable').DataTable({
