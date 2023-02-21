@@ -47,6 +47,7 @@ $(document).ready(function () {
             'regionalId' : regionalId,
         }
 
+        console.log(data);
 
         $.ajax({
             xhrFields: {
