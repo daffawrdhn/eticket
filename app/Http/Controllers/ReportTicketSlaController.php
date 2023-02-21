@@ -21,7 +21,15 @@ class ReportTicketSlaController extends BaseController
     public function getDataSLA(Request $request){
         try {
 
-            $isTicket = Ticket::all();
+            if ($request->regionalId == 0) {
+                
+                $isTicket = Ticket::all();
+            }else{
+                $isEmployees = Employee::select('employee_id')->where('regional_id', $request->regional_id)->get();
+
+                $isTicket = Ticket::whereIn('employee_id', $isEmployees)->get();
+            }
+
 
             $datas = [];
             foreach($isTicket as $ticket){
