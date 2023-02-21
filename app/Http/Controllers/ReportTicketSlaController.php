@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\API\BaseController;
 use App\Models\Ticket;
 use App\Models\TicketStatusHistory;
+use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use Exception;
@@ -60,28 +61,12 @@ class ReportTicketSlaController extends BaseController
                 function dateInterval($startDate, $endDate)
                 {
 
-                    $diff = $startDate->diff($endDate);
+                    $workingHours = 8;
+                    $diff = $startDate->diffInHoursFiltered(function(Carbon $date) use ($workingHours) {
+                        return !$date->isWeekend() && !$date->isHoliday();
+                    }, $endDate);
 
-                    $days = 0;
-                    $interval = new DateInterval('P1D');
-                    $period = new DatePeriod($startDate, $interval, $endDate);
-
-                    foreach ($period as $date) {
-                        if ($date->format('N') <= 5) { 
-                            $days++;
-                        }
-                    }
-
-                    $hours = ($days * 8) + ($diff->h - 1); 
-                    $total_seconds = ($hours * 3600) + ($diff->i * 60) + $diff->s; 
-                    $days = floor($total_seconds / (24 * 60 * 60)); 
-                    $total_seconds %= (24 * 60 * 60); 
-                    $hours = floor($total_seconds / 3600);
-                    $total_seconds %= 3600;
-                    $minutes = floor($total_seconds / 60);
-                    $seconds = $total_seconds % 60; 
-
-                    $isSlaTime = $days . 'day' . $hours . ':' . $minutes .':'.$seconds;
+                    $isSlaTime = $startDate->diffForHumans($endDate).PHP_EOL;
 
                     return $isSlaTime;
                 }
