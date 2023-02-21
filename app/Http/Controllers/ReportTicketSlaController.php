@@ -25,9 +25,23 @@ class ReportTicketSlaController extends BaseController
                 $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->get();
                 $data = [];
                 foreach($isStatusTicket as $status){
-                    $isData = $status->status_after;
-                    
-                    $data = $isData;
+                    $data[] = $status->status_after;
+
+                    // if ($status->status_after == 1) {
+                    //     $submited = date('d F Y', strtotime($status->created_at));
+                    // }else if($status->status_after == 2){
+                    //     $approval1 = date('d F Y', strtotime($status->created_at));
+                    // }else if($status->status_after == 3){
+                    //     $approval2 = date('d F Y', strtotime($status->created_at));
+                    // }else if($status->status_after == 4){
+                    //     $approval3 = date('d F Y', strtotime($status->created_at));
+                    // }else if($status->status_after == 5){
+                    //     $finalApprov = date('d F Y', strtotime($status->created_at));
+                    // }else if($status->status_after == 6){
+                    //     $reject = date('d F Y', strtotime($status->created_at));
+                    // }else if($status->status_after == 7){
+                    //     $onProcess = date('d F Y', strtotime($status->created_at));
+                    // }
                 }
 
                 $datas[] = [
