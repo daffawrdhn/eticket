@@ -25,8 +25,9 @@ class ReportTicketSlaController extends BaseController
                 $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->get();
                 $data = [];
                 foreach($isStatusTicket as $status){
-                    $data[] = $status->status_after;
+                    $data[] = $status->status_after[0];
                 }
+
 
                 $sla[] = [
                     'ticket_id' => $ticket->ticket_id,
