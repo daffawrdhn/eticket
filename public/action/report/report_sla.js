@@ -90,7 +90,12 @@ $(document).ready(function () {
     });
 
     function tableReport(data = null) { 
-        regionalId = data == null ? 0 : data
+        
+        if (data == null) {
+            regionalId = 0
+        }else{
+            regionalId = data
+        }
 
         datas = {
             'regionalId' : regionalId
