@@ -202,7 +202,6 @@ class TicketController extends BaseController
             $history = TicketStatusHistory::select('ticket_id')
             ->where('supervisor_id', $auth->employee_id)
             ->whereBetween('status_after', [2, 6])
-            ->where('status_after', '!=', 5)
             ->get();
 
             $tickets = Ticket::with('feature', 'subFeature', 'ticketStatus')
