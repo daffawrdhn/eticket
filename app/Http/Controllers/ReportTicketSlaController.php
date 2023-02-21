@@ -48,29 +48,15 @@ class ReportTicketSlaController extends BaseController
 
 
                 if ($done != null) {
-                    $isSla = dateInterval($submited->created_at, $done->created_at);
+                    $isSla = $this->dateInterval($submited->created_at, $done->created_at);
                 }else{
                     if ($reject != null) {
-                        $isSla = dateInterval($submited->created_at, $reject->created_at);
+                        $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
                     }else{
                         $isSla = '-';
                     }
                 }
 
-
-                function dateInterval($startDate, $endDate)
-                {
-
-                    $diff = $startDate->diffInHoursFiltered(function (Carbon $date) {
-                        return $date->isWeekday() && $date->between('9:00', '17:00');
-                    }, $endDate);
-                    
-                    // hitung selisih waktu dalam format hari:jam:menit:detik
-                    $diff_formatted = Carbon::createFromTimestamp($diff * 3600)->diffForHumans(['parts' => 4]);
-                    
-                    // output selisih waktu
-                    echo $diff_formatted;
-                }
 
                 $sla[] = [
                     'ticket_id' => $ticket->ticket_id,
@@ -91,6 +77,21 @@ class ReportTicketSlaController extends BaseController
         } catch (Exception $error) {
             return $this->sendError('Error Exception', ['error' => $error]);
         }
+    }
+
+
+    public function dateInterval($startDate, $endDate)
+    {
+
+        $diff = $startDate->diffInHoursFiltered(function (Carbon $date) {
+            return $date->isWeekday() && $date->between('9:00', '17:00');
+        }, $endDate);
+        
+        // hitung selisih waktu dalam format hari:jam:menit:detik
+        $diff_formatted = Carbon::createFromTimestamp($diff * 3600)->diffForHumans(['parts' => 4]);
+        
+        // output selisih waktu
+        echo $diff_formatted;
     }
 }
 
