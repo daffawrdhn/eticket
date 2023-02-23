@@ -67,7 +67,7 @@ class ReportTicketSlaController extends BaseController
                 }else{
                     if ($reject != null) {
                         $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
-                        $status = 'Done';
+                        $status = 'Reject';
                     }
                 }
 
@@ -108,6 +108,8 @@ class ReportTicketSlaController extends BaseController
         $diffInDays = $startDate->diffInDaysFiltered(function (Carbon $date) {
             return $date->isWeekday();
         }, $endDate, true);
+
+        $diffInDays =- 1;
         
         // Menghitung selisih waktu
         $diffInHours = $startDate->diffInHours($endDate) % 24;
