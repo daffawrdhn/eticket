@@ -138,7 +138,6 @@ $(document).ready(function () {
                 {data: 'is_done', name: 'is_done'},
                 {data: 'status', name: 'status'},
                 {data: 'sla_total', name: 'sla_total'},
-                
             ] ,
         })
 
