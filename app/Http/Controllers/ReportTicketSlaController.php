@@ -31,7 +31,7 @@ class ReportTicketSlaController extends BaseController
 
                 $isTicket = Ticket::orderBy('created_at', 'DESC')
                             ->whereIn('employee_id', $isEmployees)
-                            ->orWhereIn('ticket_status_id', [6,8])
+                            ->whereNotIn('ticket_status_id', [1,2,3,4,5,7])
                             ->get();
             }
 
