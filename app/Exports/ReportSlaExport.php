@@ -24,11 +24,16 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
     {
         if ($this->regionalId == 0) {
                 
-            $isTicket = Ticket::orderBy('created_at', 'DESC')->get();
+            $isTicket = Ticket::orderBy('created_at', 'DESC')
+                        ->whereIn('ticket_status_id', [6,8])
+                        ->get();
         }else{
             $isEmployees = Employee::select('employee_id')->where('regional_id', $this->regionalId)->get();
 
-            $isTicket = Ticket::orderBy('created_at', 'DESC')->whereIn('employee_id', $isEmployees)->get();
+            $isTicket = Ticket::orderBy('created_at', 'DESC')
+                        ->whereIn('employee_id', $isEmployees)
+                        ->whereNotIn('ticket_status_id', [1,2,3,4,5,7])
+                        ->get();
         }
 
 
@@ -59,11 +64,11 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
 
             if ($done != null) {
                 $isSla = $this->dateInterval($submited->created_at, $done->created_at);
+                $status = 'Done';
             }else{
                 if ($reject != null) {
                     $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
-                }else{
-                    $isSla = 'in process';
+                    $status = 'Reject';
                 }
             }
 
@@ -80,7 +85,8 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'reject_date' => $isReject,
                 'in_progress' => $isInProgress,
                 'is_done' => $isDone,
-                'sla_total' => $isSla
+                'status' => $status,
+                'sla_total' => $isSla,
             ];
         }
 
@@ -93,18 +99,19 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
 
         $diffInDays = $startDate->diffInDaysFiltered(function (Carbon $date) {
             return $date->isWeekday();
-        }, $endDate, true);
+        }, $endDate);
         
+        $day = $diffInDays - 1;
         // Menghitung selisih waktu
         $diffInHours = $startDate->diffInHours($endDate) % 24;
         
-        return $diffInDays . " hari " . $diffInHours . " jam ";
+        return $day . " hari " . $diffInHours . " jam ";
     }
 
     public function headings(): array
     {
         return ["Ticket Id", "NIK", "Regional Name", "Submited Date", "Approval 1 Date", "Approval 2 Date", "Approval 3 Date", 
-        "Final Approve Date","Reject Date", "On Progress Date", "Done Date", "Sla Total"];
+        "Final Approve Date","Reject Date", "On Progress Date", "Done Date", "Status", "Sla Total"];
     }
 
     public function registerEvents(): array
