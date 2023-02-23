@@ -136,6 +136,7 @@ $(document).ready(function () {
                 {data: 'reject_date', name: 'riject_date'},
                 {data: 'in_progress', name: 'in_progress'},
                 {data: 'is_done', name: 'is_done'},
+                {data: 'status', name: 'status'},
                 {data: 'sla_total', name: 'sla_total'},
                 
             ] ,

@@ -63,11 +63,11 @@ class ReportTicketSlaController extends BaseController
 
                 if ($done != null) {
                     $isSla = $this->dateInterval($submited->created_at, $done->created_at);
+                    $status = 'Done';
                 }else{
                     if ($reject != null) {
                         $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
-                    }else{
-                        $isSla = 'in process';
+                        $status = 'Done';
                     }
                 }
 
@@ -84,7 +84,8 @@ class ReportTicketSlaController extends BaseController
                     'reject_date' => $isReject,
                     'in_progress' => $isInProgress,
                     'is_done' => $isDone,
-                    'sla_total' => $isSla
+                    'sla_total' => $isSla,
+                    'status' => $status
                 ];
             }
 
