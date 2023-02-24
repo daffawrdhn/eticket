@@ -39,9 +39,7 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
 
         $datas = [];
         foreach($isTicket as $ticket){
-            $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)
-                                ->where('status_before', 4)
-                                ->first();
+            $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->first();
             $isEmployee = Employee::with('regional')->where('employee_id', $ticket->employee_id)->first();
 
             if ($isStatusTicket != null) {
