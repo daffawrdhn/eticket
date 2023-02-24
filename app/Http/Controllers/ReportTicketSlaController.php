@@ -66,16 +66,21 @@ class ReportTicketSlaController extends BaseController
                         $isSla = $this->dateInterval($submited->created_at, $done->created_at);
                         $status = 'Done';
                     }else{
-                        $isSla = "in Progress";
-                        $status = "in Progress";
-                        
-                        // if ($reject != null) {
-                        //     $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
-                        //     $status = 'Reject';
-                        // }
+                        if ($inProgress != null) {
+                            $isSla = $this->dateInterval($submited->created_at, $inProgress->created_at);
+                            $status = 'On Progress';
+                        }else{
+                            if ($finalApprove != null) {
+                                $isSla = $this->dateInterval($submited->created_at, $finalApprove->created_at);
+                                $status = 'In Progress';
+                            }else{
+                                $isSla = $this->dateInterval($submited->created_at, $approve3->created_at);
+                                $status = 'In Process';
+                            }
+                        }
                     }
 
-                    
+
                     $datas[] = [
                         'ticket_id' => strval($ticket->ticket_id),
                         'employee_id' => $ticket->employee_id,

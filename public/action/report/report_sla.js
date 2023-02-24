@@ -141,7 +141,6 @@ $(document).ready(function () {
                 {data: 'approve2_date', name: 'approve2_date'},
                 {data: 'approve3_date', name: 'approve3_date'},
                 {data: 'final_approve_date', name: 'final_approve_date'},
-                {data: 'reject_date', name: 'riject_date'},
                 {data: 'in_progress', name: 'in_progress'},
                 {data: 'is_done', name: 'is_done'},
                 {data: 'status', name: 'status'},
