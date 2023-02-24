@@ -73,7 +73,7 @@ class ReportTicketSlaController extends BaseController
 
 
                 $datas[] = [
-                    'ticket_id' => $ticket->ticket_id,
+                    'ticket_id' => strval($ticket->ticket_id),
                     'employee_id' => $ticket->employee_id,
                     'regional_name' => $isEmployee->regional->regional_name,
                     'submited_date' => $isSubmited,
@@ -97,7 +97,7 @@ class ReportTicketSlaController extends BaseController
             }
            
         } catch (Exception $error) {
-            return $this->sendError('Error Exception', ['error' => $error]);
+            return $this->sendError('Error Exception', ['error' => $error->getMessage()]);
         }
     }
 

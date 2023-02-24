@@ -123,6 +123,14 @@ $(document).ready(function () {
                 beforeSend: function(xhr, settings) { 
                     xhr.setRequestHeader('Authorization','Bearer ' + token ); 
                 },
+                error:function(response){
+                    if (!response.success) {
+    
+                        console.log(response);
+                        
+                        
+                    }
+                }
             },
             columns: [
                 {data: 'ticket_id', name: 'ticket_id'},
@@ -138,7 +146,7 @@ $(document).ready(function () {
                 {data: 'is_done', name: 'is_done'},
                 {data: 'status', name: 'status'},
                 {data: 'sla_total', name: 'sla_total'},
-            ] ,
+            ],
         })
 
         return table;
