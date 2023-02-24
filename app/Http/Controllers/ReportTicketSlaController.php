@@ -24,21 +24,23 @@ class ReportTicketSlaController extends BaseController
             if ($request->regionalId == 0) {
                 
                 $isTicket = Ticket::orderBy('created_at', 'DESC')
-                            ->whereIn('ticket_status_id', [6,8])
+                            ->whereIn('ticket_status_id', [4,5,7,8])
                             ->get();
             }else{
                 $isEmployees = Employee::select('employee_id')->where('regional_id', $request->regionalId)->get();
 
                 $isTicket = Ticket::orderBy('created_at', 'DESC')
                             ->whereIn('employee_id', $isEmployees)
-                            ->whereNotIn('ticket_status_id', [1,2,3,4,5,7])
+                            ->whereNotIn('ticket_status_id', [1,2,3,6])
                             ->get();
             }
 
 
             $datas = [];
             foreach($isTicket as $ticket){
-                $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)->first();
+                $isStatusTicket = TicketStatusHistory::where('ticket_id', $ticket->ticket_id)
+                                    ->where('status_before', 4)
+                                    ->first();
                 $isEmployee = Employee::with('regional')->where('employee_id', $ticket->employee_id)->first();
 
                 $submited = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 1)->first();
@@ -46,7 +48,6 @@ class ReportTicketSlaController extends BaseController
                 $approve2 = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 3)->first();
                 $approve3 = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 4)->first();
                 $finalApprove = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 5)->first();
-                $reject = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 6)->first();
                 $inProgress = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 7)->first();
                 $done = TicketStatusHistory::where('ticket_id', $isStatusTicket->ticket_id)->where('status_after', 8)->first();
 
@@ -56,7 +57,6 @@ class ReportTicketSlaController extends BaseController
                 $isApprove2 = $approve2 == null ? '-' : date('d F Y', strtotime($approve2->created_at));
                 $isApprove3 = $approve3 == null ? '-' : date('d F Y', strtotime($approve3->created_at));
                 $isFinal = $finalApprove == null ? '-' : date('d F Y', strtotime($finalApprove->created_at));
-                $isReject = $reject == null ? '-' : date('d F Y', strtotime($reject->created_at));
                 $isInProgress = $inProgress == null ? '-' : date('d F Y', strtotime($inProgress->created_at));
                 $isDone = $done == null ? '-' : date('d F Y', strtotime($done->created_at));
 
@@ -65,10 +65,13 @@ class ReportTicketSlaController extends BaseController
                     $isSla = $this->dateInterval($submited->created_at, $done->created_at);
                     $status = 'Done';
                 }else{
-                    if ($reject != null) {
-                        $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
-                        $status = 'Reject';
-                    }
+                    $isSla = "in Progress";
+                    $status = "in Progress";
+                    
+                    // if ($reject != null) {
+                    //     $isSla = $this->dateInterval($submited->created_at, $reject->created_at);
+                    //     $status = 'Reject';
+                    // }
                 }
 
 
@@ -81,7 +84,6 @@ class ReportTicketSlaController extends BaseController
                     'approve2_date' => $isApprove2,
                     'approve3_date' => $isApprove3,
                     'final_approve_date' => $isFinal,
-                    'reject_date' => $isReject,
                     'in_progress' => $isInProgress,
                     'is_done' => $isDone,
                     'sla_total' => $isSla,
