@@ -93,8 +93,8 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
                     'final_approve_date' => $isFinal,
                     'in_progress' => $isInProgress,
                     'is_done' => $isDone,
+                    'status' => $status,
                     'sla_total' => $isSla,
-                    'status' => $status
                 ];
             }
         }
@@ -120,7 +120,7 @@ class ReportSlaExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return ["Ticket Id", "NIK", "Regional Name", "Submited Date", "Approval 1 Date", "Approval 2 Date", "Approval 3 Date", 
-        "Final Approve Date","Reject Date", "On Progress Date", "Done Date", "Status", "Sla Total"];
+        "Final Approve Date", "On Progress Date", "Done Date", "Status", "Sla Total"];
     }
 
     public function registerEvents(): array
