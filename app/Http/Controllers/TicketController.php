@@ -282,7 +282,7 @@ class TicketController extends BaseController
         {
             $auth = Auth::user();
 
-            $ticketHistories = TicketStatusHistory::where('status_after', 5)
+            $ticketHistories = TicketStatusHistory::where('status_after', 4)
                 ->where('supervisor_id', $auth->employee_id)
                 ->orderBy('created_at', 'desc')
                 ->pluck('ticket_id');
