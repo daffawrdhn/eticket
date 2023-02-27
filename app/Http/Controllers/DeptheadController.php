@@ -66,7 +66,7 @@ class DeptheadController extends BaseController
                 $postApproval = Depthead::create($input);
 
                 if ($postApproval) {
-                    return $this->sendResponse('success', 'success input new helpdesk');
+                    return $this->sendResponse('success', 'Success Input New Dept Head');
                 }else{
                     return $this->sendError('Error validation', ['error' => $postApproval]);
                 }
