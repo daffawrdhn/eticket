@@ -1,3 +1,6 @@
+<script>
+    const AUTH_TOKEN = "{{ Auth::user()->api_token }}"
+</script>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="/dashboard">E-Ticket Administrator</a>

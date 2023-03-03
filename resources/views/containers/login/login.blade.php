@@ -30,7 +30,7 @@
                                 maxlength="12"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                                 required>
-                                <label class="form-control-placeholder" for="username">NIK</label>
+                                <label class="form-control-placeholder" for="employee_id">NIK</label>
                                 <div id="employee_idFeedback" class="invalid-feedback"></div>
                             </div>
                             <div class="form-group">
@@ -42,7 +42,7 @@
                                         class="form-control" 
                                         name="password" 
                                         required>
-                                        <label class="form-control-placeholder" for="password">Password</label>
+                                        <label class="form-control-placeholder" for="password-field">Password</label>
                                         <div class="input-group-append">
                                             <a class="btn btn-outline-secondary pt-2 rounded-end"><i class="bi bi-eye-slash" aria-hidden="true"></i></a>
                                         </div>
@@ -79,4 +79,5 @@
 </section>
 
 @endsection
+
 

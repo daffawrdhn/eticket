@@ -10,11 +10,6 @@ function passwordValidation(){
         var pwdValidation = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
         var password = $('#password-field').val();
 
-        // if (password.match(pwdValidation)) {
-        //     $('#password-field').removeClass('is-invalid');
-        // }else{
-        //     $('#password-field').addClass('is-invalid');
-        // }
         hoverPassword(password)
         
 
@@ -22,7 +17,7 @@ function passwordValidation(){
         if (password.length >= 8 && password.length <= 12) {
             $('#password-field').removeClass('is-invalid');
             $('#hover').removeClass('is-invalid');
-
+            
             if (password.match(pwdLower) && password.match(pwdUpper)) {
                 $('#hover').removeClass('is-invalid');
                 $('#password-field').removeClass('is-invalid');
@@ -117,7 +112,6 @@ function hoverPassword(password) {
 
 
 function checkNik() {
-    
     $('#employee_id').keyup(function () {
         
          var employeeId = $('#employee_id').val()

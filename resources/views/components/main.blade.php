@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('style/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('style/css/login/style.css') }}">
+    <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -26,7 +27,6 @@
         const _token = "{{ csrf_token() }}";
     </script>
     
-    <script src="{{ asset('style/js/jquery-3.6.1.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <script src="{{ asset('style/js/jquery.table2excel.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -38,8 +38,10 @@
     <script src="{{ asset('style/js/select2.min.js') }}"></script>
     <script src="{{ asset('style/js/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('style/js/script.js') }}"></script>
-    <script src="{{ asset('action/components/ajax.js') }}"></script>
-    <script src="{{ asset('action/components/modal.js') }}"></script>
+    <script src="{{ asset('js/components/modal.js') }}"></script>
+    <script src="{{ asset('js/components/table.js') }}"></script>
+    <script src="{{ asset('js/components/ajax.js') }}"></script>
+    <script src="{{ asset('js/components/validation.js') }}"></script>
     <script src="{{ asset('action/login/login.js') }}"></script>
     <script src="{{ asset('action/login/password_validate.js') }}"></script>
     <script src="{{ asset('action/login/forgot_password.js') }}"></script>
@@ -55,6 +57,21 @@
 
 
     @yield('container')
+
+
+    <div class="modal fade" id="modal-loading" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loaingLabel" aria-hidden="true">
+        <div class="modal-dialog" id="dialog-modal">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <h5>Loading.....</h5>
+                    <div class="container-fluid spinner-border mt-4" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 </html>
