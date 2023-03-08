@@ -46,9 +46,9 @@
                                     <th scope="col" data-type="text">Approval 2 Date</th>
                                     <th scope="col" data-type="text">Approval 3 Date</th>
                                     <th scope="col" data-type="text">Final Approval Date</th>
-                                    <th scope="col" data-type="text">Reject Date</th>
                                     <th scope="col" data-type="text">On Progress Date</th>
                                     <th scope="col" data-type="text">Finish Date</th>
+                                    <th scope="col" data-type="text">Status</th>
                                     <th scope="col" data-type="text">Total SLA</th>
                                     </tr>
                                 </thead>
